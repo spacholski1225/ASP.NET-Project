@@ -26,9 +26,9 @@ namespace RoboticsManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<MgmtDbContext>(options => {
+            /*services.AddDbContext<MgmtDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("MyConnection"));
-            });
+            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

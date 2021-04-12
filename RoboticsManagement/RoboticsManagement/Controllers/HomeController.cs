@@ -18,6 +18,10 @@ namespace RoboticsManagement.Controllers
             _logger = logger;
         }
 
+        public IActionResult Calendar()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
             return View();
