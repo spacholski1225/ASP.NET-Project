@@ -31,6 +31,10 @@ namespace RoboticsManagement.Controllers
         {
             return View();
         }
+        public IActionResult ReservedTime()
+        {
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

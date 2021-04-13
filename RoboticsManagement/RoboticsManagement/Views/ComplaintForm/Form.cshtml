@@ -1,0 +1,25 @@
+﻿@model ComplaintFormViewModel
+@{
+    ViewData["Title"] = "Description";
+}
+
+<h1 class="display-4">Complaint form</h1>
+<form method="post">
+    <div class="md-form">
+         <label>Please descript your problem.</label>
+        <textarea rows="3" asp-for="Description" class="md-textarea form-control"></textarea>
+    </div>
+    <div class="col-sm-10">
+        <label asp-for="Company"></label>
+        <input asp-for="Company" />
+        <span></span>
+    
+        <label asp-for="ERobotsCategory"></label>
+        <select asp-for="ERobotsCategory" asp-items="Html.GetEnumSelectList<ERobotsCategory>()">
+            <option value="">Select</option>
+        </select>
+    </div>
+    <div class="col-sm-10">
+        <button type="submit" class="btn btn-success">Create</button>
+    </div>
+</form>
