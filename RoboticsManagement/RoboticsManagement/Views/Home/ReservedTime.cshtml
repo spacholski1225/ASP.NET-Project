@@ -1,4 +1,4 @@
-﻿@model ReservedTimeViewModel
+﻿@model ReservedTime
 
 @{ 
     ViewData["Title"] = "Reverve time for maintain robots";
@@ -6,13 +6,13 @@
 
 <form method="post">
     <label>Choose a date</label>
-    <input type="date" />
+    <input type="date" asp-for="Date"/>
 
     <label>Choose start time</label>
-    <input type="time" />
+    <input type="time" asp-for="Start" />
 
     <label>Choose finish time</label>
-    <input type="time" />
+    <input type="time" asp-for="Finish" />
 
     <button type="submit">Submit</button>
 </form>
