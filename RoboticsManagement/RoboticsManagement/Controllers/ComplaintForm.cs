@@ -24,15 +24,19 @@ namespace RoboticsManagement.Data
         [HttpPost]
         public IActionResult Form(ComplaintFormViewModel model)
         {
-            var toAddModel = new ComplaintFormModel
+            if(ModelState.IsValid)
             {
-                Company = model.Company,
-                ERobotsCategory = model.ERobotsCategory,
-                Description = model.Description
-            };
-            context.complaintFormModels.Add(toAddModel);
-            context.SaveChanges();
-            return Ok();
+                var toAddModel = new ComplaintFormModel
+                {
+                    Company = model.Company,
+                    ERobotsCategory = model.ERobotsCategory,
+                    Description = model.Description
+                };
+                context.complaintFormModels.Add(toAddModel);
+                context.SaveChanges();
+                return Ok();
+            }
+            return RedirectToAction("Index","Home");
         }
     }
 }

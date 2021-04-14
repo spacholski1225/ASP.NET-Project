@@ -44,11 +44,11 @@ namespace RoboticsManagement.Controllers
         [HttpPost]
         public IActionResult ReservedTime(ReservedTime model)
         {
-            var modelToDb = new ReservedTime
+            /*var modelToDb = new ReservedTime
             {
                 Date = model.Date.ToString("dd, MM") //I have to use normal sql query to add date in databese
                                                      //and changing ReservedTime table into table with appropiate column type
-            };
+            };*/
             context.ReservedTimes.Add(model);
             context.SaveChanges();
             
