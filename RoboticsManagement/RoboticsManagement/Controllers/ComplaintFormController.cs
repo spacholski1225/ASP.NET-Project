@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RoboticsManagement.Data
 {
-    public class ComplaintForm : Controller
+    public class ComplaintFormController : Controller
     {
         private readonly MgmtDbContext context;
 
-        public ComplaintForm(MgmtDbContext context)
+        public ComplaintFormController(MgmtDbContext context)
         {
             this.context = context;
         }
