@@ -32,7 +32,7 @@ namespace RoboticsManagement.Data
                 context.SaveChanges();
                 return Ok();
             }
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Error","Error");
         }
     }
 }
