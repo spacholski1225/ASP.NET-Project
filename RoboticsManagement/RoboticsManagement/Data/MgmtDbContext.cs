@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using System;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Data
 {
-    public class MgmtDbContext : DbContext
+    public class MgmtDbContext : IdentityDbContext<ApplicationUser>
     {
-        public MgmtDbContext(DbContextOptions options) : base(options)
+        public MgmtDbContext(DbContextOptions<MgmtDbContext> options) : base(options)
         {
 
         }
