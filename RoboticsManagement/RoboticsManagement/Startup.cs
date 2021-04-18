@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RoboticsManagement.Data;
+using RoboticsManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace RoboticsManagement
             {
                 options.UseSqlServer(Configuration.GetConnectionString("MyConnection"));
             });
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<MgmtDbContext>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<MgmtDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,7 +59,7 @@ namespace RoboticsManagement
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Account}/{action=LoginPage}/{id?}");
             });
         }
     }
