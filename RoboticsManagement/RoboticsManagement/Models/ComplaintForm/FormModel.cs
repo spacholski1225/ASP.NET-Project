@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Models.ComplaintForm
 {
-    public class ComplaintFormModel
+    public class FormModel
     {
 
         public int Id { get; set; }

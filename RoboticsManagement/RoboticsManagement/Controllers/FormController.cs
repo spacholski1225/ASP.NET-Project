@@ -18,11 +18,11 @@ namespace RoboticsManagement.Data
             return View();
         }
         [HttpPost]
-        public IActionResult Form(ComplaintFormViewModel model)
+        public IActionResult Form(FormViewModel model)
         {
             if(ModelState.IsValid)
             {
-                var toAddModel = new ComplaintFormModel
+                var toAddModel = new FormModel
                 {
                     Company = model.Company,
                     ERobotsCategory = model.ERobotsCategory,

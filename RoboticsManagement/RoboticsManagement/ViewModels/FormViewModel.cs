@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.ViewModels
 {
-    public class ComplaintFormViewModel
+    public class FormViewModel
     {
         [Required]
         public string Company { get; set; }
