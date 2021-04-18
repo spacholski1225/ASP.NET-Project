@@ -10,16 +10,11 @@ namespace RoboticsManagement.ViewModels
     public class FormViewModel
     {
         [Required]
-        public string Company { get; set; }
+        public string Company { get; set; } // there will be account details
         [Required]
         public string Description { get; set; }
         [Required]
         public ERobotsCategory ERobotsCategory { get; set; }
-        [Required]
-        public string Date { get; set; }
-        [Required]
-        public string Start { get; set; }
-        [Required]
-        public string Finish { get; set; }
+        
     }
 }

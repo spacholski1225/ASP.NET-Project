@@ -30,7 +30,7 @@ namespace RoboticsManagement.Data
                 };
                 context.complaintFormModels.Add(toAddModel);
                 context.SaveChanges();
-                return Ok();
+                return RedirectToAction("Success", "Success");
             }
             return View();
         }
