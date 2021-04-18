@@ -9,10 +9,17 @@ namespace RoboticsManagement.ViewModels
 {
     public class ComplaintFormViewModel
     {
+        [Required]
         public string Company { get; set; }
-        
+        [Required]
         public string Description { get; set; }
-
+        [Required]
         public ERobotsCategory ERobotsCategory { get; set; }
+        [Required]
+        public string Date { get; set; }
+        [Required]
+        public string Start { get; set; }
+        [Required]
+        public string Finish { get; set; }
     }
 }

@@ -9,7 +9,8 @@
         <label asp-for="Company">Company name</label>
         <input class="form-control" asp-for="Company" placeholder="Company name..."/>
         <span asp-validation-for="Company"></span>
-    
+    </div>
+    <div class="form-group col-md-2">
         <label asp-for="ERobotsCategory">Select our robot</label>
         <select multiple class="form-control" asp-for="ERobotsCategory" asp-items="Html.GetEnumSelectList<ERobotsCategory>()">
         </select>
@@ -20,7 +21,7 @@
         <textarea rows="3" asp-for="Description" class="form-control" placeholder="Your problem..."></textarea>
         <span asp-validation-for="Description"></span>
     </div>
-    <div >
+    <div>
         <button type="submit" class="btn btn-success">Create</button>
     </div>
 </form>

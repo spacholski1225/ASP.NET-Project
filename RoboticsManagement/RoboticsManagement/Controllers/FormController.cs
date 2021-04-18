@@ -4,11 +4,11 @@ using RoboticsManagement.ViewModels;
 
 namespace RoboticsManagement.Data
 {
-    public class ComplaintFormController : Controller
+    public class FormController : Controller
     {
         private readonly MgmtDbContext context;
 
-        public ComplaintFormController(MgmtDbContext context)
+        public FormController(MgmtDbContext context)
         {
             this.context = context;
         }
@@ -32,7 +32,7 @@ namespace RoboticsManagement.Data
                 context.SaveChanges();
                 return Ok();
             }
-            return RedirectToAction("Error","Error");
+            return View();
         }
     }
 }
