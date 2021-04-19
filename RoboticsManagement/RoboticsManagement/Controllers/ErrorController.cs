@@ -10,10 +10,18 @@ namespace RoboticsManagement.Controllers
 {
     public class ErrorController : Controller
     {
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [Route("Error/{statuscode}")]
+        public IActionResult HttpsStatusCodeHandler(int statusCode)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            switch (statusCode)
+            {
+                case 404:
+                    ViewBag.ErrorMessage = "Here's nothing!";
+                    return View("NotFound");
+                default:
+                    break;
+            }
+            return View();
         }
     }
 }
