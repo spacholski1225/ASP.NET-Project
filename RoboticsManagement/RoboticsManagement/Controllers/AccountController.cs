@@ -18,24 +18,34 @@ namespace RoboticsManagement.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            
         }
         [HttpGet]
         public IActionResult LoginPage()
         {
             return View();
+
         }
         [HttpPost]
         public async Task<IActionResult> LoginPage(LoginViewModel model)
         {
+           
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Error", "Error");
+                return View(model);
             }
             var user = await _userManager.FindByEmailAsync(model.Email);
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            var result = _signInManager.SignInAsync(user, isPersistent: false);
 
+            
             return RedirectToAction("Success", "Success");
 
+        }
+        public async Task<IActionResult> Register()
+        {
+            
+            
+            return Ok();
         }
     }
 }

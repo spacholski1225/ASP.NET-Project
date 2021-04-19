@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoboticsManagement.Data;
 
 namespace RoboticsManagement.Migrations
 {
     [DbContext(typeof(MgmtDbContext))]
-    partial class MgmtDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210419135143_changedAppUser")]
+    partial class changedAppUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
