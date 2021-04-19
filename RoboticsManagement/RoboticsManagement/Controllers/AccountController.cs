@@ -41,11 +41,41 @@ namespace RoboticsManagement.Controllers
             return RedirectToAction("Success", "Success");
 
         }
-        public async Task<IActionResult> Register()
+        [HttpGet]
+        public IActionResult CompanyRegistration()
         {
-            
-            
-            return Ok();
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CompanyRegistration(CompanyRegistartionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Country = model.Country,
+                    CompanyName = model.CompanyName,
+                    City = model.City,
+                    Adress = model.Adress,
+                    NIP = int.Parse(model.NIP),
+                    Regon = int.Parse(model.Regon),
+                    ZipCode = model.ZipCode,
+                    PhoneNumber = model.PhoneNumber
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Success", "Success");
+                }
+                else
+                {
+                    return RedirectToAction("Error", "Error");
+                }
+            }
+            return View(model);
+
         }
     }
 }

@@ -12,14 +12,14 @@ namespace RoboticsManagement.ViewModels
         [EmailAddress]
         [MaxLength(50, ErrorMessage = "Too long email")]
         public string Email { get; set; }
-        [Phone]
-        public int PhoneNumber { get; set; }
+        [Phone(ErrorMessage = "Invalid phone number")]
+        public string PhoneNumber { get; set; }
         [Required]
-        [Range(10, 10, ErrorMessage = "Invalid NIP number.")]
-        public int NIP { get; set; }
+        [MaxLength(10, ErrorMessage = "Invalid NIP number."), MinLength(10)]
+        public string NIP { get; set; }
         [Required]
-        [Range(9, 9, ErrorMessage = "Invalid Regon number.")]
-        public int Regon { get; set; }
+        [MaxLength(9, ErrorMessage = "Invalid Regon number."), MinLength(9)]
+        public string Regon { get; set; }
         [Required]
         [MaxLength(256, ErrorMessage = "Name is too long.")]
         public string CompanyName { get; set; }
@@ -35,5 +35,11 @@ namespace RoboticsManagement.ViewModels
         [Required]
         [StringLength(70, ErrorMessage = "Invalid Adress, address is too long.")]
         public string Adress { get; set; }
+
+        [Required]
+        [DataType(DataType.Password, ErrorMessage ="Invalid password")]
+        public string Password { get; set; }
+        [Compare("Password", ErrorMessage = "Passwords dosn't match!")]
+        public string ConfirmPassword { get; set; }
     }
 }
