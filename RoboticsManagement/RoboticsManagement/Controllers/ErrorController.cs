@@ -18,7 +18,7 @@ namespace RoboticsManagement.Controllers
                     break;
 
             }
-            return View();
+            return NotFound();
         }
     }
 }
