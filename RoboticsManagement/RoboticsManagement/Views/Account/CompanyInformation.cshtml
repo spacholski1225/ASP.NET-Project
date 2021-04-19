@@ -1,0 +1,52 @@
+﻿@model CompanyInfoViewModel
+@{
+    ViewData["Title"] = "Information";
+}
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" placeholder="Email" />
+        <span asp-validation-for="Email" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber"/>
+        <span asp-validation-for="PhoneNumber" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CompanyName"></label>
+        <input asp-for="CompanyName"/>
+        <span asp-validation-for="CompanyName" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NIP"></label>
+        <input asp-for="NIP"/>
+        <span asp-validation-for="NIP" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Regon"></label>
+        <input asp-for="Regon"/>
+        <span asp-validation-for="Regon" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Country"></label>
+        <input asp-for="Country" />
+        <span asp-validation-for="Country" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="City"></label>
+        <input asp-for="City" />
+        <span asp-validation-for="City" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Adress"></label>
+        <input asp-for="Adress" />
+        <span asp-validation-for="Adress" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ZipCode"></label>
+        <input asp-for="ZipCode" />
+        <span asp-validation-for="ZipCode" class="alert-danger"></span>
+    </div>
+    <button class="btn btn-success">Cancel</button>
+</form>

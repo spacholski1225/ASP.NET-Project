@@ -42,6 +42,28 @@ namespace RoboticsManagement.Controllers
 
         }
         [HttpGet]
+        public async Task<IActionResult> CompanyInformation(string name) //need to be added route
+        {
+            var user = await _userManager.FindByNameAsync(name);
+            if(user == null)
+            {
+                return RedirectToAction("Error", "Error");
+            }
+            var model = new CompanyInfoViewModel
+            {
+                Email = user.Email,
+                Country = user.Country,
+                CompanyName = user.CompanyName,
+                City = user.City,
+                Adress = user.Adress,
+                NIP = user.NIP.ToString(),
+                Regon = user.Regon.ToString(),
+                ZipCode = user.ZipCode,
+                PhoneNumber = user.PhoneNumber
+            };
+            return View(model);
+        }
+        [HttpGet]
         public IActionResult CompanyRegistration()
         {
             return View();
