@@ -8,7 +8,11 @@ namespace RoboticsManagement.Test
         [Fact]
         public void Test1()
         {
+            // Arrange
 
+            // Act
+
+            // Assert
         }
     }
 }
