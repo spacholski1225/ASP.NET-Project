@@ -16,7 +16,8 @@ namespace RoboticsManagement.Data
 
         }
         public DbSet<FormModel> complaintFormModels { get; set; }
-        public DbSet<ReservedTime> ReservedTimes { get; set; }
+        
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
