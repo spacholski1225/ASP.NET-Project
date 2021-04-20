@@ -46,7 +46,7 @@ namespace RoboticsManagement.Controllers
 
         [HttpGet]
 
-        public async Task<IActionResult> CompanyInformation(string name) //need to be added route
+        public async Task<IActionResult> CompanyInformation(string name) 
         {
             var user = await _userManager.FindByNameAsync(name);
             if (user == null)
