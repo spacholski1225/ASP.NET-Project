@@ -9,8 +9,7 @@ namespace RoboticsManagement.ViewModels
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Confirm Password does't match.")]
-        public string ConfirmPassword { get; set; }
+        [Display(Name ="Remember me")]
+        public bool RememberMe { get; set; }
     }
 }

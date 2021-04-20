@@ -27,16 +27,18 @@ namespace RoboticsManagement.Controllers
         public async Task<IActionResult> LoginPage(LoginViewModel model)
         {
            
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+
+                if(result.Succeeded)
+                {
+                    return RedirectToAction("Success", "Success"); // TODO change this line into index or sth else after login
+                }
+                return View(model); //someday there will be logs
             }
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            var result = _signInManager.SignInAsync(user, isPersistent: false);
 
-            
-            return RedirectToAction("Success", "Success");
-
+            return View(model);
         }
         [HttpGet]
         public async Task<IActionResult> CompanyInformation(string name) //need to be added route

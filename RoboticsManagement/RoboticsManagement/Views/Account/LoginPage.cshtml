@@ -14,10 +14,13 @@
         <input asp-for="Password" class="form-control" type="password" placeholder="Password" />
         <span asp-validation-for="Password" class="alert-danger"></span>
     </div>
-    <div class="form-group col-md-6">
-        <label asp-for="ConfirmPassword" class="form-check-label">Confirm Password</label>
-        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
-        <span asp-validation-for="ConfirmPassword" class="alert-danger"></span>
+    <div  class="form-group col-md-6">
+        <div class="custom-checkbox">
+            <label asp-for="RememberMe">
+                <input asp-for="RememberMe" />
+                @Html.DisplayNameFor(m => m.RememberMe)
+            </label>
+        </div>
     </div>
     <button class="btn-success  text-md-center" type="submit">Login</button>
 </form>
