@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -15,23 +17,24 @@ namespace RoboticsManagement.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            
+
         }
         [HttpGet]
-        public IActionResult LoginPage()
+        [AllowAnonymous]
+        public IActionResult Login()
         {
             return View();
 
         }
         [HttpPost]
-        public async Task<IActionResult> LoginPage(LoginViewModel model)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-           
+
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-
-                if(result.Succeeded)
+                if (result.Succeeded)
                 {
                     return RedirectToAction("Success", "Success"); // TODO change this line into index or sth else after login
                 }
@@ -40,11 +43,13 @@ namespace RoboticsManagement.Controllers
 
             return View(model);
         }
+
         [HttpGet]
+
         public async Task<IActionResult> CompanyInformation(string name) //need to be added route
         {
             var user = await _userManager.FindByNameAsync(name);
-            if(user == null)
+            if (user == null)
             {
                 return RedirectToAction("Error", "Error");
             }

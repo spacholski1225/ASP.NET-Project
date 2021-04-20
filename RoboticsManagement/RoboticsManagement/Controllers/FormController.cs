@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
 
 namespace RoboticsManagement.Data
 {
+    [Authorize]
     public class FormController : Controller
     {
         private readonly MgmtDbContext context;
