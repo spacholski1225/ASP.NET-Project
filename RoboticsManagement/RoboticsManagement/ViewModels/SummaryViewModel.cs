@@ -1,5 +1,4 @@
 ﻿using RoboticsManagement.Models;
-using System;
 
 namespace RoboticsManagement.ViewModels
 {

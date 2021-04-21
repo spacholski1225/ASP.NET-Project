@@ -1,5 +1,3 @@
-using System;
-
 namespace RoboticsManagement.Models
 {
     public class ErrorViewModel

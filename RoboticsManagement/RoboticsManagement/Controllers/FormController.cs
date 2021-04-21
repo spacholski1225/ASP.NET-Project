@@ -15,13 +15,11 @@ namespace RoboticsManagement.Data
     public class FormController : Controller
     {
         private readonly MgmtDbContext _context;
-        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public FormController(MgmtDbContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        public FormController(MgmtDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _signInManager = signInManager;
             _userManager = userManager;
         }
         [HttpGet]
@@ -86,20 +84,20 @@ namespace RoboticsManagement.Data
         }
 
         [HttpGet]
-        public IActionResult DisplayForm()
+        public IActionResult DisplayForm() //move into AdministrationController
         {
             var forms = _context.complaintFormModels.OrderBy(x => x.Id).ToList();
 
             return View(forms);
         }
         [HttpPost]
-        public IActionResult DisplayForm(int id)
+        public IActionResult DisplayForm(int id) //move into AdministrationController
         {
             var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
             return RedirectToAction("ConcreteForm", "Form", result);
         }
         [HttpGet]
-        public IActionResult ConcreteForm(FormModel result)
+        public IActionResult ConcreteForm(FormModel result)//move into AdministrationController
         {
             return View(result);
         }
