@@ -11,7 +11,7 @@ namespace RoboticsManagement.Data
         {
 
         }
-        public DbSet<FormModel> complaintFormModels { get; set; }
+        public DbSet<FormModel> complaintFormModels { get; set; } //note after change table name migration have build error
         
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)

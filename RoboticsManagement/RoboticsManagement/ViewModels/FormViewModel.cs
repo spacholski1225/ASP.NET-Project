@@ -6,11 +6,9 @@ namespace RoboticsManagement.ViewModels
     public class FormViewModel
     {
         [Required]
-        public string Company { get; set; } // there will be account details
-        [Required]
+        [StringLength(500, ErrorMessage = "Too many, the limit is 500 letters.")]
         public string Description { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Choose your robot")]
         public ERobotsCategory ERobotsCategory { get; set; }
-        
     }
 }

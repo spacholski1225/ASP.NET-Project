@@ -1,18 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
+using System;
+using System.Threading.Tasks;
 
 namespace RoboticsManagement.Data
 {
     [Authorize]
     public class FormController : Controller
     {
-        private readonly MgmtDbContext context;
+        private readonly MgmtDbContext _context;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public FormController(MgmtDbContext context)
+        public FormController(MgmtDbContext context, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
-            this.context = context;
+            _context = context;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
         [HttpGet]
         public IActionResult Form()
@@ -20,21 +28,59 @@ namespace RoboticsManagement.Data
             return View();
         }
         [HttpPost]
-        public IActionResult Form(FormViewModel model)
+        public async Task<IActionResult> Form(FormViewModel model, string name)
         {
+            var user = await _userManager.FindByNameAsync(name);
             if(ModelState.IsValid)
             {
-                var toAddModel = new FormModel
+                var summary = new SummaryViewModel
                 {
-                    Company = model.Company,
+                    Adress = user.Adress,
+                    City = user.City,
+                    Company = user.CompanyName,
+                    Country = user.Country,
+                    ZipCode = user.ZipCode,
                     ERobotsCategory = model.ERobotsCategory,
                     Description = model.Description
                 };
-                context.complaintFormModels.Add(toAddModel);
-                context.SaveChanges();
+                return RedirectToAction("Summary", "Form", summary);
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult Summary(SummaryViewModel summary)
+        {
+            return View(summary);
+        }
+        [HttpPost]
+        public IActionResult Summary(SummaryViewModel summary,bool isOkay)
+        {
+            if(isOkay = true)
+            {
+                var model = new FormModel
+                {
+                    Adress = summary.Adress,
+                    City = summary.City,
+                    Company = summary.Company,
+                    Country = summary.Country,
+                    ZipCode = summary.ZipCode,
+                    ERobotsCategory = summary.ERobotsCategory,
+                    Description = summary.Description,
+                    CreatedDate = DateTime.Now
+                };
+                try
+                {
+                    _context.complaintFormModels.Add(model);
+                    _context.SaveChanges();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message); // todo change this line into log to file or sth else
+                }
+
                 return RedirectToAction("Success", "Success");
             }
-            return View();
+            return View(summary);
         }
     }
 }
