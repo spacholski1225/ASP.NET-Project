@@ -92,5 +92,16 @@ namespace RoboticsManagement.Data
 
             return View(forms);
         }
+        [HttpPost]
+        public IActionResult DisplayForm(int id)
+        {
+            var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
+            return RedirectToAction("ConcreteForm", "Form", result);
+        }
+        [HttpGet]
+        public IActionResult ConcreteForm(FormModel result)
+        {
+            return View(result);
+        }
     }
 }

@@ -1,0 +1,42 @@
+﻿@model FormModel
+
+@{
+    ViewData["Title"] = "Form " + Model.Id;
+}
+<div class="form-row">
+    <div class="col-md-4 mb-3">
+        <label asp-for="@Model.Description"></label>
+        <textarea class="form-control" asp-for="@Model.Description" readonly ></textarea>
+        <span asp-validation-for="@Model.Description" class="alert-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="@Model.ERobotsCategory"></label>
+        <input class="form-control" asp-for="@Model.ERobotsCategory" readonly />
+        <span asp-validation-for="@Model.ERobotsCategory" class="alert-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="@Model.Company"></label>
+        <input class="form-control" asp-for="@Model.Company" readonly />
+        <span asp-validation-for="@Model.Company" class="alert-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="@Model.Country"></label>
+        <input class="form-control" asp-for="@Model.Country" readonly />
+        <span asp-validation-for="@Model.Country" class="alert-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="@Model.City"></label>
+        <input class="form-control" asp-for="@Model.City" readonly />
+        <span asp-validation-for="@Model.City" class="alert-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="@Model.Adress"></label>
+        <input class="form-control" asp-for="@Model.Adress" readonly />
+        <span asp-validation-for="@Model.Adress" class="alert-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="@Model.ZipCode"></label>
+        <input class="form-control" asp-for="@Model.ZipCode" readonly />
+        <span asp-validation-for="@Model.ZipCode" class="alert-danger"></span>
+    </div>
+</div>
