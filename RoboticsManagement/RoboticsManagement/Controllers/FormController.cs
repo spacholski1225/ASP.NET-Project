@@ -5,6 +5,8 @@ using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoboticsManagement.Data
@@ -24,7 +26,7 @@ namespace RoboticsManagement.Data
         }
         [HttpGet]
         public IActionResult Form()
-        {
+        { 
             return View();
         }
         [HttpPost]
@@ -81,6 +83,14 @@ namespace RoboticsManagement.Data
                 return RedirectToAction("Success", "Success");
             }
             return View(summary);
+        }
+
+        [HttpGet]
+        public IActionResult DisplayForm()
+        {
+            var forms = _context.complaintFormModels.OrderBy(x => x.Id).ToList();
+
+            return View(forms);
         }
     }
 }

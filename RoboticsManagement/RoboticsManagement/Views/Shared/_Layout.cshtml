@@ -24,18 +24,20 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyRegistration">Temporirily register</a>
                         </li>
                         @if (signInManager.IsSignedIn(User))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Company Information</a>
-                                </li> 
-                            }
-            else
-            {
-                <li>STH WRONG</li>
-            }                       
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Company Information</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="DisplayForm">Temporily display forms</a>
+                            </li>
+
+                        }
+                        
                     </ul>
                 </div>
             </div>
