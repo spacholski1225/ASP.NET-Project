@@ -104,7 +104,27 @@ namespace RoboticsManagement.Controllers
         [HttpPost]
         public IActionResult NewTask(NewTaskViewModel model)
         {
-            return View();
+            if (ModelState.IsValid) //todo implement funcionality to choose emplyee for this task
+            {
+                var task = new EmployeeTask
+                {
+                    Description = model.Description,
+                    Adress = model.Adress,
+                    City = model.Adress,
+                    Company = model.Company,
+                    Country = model.Company
+                };
+                try
+                {
+                    _context.EmployeeTasks.Add(task);
+                    _context.SaveChanges();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message); //todo move it into logs
+                }
+            }
+            return View(model);
         }
     }
 }
