@@ -86,5 +86,25 @@ namespace RoboticsManagement.Controllers
         {
             return View(result);
         }
+
+        [HttpGet]
+        public IActionResult NewTask(int id)
+        {
+            var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
+            var model = new NewTaskViewModel
+            {
+                Description = result.Description,
+                Adress = result.Adress,
+                City = result.City,
+                Company = result.Company,
+                Country = result.Country
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult NewTask(NewTaskViewModel model)
+        {
+            return View();
+        }
     }
 }

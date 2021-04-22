@@ -39,4 +39,5 @@
         <input class="form-control" asp-for="@Model.ZipCode" readonly />
         <span asp-validation-for="@Model.ZipCode" class="alert-danger"></span>
     </div>
+    <a class="btn btn-primary" asp-action="NewTask" asp-controller="Administration" asp-route-id="@Model.Id">Send to employee</a>
 </div>
