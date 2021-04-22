@@ -18,5 +18,7 @@ namespace RoboticsManagement.Models
         public string Country { get; set; }
         
         public string Adress { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

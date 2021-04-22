@@ -15,9 +15,9 @@ namespace RoboticsManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MgmtDbContext _context;
-        private readonly RoleManager<IdentityUser> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdministrationController(UserManager<ApplicationUser> userManager, MgmtDbContext context, RoleManager<IdentityUser> roleManager)
+        public AdministrationController(UserManager<ApplicationUser> userManager, MgmtDbContext context, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _context = context;
@@ -35,11 +35,19 @@ namespace RoboticsManagement.Controllers
             {
                 var user = new ApplicationUser //TODO extend about employee informations
                 {
-                    UserName = model.UserName
+                    UserName = model.UserName,
+                    Adress = model.Adress,
+                    Email = model.Email,
+                    Country = model.Country,
+                    City = model.City,
+                    ZipCode = model.ZipCode,
+                    PhoneNumber = model.PhoneNumber
+
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, ERole.Emplyee.ToString());
                     return RedirectToAction("Success", "Success");
                 }
                 else
