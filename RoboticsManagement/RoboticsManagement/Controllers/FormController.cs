@@ -83,23 +83,6 @@ namespace RoboticsManagement.Data
             return View(summary);
         }
 
-        [HttpGet]
-        public IActionResult DisplayForm() //move into AdministrationController
-        {
-            var forms = _context.complaintFormModels.OrderBy(x => x.Id).ToList();
-
-            return View(forms);
-        }
-        [HttpPost]
-        public IActionResult DisplayForm(int id) //move into AdministrationController
-        {
-            var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
-            return RedirectToAction("ConcreteForm", "Form", result);
-        }
-        [HttpGet]
-        public IActionResult ConcreteForm(FormModel result)//move into AdministrationController
-        {
-            return View(result);
-        }
+        
     }
 }
