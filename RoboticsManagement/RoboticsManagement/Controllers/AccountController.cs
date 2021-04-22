@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
@@ -89,16 +90,20 @@ namespace RoboticsManagement.Controllers
                     NIP = int.Parse(model.NIP),
                     Regon = int.Parse(model.Regon),
                     ZipCode = model.ZipCode,
-                    PhoneNumber = model.PhoneNumber
+                    PhoneNumber = model.PhoneNumber,
+                   
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    /*var role = new IdentityRole
+                    if (!_roleManager.Roles.Any(x => x.Name == "Client"))
                     {
-                        Name = ERole.Client.ToString()
-                    };
-                    await _roleManager.CreateAsync(role)*/;
+                        var role = new IdentityRole
+                        {
+                            Name = ERole.Client.ToString()
+                        };
+                        await _roleManager.CreateAsync(role);
+                    }
                     await _userManager.AddToRoleAsync(user, ERole.Client.ToString());
                     return RedirectToAction("Success", "Success");
                 }

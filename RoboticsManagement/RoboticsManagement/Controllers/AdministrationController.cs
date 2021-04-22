@@ -33,7 +33,7 @@ namespace RoboticsManagement.Controllers
         {
             if(ModelState.IsValid)
             {
-                var user = new ApplicationUser //TODO extend about employee informations
+                var user = new ApplicationUser 
                 {
                     UserName = model.UserName,
                     Adress = model.Adress,
@@ -41,13 +41,23 @@ namespace RoboticsManagement.Controllers
                     Country = model.Country,
                     City = model.City,
                     ZipCode = model.ZipCode,
-                    PhoneNumber = model.PhoneNumber
+                    PhoneNumber = model.PhoneNumber,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
 
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, ERole.Emplyee.ToString());
+                    if(!_roleManager.Roles.Any(x =>x.Name == "Employee"))
+                    {
+                        var role = new IdentityRole
+                        {
+                            Name = ERole.Employee.ToString()
+                        };
+                        await _roleManager.CreateAsync(role);
+                    }
+                    await _userManager.AddToRoleAsync(user, ERole.Employee.ToString());
                     return RedirectToAction("Success", "Success");
                 }
                 else
