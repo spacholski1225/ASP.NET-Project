@@ -79,7 +79,7 @@ namespace RoboticsManagement.Controllers
         public IActionResult DisplayForm(int id)
         {
             var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
-            return RedirectToAction("ConcreteForm", "Form", result);
+            return RedirectToAction("ConcreteForm", "Administration", result);
         }
         [HttpGet]
         public IActionResult ConcreteForm(FormModel result)
