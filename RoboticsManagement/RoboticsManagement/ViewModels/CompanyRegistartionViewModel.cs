@@ -36,6 +36,7 @@ namespace RoboticsManagement.ViewModels
         [DataType(DataType.Password, ErrorMessage ="Invalid password")]
         public string Password { get; set; }
         [Compare("Password", ErrorMessage = "Passwords dosn't match!")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
     }
 }

@@ -12,12 +12,13 @@ namespace RoboticsManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-
+            _roleManager = roleManager;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -93,6 +94,12 @@ namespace RoboticsManagement.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    /*var role = new IdentityRole
+                    {
+                        Name = ERole.Client.ToString()
+                    };
+                    await _roleManager.CreateAsync(role)*/;
+                    await _userManager.AddToRoleAsync(user, ERole.Client.ToString());
                     return RedirectToAction("Success", "Success");
                 }
                 else

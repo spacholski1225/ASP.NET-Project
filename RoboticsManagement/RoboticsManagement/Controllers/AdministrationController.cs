@@ -15,11 +15,13 @@ namespace RoboticsManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MgmtDbContext _context;
+        private readonly RoleManager<IdentityUser> _roleManager;
 
-        public AdministrationController(UserManager<ApplicationUser> userManager, MgmtDbContext context)
+        public AdministrationController(UserManager<ApplicationUser> userManager, MgmtDbContext context, RoleManager<IdentityUser> roleManager)
         {
             _userManager = userManager;
             _context = context;
+            _roleManager = roleManager;
         }
         [HttpGet]
         public IActionResult AddEmployee()
@@ -39,6 +41,10 @@ namespace RoboticsManagement.Controllers
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Success", "Success");
+                }
+                else
+                {
+                    return View(model);
                 }
             }
             return View(model);
