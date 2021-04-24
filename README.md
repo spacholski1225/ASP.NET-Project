@@ -1,4 +1,4 @@
-# ASP.NET-Project
+# Project management 
 
 ## General info
 I want to create a business application that manages product maintenance. User (company) after login can fill a form then administration gets information from a form. After that employee in real-time gets a work plan for a future.
