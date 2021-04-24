@@ -2,28 +2,22 @@
 @inject SignInManager<ApplicationUser> signInManager
 @{
     ViewData["Title"] = "Welcome";
-    
+
 }
-    
+
 @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
 {
-<div class="grid-container">
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddEmployee">Add new Employee</a>
+    <div class="grid-container">
+        <div class="grid-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddEmployee">Add new Employee</a>
+        </div>
+        <div class="grid-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="DisplayForm">Temporily display forms</a>
+        </div>
+        <div class="grid-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyRegistration">Company Registration</a>
+        </div>
     </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="DisplayForm">Temporily display forms</a>
-    </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyRegistration">Company Registration</a>
-    </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="ConcreteForm">Concrete form</a>
-    </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="NewTask">New task</a>
-    </div>
-</div>
 }
 else if (signInManager.IsSignedIn(User) && User.IsInRole("Client"))
 {

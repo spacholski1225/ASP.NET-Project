@@ -1,62 +1,64 @@
 ﻿@model CompanyRegistartionViewModel
-@{ 
+@{
     ViewData["Title"] = "Registration";
 }
 <form method="post">
-    <div class="form-floating">
+    <div class="form-floating col-md-6">
         <label asp-for="Email">Email</label>
         <input asp-for="Email" class="form-control" placeholder="Email" />
         <span asp-validation-for="Email" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="Password">Password</label>
-        <input asp-for="Password" placeholder="Password" />
+        <input asp-for="Password" class="form-control" placeholder="Password" />
         <span asp-validation-for="Password" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="ConfirmPassword">ConfirmPassword</label>
-        <input asp-for="ConfirmPassword" placeholder="ConfirmPassword" />
+        <input asp-for="ConfirmPassword" class="form-control" placeholder="ConfirmPassword" />
         <span asp-validation-for="ConfirmPassword" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="PhoneNumber">PhoneNumber</label>
-        <input asp-for="PhoneNumber" placeholder="PhoneNumber" />
+        <input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber" />
         <span asp-validation-for="PhoneNumber" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="CompanyName">CompanyName</label>
-        <input asp-for="CompanyName" placeholder="CompanyName" />
+        <input asp-for="CompanyName" class="form-control" placeholder="CompanyName" />
         <span asp-validation-for="CompanyName" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="NIP">NIP</label>
-        <input asp-for="NIP" placeholder="NIP" />
+        <input asp-for="NIP" class="form-control" placeholder="NIP" />
         <span asp-validation-for="NIP" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="Regon">Regon</label>
-        <input asp-for="Regon" placeholder="Regon" />
+        <input asp-for="Regon" class="form-control" placeholder="Regon" />
         <span asp-validation-for="Regon" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="Country">Country</label>
-        <input asp-for="Country" placeholder="Country" />
+        <input asp-for="Country" class="form-control" placeholder="Country" />
         <span asp-validation-for="Country" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="City">City</label>
-        <input asp-for="City" placeholder="City" />
+        <input asp-for="City" class="form-control" placeholder="City" />
         <span asp-validation-for="City" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="Adress">Adress</label>
-        <input asp-for="Adress" placeholder="Adress" />
+        <input asp-for="Adress" class="form-control" placeholder="Adress" />
         <span asp-validation-for="Adress" class="alert-danger"></span>
     </div>
-    <div class="form-group">
+    <div class="form-floating col-md-6">
         <label asp-for="ZipCode">ZipCode</label>
-        <input asp-for="ZipCode" placeholder="ZipCode" />
+        <input asp-for="ZipCode" class="form-control" placeholder="ZipCode" />
         <span asp-validation-for="ZipCode" class="alert-danger"></span>
     </div>
-    <button type="submit" class="btn btn-success">Submit</button>
+    <div class="form-floating col-md-6">
+        <button type="submit" class="btn btn-success">Submit</button>
+    </div>
 </form>
