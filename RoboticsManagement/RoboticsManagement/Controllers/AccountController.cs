@@ -28,6 +28,12 @@ namespace RoboticsManagement.Controllers
             return View();
 
         }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -47,12 +53,12 @@ namespace RoboticsManagement.Controllers
             return View(model);
         }
 
-       
         [HttpGet]
         public IActionResult CompanyRegistration()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> CompanyRegistration(CompanyRegistartionViewModel model)
         {
@@ -100,6 +106,7 @@ namespace RoboticsManagement.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> AddEmployee(EmployeeRegistrationViewModel model)
         {
