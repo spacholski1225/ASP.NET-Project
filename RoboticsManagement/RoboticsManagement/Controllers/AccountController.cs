@@ -47,29 +47,7 @@ namespace RoboticsManagement.Controllers
             return View(model);
         }
 
-        [HttpGet]
-
-        public async Task<IActionResult> CompanyInformation(string name) 
-        {
-            var user = await _userManager.FindByNameAsync(name);
-            if (user == null)
-            {
-                return RedirectToAction("Error", "Error");
-            }
-            var model = new CompanyInfoViewModel
-            {
-                Email = user.Email,
-                Country = user.Country,
-                CompanyName = user.CompanyName,
-                City = user.City,
-                Adress = user.Adress,
-                NIP = user.NIP.ToString(),
-                Regon = user.Regon.ToString(),
-                ZipCode = user.ZipCode,
-                PhoneNumber = user.PhoneNumber
-            };
-            return View(model);
-        }
+       
         [HttpGet]
         public IActionResult CompanyRegistration()
         {
@@ -115,6 +93,51 @@ namespace RoboticsManagement.Controllers
             }
             return View(model);
 
+        }
+
+        [HttpGet]
+        public IActionResult AddEmployee()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddEmployee(EmployeeRegistrationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Adress = model.Adress,
+                    Email = model.Email,
+                    Country = model.Country,
+                    City = model.City,
+                    ZipCode = model.ZipCode,
+                    PhoneNumber = model.PhoneNumber,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
+
+                };
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    if (!_roleManager.Roles.Any(x => x.Name == "Employee"))
+                    {
+                        var role = new IdentityRole
+                        {
+                            Name = ERole.Employee.ToString()
+                        };
+                        await _roleManager.CreateAsync(role);
+                    }
+                    await _userManager.AddToRoleAsync(user, ERole.Employee.ToString());
+                    return RedirectToAction("Success", "Success");
+                }
+                else
+                {
+                    return View(model);
+                }
+            }
+            return View(model);
         }
     }
 }

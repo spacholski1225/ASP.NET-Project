@@ -9,7 +9,7 @@
 {
     <div class="grid-container">
         <div class="grid-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="AddEmployee">Add new Employee</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddEmployee">Add new Employee</a>
         </div>
         <div class="grid-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="DisplayForm">Temporily display forms</a>
@@ -20,7 +20,7 @@ else if (signInManager.IsSignedIn(User) && User.IsInRole("Client"))
 {
     <div class="grid-container">
         <div class="grid-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Account Information</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Account Information</a>
         </div>
         <div class="grid-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint</a>

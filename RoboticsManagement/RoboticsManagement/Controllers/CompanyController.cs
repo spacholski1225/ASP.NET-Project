@@ -1,0 +1,43 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using RoboticsManagement.Models;
+using RoboticsManagement.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace RoboticsManagement.Controllers
+{
+    public class CompanyController : Controller
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public CompanyController(UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
+        [HttpGet]
+        public async Task<IActionResult> CompanyInformation(string name)
+        {
+            var user = await _userManager.FindByNameAsync(name);
+            if (user == null)
+            {
+                return RedirectToAction("Error", "Error");
+            }
+            var model = new CompanyInfoViewModel
+            {
+                Email = user.Email,
+                Country = user.Country,
+                CompanyName = user.CompanyName,
+                City = user.City,
+                Adress = user.Adress,
+                NIP = user.NIP.ToString(),
+                Regon = user.Regon.ToString(),
+                ZipCode = user.ZipCode,
+                PhoneNumber = user.PhoneNumber
+            };
+            return View(model);
+        }
+    }
+}
