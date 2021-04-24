@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -24,7 +25,6 @@ namespace RoboticsManagement.Controllers
             _context = context;
             _roleManager = roleManager;
         }
-        [Authorize(Roles = "Admin")] //to delete or modify
         public async Task<IActionResult> AddAdmin()
         {
 
@@ -51,10 +51,9 @@ namespace RoboticsManagement.Controllers
                 }
             }
                 return Ok();
-            
-        }
-        
-        
+
+        }//to delete or modify
+
         [HttpGet]
         public IActionResult DisplayForm()
         {
@@ -62,12 +61,14 @@ namespace RoboticsManagement.Controllers
 
             return View(forms);
         }
+
         [HttpPost]
         public IActionResult DisplayForm(int id)
         {
             var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
             return RedirectToAction("ConcreteForm", "Administration", result);
         }
+
         [HttpGet]
         public IActionResult ConcreteForm(FormModel result)
         {
@@ -88,6 +89,7 @@ namespace RoboticsManagement.Controllers
             };
             return View(model);
         }
+
         [HttpPost]
         public IActionResult NewTask(NewTaskViewModel model)
         {

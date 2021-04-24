@@ -52,13 +52,15 @@ namespace RoboticsManagement.Controllers
 
             return View(model);
         }
-
+        
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult CompanyRegistration()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CompanyRegistration(CompanyRegistartionViewModel model)
         {
@@ -101,12 +103,14 @@ namespace RoboticsManagement.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult AddEmployee()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddEmployee(EmployeeRegistrationViewModel model)
         {

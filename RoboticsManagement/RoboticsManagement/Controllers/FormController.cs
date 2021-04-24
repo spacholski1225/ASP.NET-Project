@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Data
 {
-    [Authorize]
+    [Authorize(Roles = "Client")]
     public class FormController : Controller
     {
         private readonly MgmtDbContext _context;
@@ -27,6 +27,7 @@ namespace RoboticsManagement.Data
         { 
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Form(FormViewModel model, string name)
         {
@@ -47,15 +48,17 @@ namespace RoboticsManagement.Data
             }
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Summary(SummaryViewModel summary)
         {
             return View(summary);
         }
+
         [HttpPost]
-        public IActionResult Summary(SummaryViewModel summary,bool isOkay)
+        public IActionResult Summary(SummaryViewModel summary,bool isOkay = true)
         {
-            if(isOkay = true)
+            if(isOkay)
             {
                 var model = new FormModel
                 {

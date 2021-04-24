@@ -5,10 +5,10 @@ using System.Diagnostics;
 
 namespace RoboticsManagement.Controllers
 {
+    [AllowAnonymous]
     public class ErrorController : Controller
     {
         [Route("Error/{statusCode}")]
-        [AllowAnonymous]
         public IActionResult HttpStatusCodeHandler(int statusCode)
         {
             switch (statusCode)
