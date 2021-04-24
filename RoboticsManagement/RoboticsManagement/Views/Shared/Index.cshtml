@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> signInManager
+@{
+    ViewData["Title"] = "Welcome";
+}
+@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+{
+    <div class="grid-container">
+        <div class="grid-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="AddEmployee">Add new Employee</a>
+        </div>
+        <div class="grid-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="DisplayForm">Temporily display forms</a>
+        </div>
+    </div>
+}
+else if (signInManager.IsSignedIn(User) && User.IsInRole("Client"))
+{
+    <div class="grid-container">
+        <div class="grid-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Account Information</a>
+        </div>
+        <div class="grid-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint</a>
+        </div>
+    </div>
+}
+else if (signInManager.IsSignedIn(User) && User.IsInRole("Employee"))
+{
+    <div class="grid-container">
+        <div class="grid-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="TasksForEmployee">Temporily employee tasks</a>
+        </div>
+    </div>
+}

@@ -38,8 +38,9 @@ namespace RoboticsManagement.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Success", "Success"); // TODO change this line into index or sth else after login
+                    return RedirectToAction("Index", "Home");
                 }
+                
                 return View(model); //someday there will be logs
             }
 

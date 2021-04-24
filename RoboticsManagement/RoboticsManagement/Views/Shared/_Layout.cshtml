@@ -20,30 +20,12 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyRegistration">Temporirily register</a>
-                        </li>
-                        @if (signInManager.IsSignedIn(User))
+                        @if (!signInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyRegistration">Temporirily register</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Company Information</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="DisplayForm">Temporily display forms</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="AddEmployee">Temporily add new employee</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="TasksForEmployee">Temporily employee tasks</a>
-                            </li>
-
                         }
-
                     </ul>
                 </div>
             </div>
