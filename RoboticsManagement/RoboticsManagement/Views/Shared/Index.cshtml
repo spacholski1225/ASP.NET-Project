@@ -2,7 +2,9 @@
 @inject SignInManager<ApplicationUser> signInManager
 @{
     ViewData["Title"] = "Welcome";
+    
 }
+    
 @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
 {
     <div class="grid-container">
