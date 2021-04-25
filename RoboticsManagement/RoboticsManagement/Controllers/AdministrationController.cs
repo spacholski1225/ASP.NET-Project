@@ -99,9 +99,9 @@ namespace RoboticsManagement.Controllers
                 {
                     Description = model.Description,
                     Adress = model.Adress,
-                    City = model.Adress,
+                    City = model.City,
                     Company = model.Company,
-                    Country = model.Company
+                    Country = model.Country
                 };
                 try
                 {
