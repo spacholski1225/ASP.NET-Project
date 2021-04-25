@@ -79,3 +79,25 @@ body {
     border: 1px solid rgb(91 91 91 / 0.89);
     text-align: center;
 }
+.center {
+    position: absolute;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-container{
+    background-color: #808080;
+    height:84vh;
+    position:relative;
+    
+}
+.login-child{
+    border: 1px solid #ff0000;
+    padding: 10px;
+    display:inline-block;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%)
+}
