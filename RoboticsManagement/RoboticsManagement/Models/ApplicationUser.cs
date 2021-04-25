@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace RoboticsManagement.Models
 {
@@ -20,5 +21,7 @@ namespace RoboticsManagement.Models
         public string Adress { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public ICollection<EmployeeTask> EmployeeTask { get; set; }
     }
 }

@@ -13,5 +13,6 @@ namespace RoboticsManagement.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string Adress { get; set; }
+        ICollection<ApplicationUser> Employee{get;set;}
     }
 }
