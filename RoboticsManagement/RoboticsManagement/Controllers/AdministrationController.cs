@@ -114,6 +114,7 @@ namespace RoboticsManagement.Controllers
                 }
             }
             return View(model);
-        }
+        } //nowe zadanie nie zapisuje sie dla uzytkownika | dodac baze danych do odpowiednich zadan tj wiele do jednego
+        //gdzie pracownik moze miec wiele zadan
     }
 }

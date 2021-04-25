@@ -53,7 +53,7 @@ namespace RoboticsManagement.Data
         public IActionResult Summary(SummaryViewModel summary)
         {
             return View(summary);
-        }
+        } //po podsumowaniu sprawdzic wyslanie bo cos nie dziala oraz dorobic mozliwosc cofniecia w celu zmiany danych
 
         [HttpPost]
         public IActionResult Summary(SummaryViewModel summary,bool isOkay = true)
