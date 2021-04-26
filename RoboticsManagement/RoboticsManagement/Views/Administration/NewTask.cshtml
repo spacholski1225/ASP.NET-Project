@@ -1,33 +1,28 @@
-﻿@model NewTaskViewModel
+﻿@model EmployeeViewModel
 
 @{
     ViewData["Title"] = "New Task";
 }
 <form method="post">
-    <div class="col-md-4 mb-3">
-        <label asp-for="Company"></label>
-        <input class="form-control" asp-for="Company" readonly />
-        <span asp-validation-for="Company" class="alert-danger"></span>
-    </div>
-    <div class="col-md-4 mb-3">
-        <label asp-for="Country"></label>
-        <input class="form-control" asp-for="Country" readonly />
-        <span asp-validation-for="Country" class="alert-danger"></span>
-    </div>
-    <div class="col-md-4 mb-3">
-        <label asp-for="City"></label>
-        <input class="form-control" asp-for="City" readonly />
-        <span asp-validation-for="City" class="alert-danger"></span>
-    </div>
-    <div class="col-md-4 mb-3">
-        <label asp-for="Adress"></label>
-        <input class="form-control" asp-for="Adress" readonly />
-        <span asp-validation-for="Adress" class="alert-danger"></span>
-    </div>
-    <div class="col-md-4 mb-3">
-        <label asp-for="Description"></label>
-        <input class="form-control" asp-for="Description" readonly />
-        <span asp-validation-for="Description" class="alert-danger"></span>
+    <div class="row">
+        <div>
+            <div class="col-md-4">
+                <label asp-for="FirstName"></label>
+                <input class="form-control" asp-for="FirstName" readonly />
+                <span asp-validation-for="FirstName" class="alert-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="LastName"></label>
+                <input class="form-control" asp-for="LastName" readonly />
+                <span asp-validation-for="LastName" class="alert-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="NewTaskViewModel.Description"></label>
+                <input class="form-control" asp-for="NewTaskViewModel.Description" readonly />
+                <span asp-validation-for="NewTaskViewModel.Description" class="alert-danger"></span>
+            </div>
+
+        </div>
     </div>
     <button class="btn btn-primary" type="submit">Send</button>
     <a class="btn btn-primary" asp-controller="Administration" asp-action="DisplayForm">Back</a>

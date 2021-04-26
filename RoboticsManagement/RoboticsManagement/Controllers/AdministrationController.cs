@@ -18,6 +18,7 @@ namespace RoboticsManagement.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MgmtDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private int _taskId;
 
         public AdministrationController(UserManager<ApplicationUser> userManager, MgmtDbContext context, RoleManager<IdentityRole> roleManager)
         {
@@ -74,47 +75,49 @@ namespace RoboticsManagement.Controllers
         {
             return View(result);
         }
-
-        [HttpGet]
-        public IActionResult NewTask(int id)
+        [HttpPost]
+        public IActionResult ConcreteForm(int id)
         {
-            var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
-            var model = new NewTaskViewModel
+            var task = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
+            var newTask = new NewTaskViewModel
             {
-                Description = result.Description,
-                Adress = result.Adress,
-                City = result.City,
-                Company = result.Company,
-                Country = result.Country
+                TaskId = task.Id,
+                Description = task.Description,
+                Adress = task.Adress,
+                City = task.City,
+                Company = task.Company,
+                Country = task.Country
             };
+            return RedirectToAction("PickEmployee", newTask);
+        }
+        [HttpGet]
+        public async Task<IActionResult> PickEmployee(NewTaskViewModel newTask) //must have refactor this and above and below
+        {
+            var emp = await _userManager.GetUsersInRoleAsync("Employee");
+            var employees = new List<EmployeeViewModel>();
+            foreach (var employee in emp)
+            {
+                employees.Add(new EmployeeViewModel
+                {
+                    EmployeeId = employee.Id,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    NewTaskViewModel = newTask
+                });
+            }
+            return View(employees);
+        }
+        [HttpPost]
+        public async Task<IActionResult> PickEmployee(string employeeId, int taskId)
+        {
+            var employee = await _userManager.FindByIdAsync(employeeId);
+            _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId).Employee.Add(employee);
+            _context.SaveChanges();
+            return RedirectToAction("NewTask");
+        }
+        public IActionResult NewTask(EmployeeViewModel model)
+        {
             return View(model);
         }
-
-        [HttpPost]
-        public IActionResult NewTask(NewTaskViewModel model)
-        {
-            if (ModelState.IsValid) //todo implement funcionality to choose emplyee for this task
-            {
-                var task = new EmployeeTask
-                {
-                    Description = model.Description,
-                    Adress = model.Adress,
-                    City = model.City,
-                    Company = model.Company,
-                    Country = model.Country
-                };
-                try
-                {
-                    _context.EmployeeTasks.Add(task);
-                    _context.SaveChanges();
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine(e.Message); //todo move it into logs
-                }
-            }
-            return View(model);
-        } //nowe zadanie nie zapisuje sie dla uzytkownika | dodac baze danych do odpowiednich zadan tj wiele do jednego
-        //gdzie pracownik moze miec wiele zadan
     }
 }
