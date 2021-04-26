@@ -111,7 +111,13 @@ namespace RoboticsManagement.Controllers
         public async Task<IActionResult> PickEmployee(string employeeId, int taskId)
         {
             var employee = await _userManager.FindByIdAsync(employeeId);
-            _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId).Employee.Add(employee);
+            var task = _context.complaintFormModels.FirstOrDefault(x => x.Id == taskId);
+            var entity = new TaskForEmployee
+            {
+                EmployeeId = employeeId,
+                TaskId = taskId
+            };
+            _context.TaskForEmployee.Add(entity);
             _context.SaveChanges();
             return RedirectToAction("NewTask");
         }

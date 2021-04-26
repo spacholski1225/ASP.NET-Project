@@ -22,6 +22,6 @@ namespace RoboticsManagement.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public ICollection<EmployeeTask> EmployeeTask { get; set; }
+        public ICollection<TaskForEmployee> TaskForEmployee { get; set; }
     }
 }
