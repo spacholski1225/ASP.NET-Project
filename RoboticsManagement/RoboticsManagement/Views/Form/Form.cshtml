@@ -5,19 +5,21 @@
 
 <h1 class="display-4">Complaint form</h1>
 <form method="post">
-    <div class="form-group col-md-2">
-        <label asp-for="ERobotsCategory">Select our robot</label>
-        <select multiple class="form-control" asp-for="ERobotsCategory" asp-items="Html.GetEnumSelectList<ERobotsCategory>()">
-        </select>
-        <span asp-validation-for="ERobotsCategory" class="alert-danger"></span>
+    <div class="row">
+        <div class="form-group col-2">
+            <label asp-for="ERobotsCategory">Select our robot</label>
+            <select class="form-control" style="width:100%" asp-for="ERobotsCategory" asp-items="Html.GetEnumSelectList<ERobotsCategory>()">
+            </select>
+            <span asp-validation-for="ERobotsCategory" class="alert-danger"></span>
+        </div>
+        <div class="form-group col-10">
+            <label>Please descript your problem.</label>
+            <textarea rows="5" asp-for="Description" class="form-control" placeholder="Your problem..."></textarea>
+            <span asp-validation-for="Description" class="alert-danger"></span>
+        </div>
     </div>
-    <div class="form-group">
-        <label>Please descript your problem.</label>
-        <textarea rows="3" asp-for="Description" class="form-control" placeholder="Your problem..."></textarea>
-        <span asp-validation-for="Description" class="alert-danger"></span>
-    </div>
-    <div>
-        <button type="submit" class="btn btn-success" asp-route-name="@User.Identity.Name">Create</button>
-        <a class="btn btn-success" asp-controller="Home" asp-action="Index">Back</a>
+    <div class="row">
+        <button type="submit" class="btn btn-success" asp-route-name="@User.Identity.Name" style="margin-left:auto; margin-right:0">Create</button>
+        <a class="btn btn-success" asp-controller="Home" asp-action="Index" style="margin-left:5px; margin-right:auto">Back</a>
     </div>
 </form>

@@ -3,11 +3,14 @@
 @{
     ViewData["Title"] = "Employees Tasks";
 }
-@foreach (var task in Model)
-{
-    <label class="col-sm-2 col-form-label">Company name:</label>
-    <div class="col-sm-10">
-        <a class="page-link" asp-action="EmployeeTask" asp-controller="Employee" asp-route-id="@task.Id">@task.Company</a>
-    </div>
-}
-<a class="btn btn-success" asp-controller="Home" asp-action="Index">Back</a>
+<div class="row">
+    @foreach (var task in Model)
+    {
+        <div class="grid-item" style="border: hidden">
+            <a class="btn btn-outline-primary" asp-action="EmployeeTask" asp-controller="Employee" asp-route-id="@task.Id">@task.Company</a>
+        </div>
+    }
+</div>
+<div class="row">
+    <a class="btn btn-success" asp-controller="Home" asp-action="Index" style="margin:0 auto 0 auto">Back</a>
+</div>

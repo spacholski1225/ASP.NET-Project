@@ -34,7 +34,7 @@ else if (signInManager.IsSignedIn(User) && User.IsInRole("Employee"))
 {
     <div class="grid-container">
         <div class="grid-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="TasksForEmployee">Temporily employee tasks</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="TasksForEmployee" asp-route-name="@User.Identity.Name">Tasks</a>
         </div>
     </div>
 }

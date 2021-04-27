@@ -2,54 +2,63 @@
 @{
     ViewData["Title"] = "Information";
 }
-<form method="post">
-    <div class="form-row">
+<div class="row ">
+    <form method="post" style="width:100%">
 
-        <div class="col-md-4 mb-3">
-            <label asp-for="Email">Email</label>
-            <input class="form-control" asp-for="Email" placeholder="Email" readonly />
-            <span asp-validation-for="Email" class="alert-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="PhoneNumber"></label>
-            <input class="form-control" asp-for="PhoneNumber" readonly />
-            <span asp-validation-for="PhoneNumber" class="alert-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
+        <div class="row col-md-12 mb-3">
             <label asp-for="CompanyName"></label>
             <input class="form-control" asp-for="CompanyName" readonly />
             <span asp-validation-for="CompanyName" class="alert-danger"></span>
         </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="NIP"></label>
-            <input class="form-control" asp-for="NIP" readonly />
-            <span asp-validation-for="NIP" class="alert-danger"></span>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Email">Email</label>
+                <input class="form-control" asp-for="Email" placeholder="Email" readonly />
+                <span asp-validation-for="Email" class="alert-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="PhoneNumber"></label>
+                <input class="form-control" asp-for="PhoneNumber" readonly />
+                <span asp-validation-for="PhoneNumber" class="alert-danger"></span>
+            </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="Regon"></label>
-            <input class="form-control" asp-for="Regon" readonly />
-            <span asp-validation-for="Regon" class="alert-danger"></span>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="NIP"></label>
+                <input class="form-control" asp-for="NIP" readonly />
+                <span asp-validation-for="NIP" class="alert-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Regon"></label>
+                <input class="form-control" asp-for="Regon" readonly />
+                <span asp-validation-for="Regon" class="alert-danger"></span>
+            </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="Country"></label>
-            <input class="form-control" asp-for="Country" readonly />
-            <span asp-validation-for="Country" class="alert-danger"></span>
+
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <label asp-for="Country"></label>
+                <input class="form-control" asp-for="Country" readonly />
+                <span asp-validation-for="Country" class="alert-danger"></span>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label asp-for="City"></label>
+                <input class="form-control" asp-for="City" readonly />
+                <span asp-validation-for="City" class="alert-danger"></span>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label asp-for="Adress"></label>
+                <input class="form-control" asp-for="Adress" readonly />
+                <span asp-validation-for="Adress" class="alert-danger"></span>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label asp-for="ZipCode"></label>
+                <input class="form-control" asp-for="ZipCode" readonly />
+                <span asp-validation-for="ZipCode" class="alert-danger"></span>
+            </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="City"></label>
-            <input class="form-control" asp-for="City" readonly />
-            <span asp-validation-for="City" class="alert-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="Adress"></label>
-            <input class="form-control" asp-for="Adress" readonly />
-            <span asp-validation-for="Adress" class="alert-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="ZipCode"></label>
-            <input class="form-control" asp-for="ZipCode" readonly />
-            <span asp-validation-for="ZipCode" class="alert-danger"></span>
-        </div>
-        <a class="btn btn-success" asp-controller="Home" asp-action="Index">Cancel</a>
-    </div>
-</form>
+        <div class="row">
+            <a class="btn btn-success col-md-12" asp-controller="Home" asp-action="Index" style="margin: 0 auto 0 auto">Cancel</a>
+        </div=">
+    </form>
+</div>

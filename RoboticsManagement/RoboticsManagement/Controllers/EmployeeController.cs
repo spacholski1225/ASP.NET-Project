@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Data;
+using RoboticsManagement.Models;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
 {
@@ -10,10 +13,12 @@ namespace RoboticsManagement.Controllers
     public class EmployeeController : Controller
     {
         private readonly MgmtDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public EmployeeController(MgmtDbContext context)
+        public EmployeeController(MgmtDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         [HttpGet]
         public IActionResult EmployeeTask(int id)
@@ -26,10 +31,13 @@ namespace RoboticsManagement.Controllers
             return View(task);
         }
         [HttpGet]
-        public IActionResult TasksForEmployee()
+        public async Task<IActionResult> TasksForEmployee(string name)
         {
-            var tasks = _context.EmployeeTasks.OrderBy(x => x.Id).ToList();
-            return View(tasks);
+            var employee = await _userManager.FindByNameAsync(name);
+            if(employee != null)
+            {
+
+            }
         }
         public IActionResult DoneTask(int id)
         {

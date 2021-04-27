@@ -6,7 +6,7 @@
 <div class="row">
     @foreach (var form in Model)
     {
-        <form method="post" class="col-sm-6">
+        <form method="post" class="col-sm-6" style="margin-top:5px" >
             <div class="col-md">
                 <div class="card">
                     <div class="card-body">
@@ -29,6 +29,6 @@
         </form>
     }
 </div>
-<div class="align-content-center">
+<div class="col-sm-6" style="margin-top: 5px">
     <a class="btn btn-success" asp-controller="Home" asp-action="Index">Back</a>
 </div>
