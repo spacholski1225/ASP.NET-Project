@@ -1,9 +1,9 @@
-﻿@model IEnumerable<EmployeeViewModel>
+﻿@model IEnumerable<EmployeeTaskViewModel>
 
     @foreach (var employee in Model)
     {
         <form method="post" class="form-check"> @*Jakis opis specjalizacji powinien dodac wpisany ale to w AppUser*@
-            <button type="submit" class="btn btn-outline-dark" asp-route-employeeId="@employee.EmployeeId" asp-route-taskId="@employee.NewTaskViewModel.TaskId">@employee.FirstName @employee.LastName</button>
+            <button type="submit" class="btn btn-outline-dark" asp-route-employeeId="@employee.EmployeeId" asp-route-taskId="@employee.TaskId">@employee.FirstName @employee.LastName</button>
         </form>
     }
 <div class="col-12">

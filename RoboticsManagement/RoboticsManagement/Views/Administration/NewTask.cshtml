@@ -1,29 +1,54 @@
-﻿@model EmployeeViewModel
+﻿@model EmployeeTaskViewModel
 
 @{
     ViewData["Title"] = "New Task";
 }
 <form method="post">
     <div class="row">
-        <div>
-            <div class="col-md-4">
-                <label asp-for="FirstName"></label>
-                <input class="form-control" asp-for="FirstName" readonly />
-                <span asp-validation-for="FirstName" class="alert-danger"></span>
-            </div>
-            <div class="col-md-4">
-                <label asp-for="LastName"></label>
-                <input class="form-control" asp-for="LastName" readonly />
-                <span asp-validation-for="LastName" class="alert-danger"></span>
-            </div>
-            <div class="col-md-4">
-                <label asp-for="NewTaskViewModel.Description"></label>
-                <input class="form-control" asp-for="NewTaskViewModel.Description" readonly />
-                <span asp-validation-for="NewTaskViewModel.Description" class="alert-danger"></span>
-            </div>
-
+        <div hidden>
+            <label asp-for="TaskId"></label>
+            <label asp-for="EmployeeId"></label>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="FirstName"></label>
+            <input class="form-control" asp-for="FirstName" readonly />
+            <span asp-validation-for="FirstName" class="alert-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="LastName"></label>
+            <input class="form-control" asp-for="LastName" readonly />
+            <span asp-validation-for="LastName" class="alert-danger"></span>
         </div>
     </div>
-    <button class="btn btn-primary" type="submit">Send</button>
-    <a class="btn btn-primary" asp-controller="Administration" asp-action="DisplayForm">Back</a>
+    <div class="form-group">
+        <label asp-for="Company"></label>
+        <input class="form-control" asp-for="Company" readonly />
+        <span asp-validation-for="Company" class="alert-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea class="form-control" asp-for="Description" readonly></textarea>
+        <span asp-validation-for="Description" class="alert-danger"></span>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <label asp-for="City"></label>
+            <input class="form-control" asp-for="City" readonly />
+            <span asp-validation-for="City" class="alert-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Adress"></label>
+            <input class="form-control" asp-for="Adress" readonly />
+            <span asp-validation-for="Adress" class="alert-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ZipCode"></label>
+            <input class="form-control" asp-for="ZipCode" readonly />
+            <span asp-validation-for="ZipCode" class="alert-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <button class="btn btn-primary" type="submit" asp-route-employeeId="@Model.EmployeeId" asp-route-taskId="@Model.TaskId">Send</button>
+        <a class="btn btn-primary" asp-controller="Administration" asp-action="DisplayForm">Back</a>
+    </div>
 </form>

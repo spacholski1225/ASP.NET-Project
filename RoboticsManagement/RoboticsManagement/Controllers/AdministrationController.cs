@@ -18,7 +18,6 @@ namespace RoboticsManagement.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MgmtDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private int _taskId;
 
         public AdministrationController(UserManager<ApplicationUser> userManager, MgmtDbContext context, RoleManager<IdentityRole> roleManager)
         {
@@ -51,7 +50,7 @@ namespace RoboticsManagement.Controllers
                     return RedirectToAction("Success", "Success");
                 }
             }
-                return Ok();
+            return Ok();
 
         }//to delete or modify
 
@@ -79,51 +78,75 @@ namespace RoboticsManagement.Controllers
         public IActionResult ConcreteForm(int id)
         {
             var task = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
-            var newTask = new NewTaskViewModel
+            var newTask = new EmployeeTaskViewModel
             {
                 TaskId = task.Id,
-                Description = task.Description,
-                Adress = task.Adress,
-                City = task.City,
-                Company = task.Company,
-                Country = task.Country
             };
             return RedirectToAction("PickEmployee", newTask);
         }
         [HttpGet]
-        public async Task<IActionResult> PickEmployee(NewTaskViewModel newTask) //must have refactor this and above and below
+        public async Task<IActionResult> PickEmployee(EmployeeTaskViewModel newTask)
         {
             var emp = await _userManager.GetUsersInRoleAsync("Employee");
-            var employees = new List<EmployeeViewModel>();
+            var employees = new List<EmployeeTaskViewModel>();
             foreach (var employee in emp)
             {
-                employees.Add(new EmployeeViewModel
+                employees.Add(new EmployeeTaskViewModel
                 {
                     EmployeeId = employee.Id,
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
-                    NewTaskViewModel = newTask
+                    TaskId = newTask.TaskId
                 });
             }
             return View(employees);
         }
         [HttpPost]
-        public async Task<IActionResult> PickEmployee(string employeeId, int taskId)
+        public async Task<IActionResult> PickEmployee(string employeeId, int taskId)//todo add handler exceptions
         {
             var employee = await _userManager.FindByIdAsync(employeeId);
             var task = _context.complaintFormModels.FirstOrDefault(x => x.Id == taskId);
+
+
+            var model = new EmployeeTaskViewModel
+            {
+                Description = task.Description,
+                Adress = task.Adress,
+                City = task.City,
+                Company = task.Company,
+                Country = task.Country,
+                EmployeeId = employeeId,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                TaskId = taskId,
+                ZipCode = task.ZipCode
+
+            };
+            return RedirectToAction("NewTask", model);
+        }
+        [HttpGet]
+        public IActionResult NewTask(EmployeeTaskViewModel model)
+        {
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult NewTask(string employeeId, int taskId)
+        {
             var entity = new TaskForEmployee
             {
                 EmployeeId = employeeId,
                 TaskId = taskId
             };
-            _context.TaskForEmployee.Add(entity);
-            _context.SaveChanges();
-            return RedirectToAction("NewTask");
-        }
-        public IActionResult NewTask(EmployeeViewModel model)
-        {
-            return View(model);
+            try
+            {
+                _context.TaskForEmployee.Add(entity); //error when id is already in database
+                _context.SaveChanges();//fix error when id is already in database
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("is already in db" + e.Message); //save in log or add alert 
+            }
+            return RedirectToAction("Success", "Success");
         }
     }
 }
