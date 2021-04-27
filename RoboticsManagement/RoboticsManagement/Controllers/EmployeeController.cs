@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Data;
 using RoboticsManagement.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace RoboticsManagement.Controllers
         public IActionResult EmployeeTask(int id)
         {
             var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == id);
-            if(task == null)
+            if (task == null)
             {
                 return RedirectToAction("Error", "Error"); //add into logs
             }
@@ -34,16 +35,26 @@ namespace RoboticsManagement.Controllers
         public async Task<IActionResult> TasksForEmployee(string name)
         {
             var employee = await _userManager.FindByNameAsync(name);
-            if(employee != null)
+            if (employee != null)
             {
+                var listOfTasks = new List<EmployeeTask>();
+                var tasks = _context.TaskForEmployee.Where(x => x.EmployeeId == employee.Id).ToList();
+                tasks.ForEach(t =>
+                {
+                    var task = _context.EmployeeTasks.FirstOrDefault(x => (x.Id == t.TaskId && x.isDone == false));
+                    if (task != null)
+                        listOfTasks.Add(task);
+                });
 
+                return View(listOfTasks);
             }
+            return View(name); //add logs
         }
         public IActionResult DoneTask(int id)
         {
             var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == id);
-            if(task != null)
-            { 
+            if (task != null)
+            {
                 task.isDone = true;
                 _context.SaveChanges();
             }
