@@ -14,6 +14,6 @@ namespace RoboticsManagement.Models
         public string Country { get; set; }
         public string Adress { get; set; }
         public ICollection<TaskForEmployee> TaskForEmployee{ get; set; }
-        //dodac flage isDOne 
+        public bool isDone { get; set; }
     }
 }

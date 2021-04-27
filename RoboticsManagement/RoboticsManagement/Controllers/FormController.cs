@@ -34,7 +34,7 @@ namespace RoboticsManagement.Data
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(name);
-                if(user != null)
+                if (user != null)
                 {
                     var summary = new SummaryViewModel
                     {
@@ -52,12 +52,11 @@ namespace RoboticsManagement.Data
                 {
                     //add to logs
                 }
-                
+
             }
-            else
-            {
-                return View(model); //add into logs
-            }
+
+            return View(model); //add into logs
+
         }
 
         [HttpGet]
