@@ -26,7 +26,6 @@ namespace RoboticsManagement.Controllers
         public IActionResult Login()
         {
             return View();
-
         }
 
         public async Task<IActionResult> Logout()
@@ -46,13 +45,15 @@ namespace RoboticsManagement.Controllers
                 {
                     return RedirectToAction("Index", "Home");
                 }
-                
-                return View(model); //someday there will be logs
+                else
+                {
+                    return View(model); //add to logs
+                }
             }
 
             return View(model);
         }
-        
+
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult CompanyRegistration()
@@ -78,7 +79,6 @@ namespace RoboticsManagement.Controllers
                     Regon = int.Parse(model.Regon),
                     ZipCode = model.ZipCode,
                     PhoneNumber = model.PhoneNumber,
-                   
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -96,11 +96,13 @@ namespace RoboticsManagement.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Error", "Error");
+                    return RedirectToAction("Error", "Error"); //add into logs
                 }
             }
-            return View(model);
-
+            else
+            {
+                return View(model); //add into logs
+            }
         }
 
         [Authorize(Roles = "Admin")]
@@ -145,10 +147,13 @@ namespace RoboticsManagement.Controllers
                 }
                 else
                 {
-                    return View(model);
+                    return View(model); //add into logs
                 }
             }
-            return View(model);
+            else
+            {
+                return View(model); //add into logs
+            }
         }
     }
 }

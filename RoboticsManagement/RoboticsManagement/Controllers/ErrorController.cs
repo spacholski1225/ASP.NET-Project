@@ -14,7 +14,7 @@ namespace RoboticsManagement.Controllers
             switch (statusCode)
             {
                 case 404:
-                    ViewData["ErrorMessage"] = "There is nothing";
+                    ViewData["ErrorMessage"] = "There is nothing"; //add into logs
                     return View("NotFound");
                 default:
                     break;

@@ -68,7 +68,6 @@ namespace RoboticsManagement.Controllers
             var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
             return RedirectToAction("ConcreteForm", "Administration", result);
         }
-
         [HttpGet]
         public IActionResult ConcreteForm(FormModel result)
         {
@@ -88,41 +87,56 @@ namespace RoboticsManagement.Controllers
         public async Task<IActionResult> PickEmployee(EmployeeTaskViewModel newTask)
         {
             var emp = await _userManager.GetUsersInRoleAsync("Employee");
-            var employees = new List<EmployeeTaskViewModel>();
-            foreach (var employee in emp)
+            if (emp != null)
             {
-                employees.Add(new EmployeeTaskViewModel
+                var employees = new List<EmployeeTaskViewModel>();
+                foreach (var employee in emp)
                 {
-                    EmployeeId = employee.Id,
-                    FirstName = employee.FirstName,
-                    LastName = employee.LastName,
-                    TaskId = newTask.TaskId
-                });
+                    employees.Add(new EmployeeTaskViewModel
+                    {
+                        EmployeeId = employee.Id,
+                        FirstName = employee.FirstName,
+                        LastName = employee.LastName,
+                        TaskId = newTask.TaskId
+                    });
+                }
+                return View(employees);
             }
-            return View(employees);
+            else
+            {
+                //todo save into logs
+            }
+            return View();
         }
         [HttpPost]
-        public async Task<IActionResult> PickEmployee(string employeeId, int taskId)//todo add handler exceptions
+        public async Task<IActionResult> PickEmployee(string employeeId, int taskId)
         {
-            var employee = await _userManager.FindByIdAsync(employeeId);
-            var task = _context.complaintFormModels.FirstOrDefault(x => x.Id == taskId);
-
-
-            var model = new EmployeeTaskViewModel
+            if(employeeId != null && !taskId.Equals(null))
             {
-                Description = task.Description,
-                Adress = task.Adress,
-                City = task.City,
-                Company = task.Company,
-                Country = task.Country,
-                EmployeeId = employeeId,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                TaskId = taskId,
-                ZipCode = task.ZipCode
+                var employee = await _userManager.FindByIdAsync(employeeId);
+                var task = _context.complaintFormModels.FirstOrDefault(x => x.Id == taskId);
+                var model = new EmployeeTaskViewModel
+                {
+                    Description = task.Description,
+                    Adress = task.Adress,
+                    City = task.City,
+                    Company = task.Company,
+                    Country = task.Country,
+                    EmployeeId = employeeId,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    TaskId = taskId,
+                    ZipCode = task.ZipCode
 
-            };
-            return RedirectToAction("NewTask", model);
+                };
+                return RedirectToAction("NewTask", model);
+            }
+            else
+            {
+                //todo save into logs
+            }
+            return View();
+
         }
         [HttpGet]
         public IActionResult NewTask(EmployeeTaskViewModel model)
@@ -130,7 +144,7 @@ namespace RoboticsManagement.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult NewTask(string employeeId, int taskId)
+        public IActionResult NewTask(string employeeId, int taskId) //add something like that user can't get into there without move across all controllers
         {
             var entity = new TaskForEmployee
             {
@@ -144,7 +158,7 @@ namespace RoboticsManagement.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine("is already in db" + e.Message); //save in log or add alert 
+                Console.WriteLine("is already in db" + e.Message); //save into logs or add alert 
             }
             return RedirectToAction("Success", "Success");
         }

@@ -19,6 +19,10 @@ namespace RoboticsManagement.Controllers
         public IActionResult EmployeeTask(int id)
         {
             var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == id);
+            if(task == null)
+            {
+                return RedirectToAction("Error", "Error"); //add into logs
+            }
             return View(task);
         }
         [HttpGet]
@@ -37,7 +41,7 @@ namespace RoboticsManagement.Controllers
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(e.Message); //add into logs
             }
             return RedirectToAction("Success", "Success");
 

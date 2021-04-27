@@ -20,23 +20,27 @@ namespace RoboticsManagement.Controllers
         public async Task<IActionResult> CompanyInformation(string name)
         {
             var user = await _userManager.FindByNameAsync(name);
-            if (user == null)
+            if (user != null)
             {
-                return RedirectToAction("Error", "Error");
+                var model = new CompanyInfoViewModel
+                {
+                    Email = user.Email,
+                    Country = user.Country,
+                    CompanyName = user.CompanyName,
+                    City = user.City,
+                    Adress = user.Adress,
+                    NIP = user.NIP.ToString(),
+                    Regon = user.Regon.ToString(),
+                    ZipCode = user.ZipCode,
+                    PhoneNumber = user.PhoneNumber
+                };
+                return View(model);
             }
-            var model = new CompanyInfoViewModel
+            else
             {
-                Email = user.Email,
-                Country = user.Country,
-                CompanyName = user.CompanyName,
-                City = user.City,
-                Adress = user.Adress,
-                NIP = user.NIP.ToString(),
-                Regon = user.Regon.ToString(),
-                ZipCode = user.ZipCode,
-                PhoneNumber = user.PhoneNumber
-            };
-            return View(model);
+                return RedirectToAction("Error", "Error"); //add into logs
+            }
+
         }
     }
 }

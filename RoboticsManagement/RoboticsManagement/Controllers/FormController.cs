@@ -24,29 +24,40 @@ namespace RoboticsManagement.Data
         }
         [HttpGet]
         public IActionResult Form()
-        { 
+        {
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Form(FormViewModel model, string name)
         {
-            var user = await _userManager.FindByNameAsync(name);
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var summary = new SummaryViewModel
+                var user = await _userManager.FindByNameAsync(name);
+                if(user != null)
                 {
-                    Adress = user.Adress,
-                    City = user.City,
-                    Company = user.CompanyName,
-                    Country = user.Country,
-                    ZipCode = user.ZipCode,
-                    ERobotsCategory = model.ERobotsCategory,
-                    Description = model.Description
-                };
-                return RedirectToAction("Summary", "Form", summary);
+                    var summary = new SummaryViewModel
+                    {
+                        Adress = user.Adress,
+                        City = user.City,
+                        Company = user.CompanyName,
+                        Country = user.Country,
+                        ZipCode = user.ZipCode,
+                        ERobotsCategory = model.ERobotsCategory,
+                        Description = model.Description
+                    };
+                    return RedirectToAction("Summary", "Form", summary);
+                }
+                else
+                {
+                    //add to logs
+                }
+                
             }
-            return View(model);
+            else
+            {
+                return View(model); //add into logs
+            }
         }
 
         [HttpGet]
@@ -56,9 +67,9 @@ namespace RoboticsManagement.Data
         } //po podsumowaniu sprawdzic wyslanie bo cos nie dziala oraz dorobic mozliwosc cofniecia w celu zmiany danych
 
         [HttpPost]
-        public IActionResult Summary(SummaryViewModel summary,bool isOkay = true)
+        public IActionResult Summary(SummaryViewModel summary, bool isOkay = true)
         {
-            if(isOkay)
+            if (isOkay)
             {
                 var model = new FormModel
                 {
@@ -76,16 +87,20 @@ namespace RoboticsManagement.Data
                     _context.complaintFormModels.Add(model);
                     _context.SaveChanges();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    Console.WriteLine(e.Message); // todo change this line into log to file or sth else
+                    Console.WriteLine(e.Message); // add to logs / add alert
                 }
 
                 return RedirectToAction("Success", "Success");
             }
+            else
+            {
+                //add into logs
+            }
             return View(summary);
         }
 
-        
+
     }
 }
