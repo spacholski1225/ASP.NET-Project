@@ -34,14 +34,14 @@ namespace RoboticsManagement.Controllers
         public IActionResult DoneTask(int id)
         {
             var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == id);
-            try
-            {
-                _context.EmployeeTasks.Remove(task);
+            if(task != null)
+            { 
+                task.isDone = true;
                 _context.SaveChanges();
             }
-            catch(Exception e)
+            else
             {
-                Console.WriteLine(e.Message); //add into logs
+                //save to logs
             }
             return RedirectToAction("Success", "Success");
 
