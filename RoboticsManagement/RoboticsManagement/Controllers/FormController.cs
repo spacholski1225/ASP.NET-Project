@@ -28,7 +28,7 @@ namespace RoboticsManagement.Data
         [HttpPost]
         public async Task<IActionResult> Form(FormViewModel model, string name)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && name != null)
             {
                 var user = await _userManager.FindByNameAsync(name);
                 if (user != null)
@@ -63,7 +63,7 @@ namespace RoboticsManagement.Data
         } //po podsumowaniu sprawdzic wyslanie bo cos nie dziala oraz dorobic mozliwosc cofniecia w celu zmiany danych
 
         [HttpPost]
-        public IActionResult Summary(SummaryViewModel summary, bool isOkay = true)
+        public IActionResult Summary(SummaryViewModel summary, bool isOkay)
         {
             if (isOkay)
             {
