@@ -1,4 +1,5 @@
 ﻿using RoboticsManagement.Models.ComplaintForm;
+using System.Collections.Generic;
 
 namespace RoboticsManagement.Interfaces.IRepository
 {
@@ -8,6 +9,7 @@ namespace RoboticsManagement.Interfaces.IRepository
         public void DeleteById(int id);
         public void ModifyForm(FormModel form);
         public FormModel CreateForm();
+        public List<FormModel> SortAscById();
 
     }
 }

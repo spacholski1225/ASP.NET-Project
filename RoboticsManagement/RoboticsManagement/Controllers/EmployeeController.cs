@@ -18,12 +18,17 @@ namespace RoboticsManagement.Controllers
         private readonly MgmtDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITaskForEmployeeRepository _taskForEmployeeRepository;
+        private readonly IEmployeeTaskRepository _employeeTaskRepository;
 
-        public EmployeeController(MgmtDbContext context, UserManager<ApplicationUser> userManager, ITaskForEmployeeRepository taskForEmployeeRepository)
+        public EmployeeController(MgmtDbContext context,
+            UserManager<ApplicationUser> userManager,
+            ITaskForEmployeeRepository taskForEmployeeRepository,
+            IEmployeeTaskRepository employeeTaskRepository)
         {
             _context = context;
             _userManager = userManager;
             _taskForEmployeeRepository = taskForEmployeeRepository;
+            _employeeTaskRepository = employeeTaskRepository;
         }
         [HttpGet]
         public IActionResult EmployeeTask(int id)
@@ -47,7 +52,7 @@ namespace RoboticsManagement.Controllers
         }
         public IActionResult DoneTask(int id)
         {
-            var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == id);
+            var task = _employeeTaskRepository.GetTaskById(id);
             if (task != null)
             {
                 task.isDone = true;

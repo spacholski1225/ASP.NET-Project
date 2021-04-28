@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Repositories
 {
-    public abstract class FormRepository : IFormRepository
+    public class FormRepository : IFormRepository
     {
         private readonly MgmtDbContext _context;
         public FormRepository(MgmtDbContext context)
@@ -34,5 +34,7 @@ namespace RoboticsManagement.Repositories
             _context.complaintFormModels.Update(form);
             _context.SaveChanges();
         }
+
+        public List<FormModel> SortAscById() => _context.complaintFormModels.OrderBy(x => x.Id).ToList();
     }
 }

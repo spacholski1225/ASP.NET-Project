@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Data;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
@@ -18,12 +19,17 @@ namespace RoboticsManagement.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MgmtDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IFormRepository _formRepository;
 
-        public AdministrationController(UserManager<ApplicationUser> userManager, MgmtDbContext context, RoleManager<IdentityRole> roleManager)
+        public AdministrationController(UserManager<ApplicationUser> userManager,
+            MgmtDbContext context,
+            RoleManager<IdentityRole> roleManager,
+            IFormRepository formRepository)
         {
             _userManager = userManager;
             _context = context;
             _roleManager = roleManager;
+            _formRepository = formRepository;
         }
         public async Task<IActionResult> AddAdmin()
         {
@@ -55,12 +61,7 @@ namespace RoboticsManagement.Controllers
         }//to delete or modify
 
         [HttpGet]
-        public IActionResult DisplayForm()
-        {
-            var forms = _context.complaintFormModels.OrderBy(x => x.Id).ToList();
-
-            return View(forms);
-        }
+        public IActionResult DisplayForm() => View(_formRepository.SortAscById());
 
         [HttpPost]
         public IActionResult DisplayForm(int id)

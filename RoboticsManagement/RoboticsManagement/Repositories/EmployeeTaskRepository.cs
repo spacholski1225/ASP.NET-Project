@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Repositories
 {
-    public abstract class EmployeeTaskRepository : IEmployeeTaskRepository
+    public class EmployeeTaskRepository : IEmployeeTaskRepository
     {
         private readonly MgmtDbContext _context;
 
@@ -16,7 +16,7 @@ namespace RoboticsManagement.Repositories
         {
             _context = context;
         }
-        public EmployeeTask GetByTaskId(int taskId)
+        public EmployeeTask GetTaskById(int taskId)
             => _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId);
 
         public List<EmployeeTask> GetDoneTasks() => _context.EmployeeTasks.Where(x => x.isDone == true).ToList();
