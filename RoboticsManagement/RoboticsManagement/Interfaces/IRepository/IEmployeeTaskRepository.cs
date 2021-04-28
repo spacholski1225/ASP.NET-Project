@@ -9,7 +9,7 @@ namespace RoboticsManagement.Interfaces.IRepository
     public interface IEmployeeTaskRepository
     {
         public EmployeeTask GetByTaskId(int taskId);
-        public EmployeeTask GetUnDoneTasks();
-        public EmployeeTask GetDoneTasks();
+        public List<EmployeeTask> GetUnDoneTasks();
+        public List<EmployeeTask> GetDoneTasks();
     }
 }

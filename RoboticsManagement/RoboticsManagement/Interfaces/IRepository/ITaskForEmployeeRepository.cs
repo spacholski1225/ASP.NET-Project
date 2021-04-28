@@ -8,7 +8,7 @@ namespace RoboticsManagement.Interfaces.IRepository
 {
     public interface ITaskForEmployeeRepository
     {
-        public List<int> GetTaskIdByEmployeeId(string employeeId);
-        public EmployeeTask GetTasksForEmployee(string employeeId);
+        public List<TaskForEmployee> GetTaskIdByEmployeeId(string employeeId);
+        public List<EmployeeTask> GetTasksForEmployee(string employeeId);
     }
 }

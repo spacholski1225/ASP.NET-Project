@@ -6,7 +6,7 @@ namespace RoboticsManagement.Interfaces.IRepository
     {
         public FormModel GetFormById(int id);
         public void DeleteById(int id);
-        public FormModel ModifyForm(FormModel form);
+        public void ModifyForm(FormModel form);
         public FormModel CreateForm();
 
     }

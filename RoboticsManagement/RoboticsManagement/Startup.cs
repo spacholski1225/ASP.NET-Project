@@ -8,7 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RoboticsManagement.Data;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
+using RoboticsManagement.Repositories;
 
 namespace RoboticsManagement
 {
@@ -37,7 +39,7 @@ namespace RoboticsManagement
                // config.Filters.Add(new AuthorizeFilter(policy)); // its does not working check why and do notes
                
             });
-            
+            services.AddScoped<ITaskForEmployeeRepository, TaskForEmployeeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

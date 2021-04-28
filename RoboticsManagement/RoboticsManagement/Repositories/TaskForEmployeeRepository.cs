@@ -1,22 +1,33 @@
-﻿using RoboticsManagement.Interfaces.IRepository;
+﻿using RoboticsManagement.Data;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RoboticsManagement.Repositories
 {
-    public abstract class TaskForEmployeeRepository : ITaskForEmployeeRepository
+    public class TaskForEmployeeRepository : ITaskForEmployeeRepository
     {
-        public List<int> GetTaskIdByEmployeeId(string employeeId)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly MgmtDbContext _context;
 
-        public EmployeeTask GetTasksForEmployee(string employeeId)
+        public TaskForEmployeeRepository(MgmtDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public List<TaskForEmployee> GetTaskIdByEmployeeId(string employeeId) 
+            => _context.TaskForEmployee.Where(x => x.EmployeeId == employeeId).ToList();
+
+        public List<EmployeeTask> GetTasksForEmployee(string employeeId)
+        {
+            var listOfTasks = new List<EmployeeTask>();
+            var tasks = GetTaskIdByEmployeeId(employeeId);
+            tasks.ForEach(t =>
+            {
+                var task = _context.EmployeeTasks.FirstOrDefault(x => (x.Id == t.TaskId && x.isDone == false));
+                if (task != null)
+                    listOfTasks.Add(task);
+            });
+            return listOfTasks;
         }
     }
 }

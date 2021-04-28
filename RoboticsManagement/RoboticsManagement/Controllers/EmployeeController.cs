@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Data;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
+using RoboticsManagement.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,13 @@ namespace RoboticsManagement.Controllers
     {
         private readonly MgmtDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ITaskForEmployeeRepository _taskForEmployeeRepository;
 
-        public EmployeeController(MgmtDbContext context, UserManager<ApplicationUser> userManager)
+        public EmployeeController(MgmtDbContext context, UserManager<ApplicationUser> userManager, ITaskForEmployeeRepository taskForEmployeeRepository)
         {
             _context = context;
             _userManager = userManager;
+            _taskForEmployeeRepository = taskForEmployeeRepository;
         }
         [HttpGet]
         public IActionResult EmployeeTask(int id)
@@ -37,16 +41,7 @@ namespace RoboticsManagement.Controllers
             var employee = await _userManager.FindByNameAsync(name);
             if (employee != null)
             {
-                var listOfTasks = new List<EmployeeTask>();
-                var tasks = _context.TaskForEmployee.Where(x => x.EmployeeId == employee.Id).ToList();
-                tasks.ForEach(t =>
-                {
-                    var task = _context.EmployeeTasks.FirstOrDefault(x => (x.Id == t.TaskId && x.isDone == false));
-                    if (task != null)
-                        listOfTasks.Add(task);
-                });
-
-                return View(listOfTasks);
+                return View(_taskForEmployeeRepository.GetTasksForEmployee(employee.Id));
             }
             return View(name); //add logs
         }

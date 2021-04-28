@@ -1,4 +1,5 @@
-﻿using RoboticsManagement.Interfaces.IRepository;
+﻿using RoboticsManagement.Data;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models.ComplaintForm;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,11 @@ namespace RoboticsManagement.Repositories
 {
     public abstract class FormRepository : IFormRepository
     {
+        private readonly MgmtDbContext _context;
+        public FormRepository(MgmtDbContext context)
+        {
+            _context = context;
+        }
         public FormModel CreateForm()
         {
             throw new NotImplementedException();
@@ -16,17 +22,17 @@ namespace RoboticsManagement.Repositories
 
         public void DeleteById(int id)
         {
-            throw new NotImplementedException();
+            var form = _context.complaintFormModels.FirstOrDefault(f => f.Id == id);
+            _context.complaintFormModels.Remove(form);
+            _context.SaveChanges();
         }
 
-        public FormModel GetFormById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public FormModel GetFormById(int id) => _context.complaintFormModels.FirstOrDefault(f => f.Id == id);
 
-        public FormModel ModifyForm(FormModel form)
+        public void ModifyForm(FormModel form)
         {
-            throw new NotImplementedException();
+            _context.complaintFormModels.Update(form);
+            _context.SaveChanges();
         }
     }
 }

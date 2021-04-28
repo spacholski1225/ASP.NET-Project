@@ -1,4 +1,5 @@
-﻿using RoboticsManagement.Interfaces.IRepository;
+﻿using RoboticsManagement.Data;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using System;
 using System.Collections.Generic;
@@ -9,19 +10,17 @@ namespace RoboticsManagement.Repositories
 {
     public abstract class EmployeeTaskRepository : IEmployeeTaskRepository
     {
+        private readonly MgmtDbContext _context;
+
+        public EmployeeTaskRepository(MgmtDbContext context)
+        {
+            _context = context;
+        }
         public EmployeeTask GetByTaskId(int taskId)
-        {
-            throw new NotImplementedException();
-        }
+            => _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId);
 
-        public EmployeeTask GetDoneTasks()
-        {
-            throw new NotImplementedException();
-        }
+        public List<EmployeeTask> GetDoneTasks() => _context.EmployeeTasks.Where(x => x.isDone == true).ToList();
 
-        public EmployeeTask GetUnDoneTasks()
-        {
-            throw new NotImplementedException();
-        }
+        public List<EmployeeTask> GetUnDoneTasks() => _context.EmployeeTasks.Where(x => x.isDone == false).ToList();
     }
 }
