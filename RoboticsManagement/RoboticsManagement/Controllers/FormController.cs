@@ -23,10 +23,7 @@ namespace RoboticsManagement.Data
             _userManager = userManager;
         }
         [HttpGet]
-        public IActionResult Form()
-        {
-            return View();
-        }
+        public IActionResult Form() => View();
 
         [HttpPost]
         public async Task<IActionResult> Form(FormViewModel model, string name)

@@ -66,18 +66,15 @@ namespace RoboticsManagement.Controllers
         [HttpPost]
         public IActionResult DisplayForm(int id)
         {
-            var result = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
+            var result = _formRepository.GetFormById(id);
             return RedirectToAction("ConcreteForm", "Administration", result);
         }
         [HttpGet]
-        public IActionResult ConcreteForm(FormModel result)
-        {
-            return View(result);
-        }
+        public IActionResult ConcreteForm(FormModel result) => View(result);
         [HttpPost]
         public IActionResult ConcreteForm(int id)
         {
-            var task = _context.complaintFormModels.FirstOrDefault(x => x.Id == id);
+            var task = _formRepository.GetFormById(id);
             var newTask = new EmployeeTaskViewModel
             {
                 TaskId = task.Id,
@@ -140,10 +137,7 @@ namespace RoboticsManagement.Controllers
 
         }
         [HttpGet]
-        public IActionResult NewTask(EmployeeTaskViewModel model)
-        {
-            return View(model);
-        }
+        public IActionResult NewTask(EmployeeTaskViewModel model) => View(model);
         [HttpPost]
         public IActionResult NewTask(string employeeId, int taskId) //add something like that user can't get into there without move across all controllers
         {

@@ -8,9 +8,6 @@ namespace RoboticsManagement.Controllers
     {
         [HttpGet]
         [Route("~/Shared/Index.cshtml")]
-        public IActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
     }
 }

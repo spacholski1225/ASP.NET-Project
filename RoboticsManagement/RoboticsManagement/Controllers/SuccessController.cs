@@ -6,9 +6,6 @@ namespace RoboticsManagement.Controllers
     public class SuccessController : Controller
     {
         [Authorize]
-        public IActionResult Success()
-        {
-            return View();
-        }
+        public IActionResult Success() => View();
     }
 }

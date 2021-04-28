@@ -23,10 +23,7 @@ namespace RoboticsManagement.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() => View();
 
         public async Task<IActionResult> Logout()
         {
@@ -56,10 +53,7 @@ namespace RoboticsManagement.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult CompanyRegistration()
-        {
-            return View();
-        }
+        public IActionResult CompanyRegistration() => View();
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
@@ -107,10 +101,7 @@ namespace RoboticsManagement.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult AddEmployee()
-        {
-            return View();
-        }
+        public IActionResult AddEmployee() => View();
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
