@@ -1,5 +1,6 @@
 ﻿using RoboticsManagement.Models.ComplaintForm;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RoboticsManagement.Interfaces.IRepository
 {
@@ -10,7 +11,7 @@ namespace RoboticsManagement.Interfaces.IRepository
         public void ModifyForm(FormModel form);
         public FormModel CreateForm();
         public List<FormModel> SortAscById();
-       // public List<FormModel> GetAllFormsByUser(string userId);
+        public Task<List<FormModel>> GetAllFormsByUser(string name);
 
     }
 }

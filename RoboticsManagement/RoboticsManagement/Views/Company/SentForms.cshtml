@@ -1,5 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<SentFormsViewModel>
 @{
+    ViewData["Title"] = "Sent Forms";
+}
+@foreach (var form in Model)
+{
+    <div class="row">
+        <div class="col-6">
+            <label class="form-label col-4" asp-for="@form.CreatedDate"></label>
+            <input class="form-control" asp-for="@form.CreatedDate" readonly />
+        </div>
+        <div class="col-6">
+            <label class="form-label col-4" asp-for="@form.Robot"></label>
+            <input class="form-control" asp-for="@form.Robot" readonly />
+        </div>
+    </div>
+    <div class="col-12">
+        <label class="form-label col-4" asp-for="@form.Description"></label>
+        <textarea rows="10" class="form-control" asp-for="@form.Description" readonly></textarea>
+    </div>
 }

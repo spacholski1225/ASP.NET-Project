@@ -21,14 +21,17 @@
 }
 else if (signInManager.IsSignedIn(User) && User.IsInRole("Client"))
 {
-    <div class="grid-container">
-        <div class="grid-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Account Information</a>
-        </div>
-        <div class="grid-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint</a>
-        </div>
+<div class="grid-container">
+    <div class="grid-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Account Information</a>
     </div>
+    <div class="grid-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint form</a>
+    </div>
+    <div class="grid-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="SentForms" asp-route-name="@User.Identity.Name">Sent Forms</a>
+    </div>
+</div>
 }
 else if (signInManager.IsSignedIn(User) && User.IsInRole("Employee"))
 {

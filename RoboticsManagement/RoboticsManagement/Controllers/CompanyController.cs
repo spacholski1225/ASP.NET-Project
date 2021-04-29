@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
@@ -13,12 +15,15 @@ namespace RoboticsManagement.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<CompanyController> _logger;
+        private readonly IFormRepository _formRepository;
 
         public CompanyController(UserManager<ApplicationUser> userManager,
-            ILogger<CompanyController> logger)
+            ILogger<CompanyController> logger,
+            IFormRepository formRepository)
         {
             _userManager = userManager;
             _logger = logger;
+            _formRepository = formRepository;
         }
         [HttpGet]
         public async Task<IActionResult> CompanyInformation(string name)
@@ -48,13 +53,26 @@ namespace RoboticsManagement.Controllers
 
         }
 
-        /*[HttpGet]
-        public IActionResult SentForms(SentFormsViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> SentForms(string name)
         {
 
+            var forms = await _formRepository.GetAllFormsByUser(name);
+            var sentForms = new List<SentFormsViewModel>();
+
+            foreach (var form in forms)
+            {
+                sentForms.Add(new SentFormsViewModel
+                {
+                    Description = form.Description,
+                    CreatedDate = form.CreatedDate,
+                    Robot = form.ERobotsCategory.ToString()
+                });
+            }
+            
+
+           return View(sentForms);
         }
 
-        [HttpPost]
-        public IActionResult SentForms()*/
     }
 }

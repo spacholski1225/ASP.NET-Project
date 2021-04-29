@@ -44,7 +44,8 @@ namespace RoboticsManagement.Data
                         Country = user.Country,
                         ZipCode = user.ZipCode,
                         ERobotsCategory = model.ERobotsCategory,
-                        Description = model.Description
+                        Description = model.Description,
+                        Id = user.Id
                     };
                     return RedirectToAction("Summary", "Form", summary);
                 }
@@ -62,7 +63,7 @@ namespace RoboticsManagement.Data
         public IActionResult Summary(SummaryViewModel summary) => View(summary);
 
         [HttpPost]
-        public IActionResult Summary(SummaryViewModel summary, bool isOkay)
+        public async Task<IActionResult> Summary(SummaryViewModel summary, bool isOkay)
         {
             if (ModelState.IsValid && isOkay)
             {
@@ -75,7 +76,8 @@ namespace RoboticsManagement.Data
                     ZipCode = summary.ZipCode,
                     ERobotsCategory = summary.ERobotsCategory,
                     Description = summary.Description,
-                    CreatedDate = DateTime.Now
+                    CreatedDate = DateTime.Now,
+                    ApplicationUser = await _userManager.FindByIdAsync(summary.Id)
                 };
                 try
                 {
