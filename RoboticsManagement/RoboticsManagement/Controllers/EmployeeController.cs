@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RoboticsManagement.Data;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
@@ -19,16 +20,19 @@ namespace RoboticsManagement.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITaskForEmployeeRepository _taskForEmployeeRepository;
         private readonly IEmployeeTaskRepository _employeeTaskRepository;
+        private readonly ILogger<EmployeeController> _logger;
 
         public EmployeeController(MgmtDbContext context,
             UserManager<ApplicationUser> userManager,
             ITaskForEmployeeRepository taskForEmployeeRepository,
-            IEmployeeTaskRepository employeeTaskRepository)
+            IEmployeeTaskRepository employeeTaskRepository,
+            ILogger<EmployeeController> logger)
         {
             _context = context;
             _userManager = userManager;
             _taskForEmployeeRepository = taskForEmployeeRepository;
             _employeeTaskRepository = employeeTaskRepository;
+            _logger = logger;
         }
         [HttpGet]
         public IActionResult EmployeeTask(int id)
@@ -36,7 +40,8 @@ namespace RoboticsManagement.Controllers
             var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == id);
             if (task == null)
             {
-                return RedirectToAction("Error", "Error"); //add into logs
+                _logger.LogWarning("Can't find task in EmployeeTask with id " + id);
+                return RedirectToAction("Error", "Error"); 
             }
             return View(task);
         }
@@ -48,7 +53,8 @@ namespace RoboticsManagement.Controllers
             {
                 return View(_taskForEmployeeRepository.GetTasksForEmployee(employee.Id));
             }
-            return View(name); //add logs
+            _logger.LogWarning("Employee named " + name + "doesn't exist");
+            return View(name); 
         }
         public IActionResult DoneTask(int id)
         {
@@ -60,7 +66,7 @@ namespace RoboticsManagement.Controllers
             }
             else
             {
-                //save to logs
+                _logger.LogWarning("Task with id " + id + "doesn't exist");
             }
             return RedirectToAction("Success", "Success");
 

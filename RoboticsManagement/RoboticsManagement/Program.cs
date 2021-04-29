@@ -38,6 +38,8 @@ namespace RoboticsManagement
                 .WriteTo.Console()
                 .WriteTo.Debug()
                 .WriteTo.File("./logs/log.txt")
+                .Enrich.WithMachineName()
+                .Enrich.WithThreadId()
                 .CreateLogger();
         }
     }

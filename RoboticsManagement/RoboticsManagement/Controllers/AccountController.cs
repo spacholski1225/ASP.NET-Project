@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -50,7 +51,8 @@ namespace RoboticsManagement.Controllers
                 }
                 else
                 {
-                    return View(model); //add to logs
+                    _logger.LogInformation("Unauthenticated user");
+                    return View(model);
                 }
             }
 
@@ -96,12 +98,14 @@ namespace RoboticsManagement.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Error", "Error"); //add into logs
+                    _logger.LogWarning("Can't create Company user, something wrong with User Identity");
+                    return RedirectToAction("Error", "Error");
                 }
             }
             else
             {
-                return View(model); //add into logs
+                _logger.LogWarning("While creating user occur invalid model");
+                return View(model);
             }
         }
 
@@ -144,12 +148,14 @@ namespace RoboticsManagement.Controllers
                 }
                 else
                 {
-                    return View(model); //add into logs
+                    _logger.LogWarning("Can't create Employee user, something wrong with User Identity");
+                    return View(model);
                 }
             }
             else
             {
-                return View(model); //add into logs
+                _logger.LogWarning("While creating user occur invalid model");
+                return View(model);
             }
         }
     }

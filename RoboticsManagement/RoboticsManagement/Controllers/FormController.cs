@@ -6,8 +6,6 @@ using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoboticsManagement.Data
@@ -52,25 +50,21 @@ namespace RoboticsManagement.Data
                 }
                 else
                 {
-                    //add to logs
+                    _logger.LogWarning("Usermanager can't find user named " + name);
                 }
-
+                _logger.LogWarning("Invalid form modelstate or user name is null");
             }
-
-            return View(model); //add into logs
+            return View(model);
 
         }
 
         [HttpGet]
-        public IActionResult Summary(SummaryViewModel summary)
-        {
-            return View(summary);
-        } //po podsumowaniu sprawdzic wyslanie bo cos nie dziala oraz dorobic mozliwosc cofniecia w celu zmiany danych
+        public IActionResult Summary(SummaryViewModel summary) => View(summary);
 
         [HttpPost]
         public IActionResult Summary(SummaryViewModel summary, bool isOkay)
         {
-            if (isOkay)
+            if (ModelState.IsValid && isOkay)
             {
                 var model = new FormModel
                 {
@@ -90,14 +84,14 @@ namespace RoboticsManagement.Data
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message); // add to logs / add alert
+                    _logger.LogError("Error while adding to database", e);
+                    Console.WriteLine(e.Message); // add alert in view
                 }
-
                 return RedirectToAction("Success", "Success");
             }
             else
             {
-                //add into logs
+                _logger.LogWarning("Invalid modelstate in summary");
             }
             return View(summary);
         }

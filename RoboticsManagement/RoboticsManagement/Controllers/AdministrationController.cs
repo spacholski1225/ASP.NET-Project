@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RoboticsManagement.Data;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
@@ -20,16 +21,19 @@ namespace RoboticsManagement.Controllers
         private readonly MgmtDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IFormRepository _formRepository;
+        private readonly ILogger<AdministrationController> _logger;
 
         public AdministrationController(UserManager<ApplicationUser> userManager,
             MgmtDbContext context,
             RoleManager<IdentityRole> roleManager,
-            IFormRepository formRepository)
+            IFormRepository formRepository,
+            ILogger<AdministrationController> logger)
         {
             _userManager = userManager;
             _context = context;
             _roleManager = roleManager;
             _formRepository = formRepository;
+            _logger = logger;
         }
         public async Task<IActionResult> AddAdmin()
         {
@@ -102,7 +106,7 @@ namespace RoboticsManagement.Controllers
             }
             else
             {
-                //todo save into logs
+                _logger.LogWarning("Can't find employees in Employee role, AdministrationController PickEmployee method");
             }
             return View();
         }
@@ -131,7 +135,7 @@ namespace RoboticsManagement.Controllers
             }
             else
             {
-                //todo save into logs
+                _logger.LogError("While sending task to employee occurs error where employeeId or taskId null");
             }
             return View();
 
@@ -148,12 +152,12 @@ namespace RoboticsManagement.Controllers
             };
             try
             {
-                _context.TaskForEmployee.Add(entity); //error when id is already in database
-                _context.SaveChanges();//fix error when id is already in database
+                _context.TaskForEmployee.Add(entity);
+                _context.SaveChanges();
             }
             catch (Exception e)
             {
-                Console.WriteLine("is already in db" + e.Message); //save into logs or add alert 
+                _logger.LogError("Task is already in database", e);
             }
             return RedirectToAction("Success", "Success");
         }
