@@ -11,6 +11,10 @@ namespace RoboticsManagement.Controllers
     {
         private readonly ILogger<ErrorController> _logger;
 
+        public ErrorController()
+        {
+
+        }
         public ErrorController(ILogger<ErrorController> logger)
         {
             _logger = logger;

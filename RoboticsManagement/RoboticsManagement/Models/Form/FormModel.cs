@@ -24,5 +24,6 @@ namespace RoboticsManagement.Models.ComplaintForm
         public string Country { get; set; }
         [Required]
         public string Adress { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

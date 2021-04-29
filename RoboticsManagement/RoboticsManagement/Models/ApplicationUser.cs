@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using RoboticsManagement.Models.ComplaintForm;
 using System.Collections.Generic;
 
 namespace RoboticsManagement.Models
@@ -23,5 +24,6 @@ namespace RoboticsManagement.Models
         public string LastName { get; set; }
 
         public ICollection<TaskForEmployee> TaskForEmployee { get; set; }
+        public ICollection<FormModel> FormModels{ get; set; }
     }
 }

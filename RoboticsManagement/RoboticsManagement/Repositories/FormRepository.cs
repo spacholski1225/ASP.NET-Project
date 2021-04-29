@@ -56,5 +56,9 @@ namespace RoboticsManagement.Repositories
         }
 
         public List<FormModel> SortAscById() => _context.complaintFormModels.OrderBy(x => x.Id).ToList();
+       /* public List<FormModel> GetAllFormsByUser(string userId)
+        {
+            return new List<FormModel>();
+        }*/
     }
 }

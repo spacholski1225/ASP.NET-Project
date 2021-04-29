@@ -47,5 +47,14 @@ namespace RoboticsManagement.Controllers
             }
 
         }
+
+        /*[HttpGet]
+        public IActionResult SentForms(SentFormsViewModel model)
+        {
+
+        }
+
+        [HttpPost]
+        public IActionResult SentForms()*/
     }
 }
