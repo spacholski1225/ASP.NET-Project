@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
@@ -16,11 +17,15 @@ namespace RoboticsManagement.Data
     {
         private readonly MgmtDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<FormController> _logger;
 
-        public FormController(MgmtDbContext context, UserManager<ApplicationUser> userManager)
+        public FormController(MgmtDbContext context,
+            UserManager<ApplicationUser> userManager,
+            ILogger<FormController> logger)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
         }
         [HttpGet]
         public IActionResult Form() => View();
