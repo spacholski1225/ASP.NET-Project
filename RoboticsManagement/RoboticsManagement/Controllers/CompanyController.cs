@@ -58,20 +58,32 @@ namespace RoboticsManagement.Controllers
         {
 
             var forms = await _formRepository.GetAllFormsByUser(name);
-            var sentForms = new List<SentFormsViewModel>();
+            var sentForms = new List<SentFormViewModel>();
 
             foreach (var form in forms)
             {
-                sentForms.Add(new SentFormsViewModel
+                sentForms.Add(new SentFormViewModel
                 {
-                    Description = form.Description,
-                    CreatedDate = form.CreatedDate,
-                    Robot = form.ERobotsCategory.ToString()
+                    FormId = form.Id,
+                    CreatedDate = form.CreatedDate
                 });
             }
             
 
            return View(sentForms);
+        }
+        [HttpGet]
+        public IActionResult CurrentForm(int formId)
+        {
+            var form = _formRepository.GetFormById(formId);
+            var formModel = new SentFormViewModel
+            {
+                Description = form.Description,
+                CreatedDate = form.CreatedDate,
+                FormId = form.Id,
+                Robot = form.ERobotsCategory.ToString()
+            };
+            return View(formModel);
         }
 
     }

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SentFormsViewModel>
+﻿@model IEnumerable<SentFormViewModel>
 @{
     ViewData["Title"] = "Sent Forms";
 }
@@ -6,16 +6,8 @@
 {
     <div class="row">
         <div class="col-6">
-            <label class="form-label col-4" asp-for="@form.CreatedDate"></label>
-            <input class="form-control" asp-for="@form.CreatedDate" readonly />
+            <label>@form.CreatedDate</label>
+            <a class="btn btn-outline-info" asp-controller="Company" asp-action="CurrentForm" asp-route-formId="@form.FormId">Check me!</a>
         </div>
-        <div class="col-6">
-            <label class="form-label col-4" asp-for="@form.Robot"></label>
-            <input class="form-control" asp-for="@form.Robot" readonly />
-        </div>
-    </div>
-    <div class="col-12">
-        <label class="form-label col-4" asp-for="@form.Description"></label>
-        <textarea rows="10" class="form-control" asp-for="@form.Description" readonly></textarea>
     </div>
 }

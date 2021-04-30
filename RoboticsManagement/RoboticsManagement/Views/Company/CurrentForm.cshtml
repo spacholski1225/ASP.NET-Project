@@ -1,0 +1,21 @@
+﻿@model SentFormViewModel
+@{
+    ViewData["Title"] = "Form #" + Model.FormId;
+}
+<div class="row">
+    <div class="col-6">
+        <label class="form-label col-4" asp-for="CreatedDate"></label>
+        <input class="form-control" asp-for="CreatedDate" readonly />
+    </div>
+    <div class="col-6">
+        <label class="form-label col-4" asp-for="Robot"></label>
+        <input class="form-control" asp-for="Robot" readonly />
+    </div>
+</div>
+<div class="col-12">
+    <label class="form-label col-4" asp-for="Description"></label>
+    <textarea rows="10" class="form-control" asp-for="Description" readonly></textarea>
+</div>
+<div class="col-4">
+    <button class="btn btn-primary" asp-action="SentForms" asp-controller="Company">Back</button>
+</div>
