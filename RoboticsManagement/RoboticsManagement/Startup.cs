@@ -42,6 +42,7 @@ namespace RoboticsManagement
             services.AddScoped<ITaskForEmployeeRepository, TaskForEmployeeRepository>();
             services.AddScoped<IEmployeeTaskRepository, EmployeeTaskRepository>();
             services.AddScoped<IFormRepository, FormRepository>();
+            services.AddScoped<IEmployeeNotificationsRepository, EmployeeNotificationsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

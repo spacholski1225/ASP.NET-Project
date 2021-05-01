@@ -11,7 +11,7 @@ namespace RoboticsManagement.Models.Notifications
         public string ToEmployeeId { get; set; }
         public string NotiHeader { get; set; }
         public string NotiBody { get; set; }
-        public string IsRead { get; set; }
+        public bool IsRead { get; set; }
         public DateTime CreatedDate { get; set; }
 
     }
