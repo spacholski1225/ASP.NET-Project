@@ -9,5 +9,7 @@ namespace RoboticsManagement.Interfaces.IRepository
     public interface IEmployeeNotificationsRepository
     {
         List<EmployeeNotifications> GetNotifications(string toEmployeeId, bool isRead);
+        void ReadAllNotifications(string toEmployeeId);
+        void SetNotificationAsRead(int NotiId);
     }
 }
