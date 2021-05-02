@@ -1,0 +1,25 @@
+﻿@model RoboticsManagement.Models.Notifications.EmployeeNotifications
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+<div class="container">
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-6">
+            <input type="button" id="getNoti" value="Get notifications" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <ul id="notificationsList"></ul>
+    </div>
+</div>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/notification.js"></script>

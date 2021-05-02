@@ -3,11 +3,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>@ViewData["Title"] - RoboticsManagement</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RoboticsManagement</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css?v=3.4.1" />
+    <link href="~/icon/all.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -32,7 +36,15 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyRegistration">Temporirily register</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Notifications" asp-action="Index">Temporirily noti</a>
+                        </li>
                     </ul>
+                    <div class="row">
+                        <a href="#" title="notify" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="">
+                            <i class="fa fa-bell" aria-hidden="true"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -48,9 +60,14 @@
             &copy; 2021 - RoboticsManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/icon/all.js"></script>
+    
+    <script src="~/js/popover.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

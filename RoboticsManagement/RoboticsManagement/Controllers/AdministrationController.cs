@@ -6,6 +6,7 @@ using RoboticsManagement.Data;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
+using RoboticsManagement.Models.Notifications;
 using RoboticsManagement.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -150,8 +151,18 @@ namespace RoboticsManagement.Controllers
                 EmployeeId = employeeId,
                 TaskId = taskId
             };
+            var notifi = new EmployeeNotifications
+            {
+                FromRole = ERole.Admin,
+                IsRead = false,
+                CreatedDate = DateTime.Now,
+                NotiBody = "You have new task",
+                NotiHeader = "New task",
+                ToEmployeeId = employeeId
+            };
             try
             {
+                _context.EmployeeNotifications.Add(notifi);
                 _context.TaskForEmployee.Add(entity);
                 _context.SaveChanges();
             }

@@ -8,9 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RoboticsManagement.Data;
+using RoboticsManagement.Hubs;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using RoboticsManagement.Repositories;
+using System;
 
 namespace RoboticsManagement
 {
@@ -43,6 +45,8 @@ namespace RoboticsManagement
             services.AddScoped<IEmployeeTaskRepository, EmployeeTaskRepository>();
             services.AddScoped<IFormRepository, FormRepository>();
             services.AddScoped<IEmployeeNotificationsRepository, EmployeeNotificationsRepository>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +72,10 @@ namespace RoboticsManagement
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Account}/{action=Login}/{id?}");
+                endpoints.MapHub<NotificationHub>("/notificationHub");
             });
         }
+
+        
     }
 }
