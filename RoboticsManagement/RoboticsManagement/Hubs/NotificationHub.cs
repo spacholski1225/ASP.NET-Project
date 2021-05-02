@@ -9,10 +9,10 @@ namespace RoboticsManagement.Hubs
 {
     public class NotificationHub : Hub
     {
-        public async Task AddNewNotificationForEmployee(string employeeId, string notification)
+        public async Task AddNewNotificationForEmployee(string employeeId, EmployeeNotifications notification)
         {
             // await Clients.User(employeeId).SendAsync("ReceiveTask", notification);
-            await Clients.All.SendAsync("ReceiveTask",employeeId,  notification);
+            await Clients.All.SendAsync("ReceiveTask", employeeId,  notification);
         }
     }
 }

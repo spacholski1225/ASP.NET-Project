@@ -7,8 +7,8 @@ document.getElementById("getNoti").disabled = true;
 
 connection.on("ReceiveTask", function (employeeId, notification) {
     var heading = document.createElement("h3");
-    heading.textContent = employeeId; //zmienic
-    var encodedMsg = notification;
+    heading.textContent = "New Task"
+    var encodedMsg = employeeId + " : " +notification.NotiBody;
     var li = document.createElement("li");
     li.textContent = encodedMsg;
     document.getElementById("notificationsList").appendChild(li);
@@ -21,6 +21,8 @@ connection.start().then(function () {
 });
 
 document.getElementById("getNoti").addEventListener("click", function (event) {
+    //tutaj polaczenie z DB i pobranie danych
+
     var employeeId = "empid";
     var notification = "Notification Message";
     connection.invoke("AddNewNotificationForEmployee", employeeId, notification).catch(function (err) {
