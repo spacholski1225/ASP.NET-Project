@@ -13,6 +13,7 @@ namespace RoboticsManagement.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string Adress { get; set; }
+        public ERobotsCategory ERobotsCategory { get; set; }
         public ICollection<TaskForEmployee> TaskForEmployee{ get; set; }
         public bool isDone { get; set; }
     }

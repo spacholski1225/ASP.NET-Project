@@ -79,8 +79,19 @@ namespace RoboticsManagement.Data
                     CreatedDate = DateTime.Now,
                     ApplicationUser = await _userManager.FindByIdAsync(summary.Id)
                 };
+                var empTask = new EmployeeTask
+                {
+                    Adress = summary.Adress,
+                    City = summary.City,
+                    Company = summary.Company,
+                    ERobotsCategory = summary.ERobotsCategory,
+                    Country = summary.Country,
+                    Description = summary.Description,
+                    isDone = false
+                };
                 try
                 {
+                    _context.EmployeeTasks.Add(empTask);
                     _context.complaintFormModels.Add(model);
                     _context.SaveChanges();
                 }

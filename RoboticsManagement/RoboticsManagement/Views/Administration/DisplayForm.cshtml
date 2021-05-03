@@ -1,28 +1,28 @@
-﻿@model IEnumerable<FormModel>
+﻿@model IEnumerable<EmployeeTask>
 
 @{
     ViewData["Title"] = "Display Form";
 }
 <div class="row">
-    @foreach (var form in Model)
+    @foreach (var task in Model)
     {
         <form method="post" class="col-sm-6" style="margin-top:5px" >
             <div class="col-md">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">@form.Company</h5>
+                        <h5 class="card-title">@task.Company</h5>
 
-                        @if (form.Description.Length > 15)
+                        @if (task.Description.Length > 15)
                         {
-                            <p class="card-text">@form.ToString().Substring(0, 15)...</p>
+                            <p class="card-text">@task.ToString().Substring(0, 15)...</p>
                         }
                         else
                         {
                             <p class="card-text">
-                                @form.Description
+                                @task.Description
                             </p>
                         }
-                        <button type="submit" asp-route-id="@form.Id" class="btn btn-primary">Choose me!</button>
+                        <button type="submit" asp-route-id="@task.Id" class="btn btn-primary">Choose me!</button>
                     </div>
                 </div>
             </div>

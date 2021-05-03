@@ -22,5 +22,11 @@ namespace RoboticsManagement.Repositories
         public List<EmployeeTask> GetDoneTasks() => _context.EmployeeTasks.Where(x => x.isDone == true).ToList();
 
         public List<EmployeeTask> GetUnDoneTasks() => _context.EmployeeTasks.Where(x => x.isDone == false).ToList();
+
+        public List<EmployeeTask> SortAscById()
+        {
+            var tasks =  _context.EmployeeTasks.Where(x=> x.Description !=null && x.City !=null && x.Country != null && x.Adress != null).OrderBy(x => x.Id).ToList();
+            return tasks;
+        }
     }
 }

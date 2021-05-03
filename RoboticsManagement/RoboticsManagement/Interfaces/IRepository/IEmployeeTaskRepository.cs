@@ -11,5 +11,6 @@ namespace RoboticsManagement.Interfaces.IRepository
         public EmployeeTask GetTaskById(int taskId);
         public List<EmployeeTask> GetUnDoneTasks();
         public List<EmployeeTask> GetDoneTasks();
+        public List<EmployeeTask> SortAscById();
     }
 }

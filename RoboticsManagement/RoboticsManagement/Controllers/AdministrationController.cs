@@ -21,19 +21,19 @@ namespace RoboticsManagement.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly MgmtDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IFormRepository _formRepository;
+        private readonly IEmployeeTaskRepository _employeeTaskRepository;
         private readonly ILogger<AdministrationController> _logger;
 
         public AdministrationController(UserManager<ApplicationUser> userManager,
             MgmtDbContext context,
             RoleManager<IdentityRole> roleManager,
-            IFormRepository formRepository,
+            IEmployeeTaskRepository employeeTaskRepository,
             ILogger<AdministrationController> logger)
         {
             _userManager = userManager;
             _context = context;
             _roleManager = roleManager;
-            _formRepository = formRepository;
+            _employeeTaskRepository = employeeTaskRepository;
             _logger = logger;
         }
         public async Task<IActionResult> AddAdmin()
@@ -66,23 +66,24 @@ namespace RoboticsManagement.Controllers
         }//to delete or modify
 
         [HttpGet]
-        public IActionResult DisplayForm() => View(_formRepository.SortAscById());
+        public IActionResult DisplayForm() => View(_employeeTaskRepository.SortAscById());
 
         [HttpPost]
         public IActionResult DisplayForm(int id)
         {
-            var result = _formRepository.GetFormById(id);
+            var result = _employeeTaskRepository.GetTaskById(id);
             return RedirectToAction("ConcreteForm", "Administration", result);
         }
         [HttpGet]
-        public IActionResult ConcreteForm(FormModel result) => View(result);
+        public IActionResult ConcreteForm(EmployeeTask result) => View(result);
         [HttpPost]
         public IActionResult ConcreteForm(int id)
         {
-            var task = _formRepository.GetFormById(id);
+            var task = _employeeTaskRepository.GetTaskById(id);
+
             var newTask = new EmployeeTaskViewModel
             {
-                TaskId = task.Id,
+                TaskId = task.Id
             };
             return RedirectToAction("PickEmployee", newTask);
         }
@@ -114,10 +115,10 @@ namespace RoboticsManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> PickEmployee(string employeeId, int taskId)
         {
-            if(employeeId != null && !taskId.Equals(null))
+            if (employeeId != null && !taskId.Equals(null))
             {
                 var employee = await _userManager.FindByIdAsync(employeeId);
-                var task = _context.complaintFormModels.FirstOrDefault(x => x.Id == taskId);
+                var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId);
                 var model = new EmployeeTaskViewModel
                 {
                     Description = task.Description,
@@ -128,9 +129,7 @@ namespace RoboticsManagement.Controllers
                     EmployeeId = employeeId,
                     FirstName = employee.FirstName,
                     LastName = employee.LastName,
-                    TaskId = taskId,
-                    ZipCode = task.ZipCode
-
+                    TaskId = taskId
                 };
                 return RedirectToAction("NewTask", model);
             }
@@ -168,8 +167,8 @@ namespace RoboticsManagement.Controllers
             }
             catch (Exception e)
             {
-
-                _logger.LogError("Task is already in database", e);
+                Console.WriteLine(e.ToString());
+                _logger.LogError("Task is already in database", e.ToString());
             }
             return RedirectToAction("Success", "Success");
         }

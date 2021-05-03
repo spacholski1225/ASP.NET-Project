@@ -1,4 +1,4 @@
-﻿@model FormModel
+﻿@model EmployeeTask
 
 @{
     ViewData["Title"] = "Form " + Model.Id;
@@ -34,11 +34,6 @@
             <label asp-for="@Model.Adress"></label>
             <input class="form-control" asp-for="@Model.Adress" readonly />
             <span asp-validation-for="@Model.Adress" class="alert-danger"></span>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label asp-for="@Model.ZipCode"></label>
-            <input class="form-control" asp-for="@Model.ZipCode" readonly />
-            <span asp-validation-for="@Model.ZipCode" class="alert-danger"></span>
         </div>
     </div>
     <button class="btn btn-primary" asp-route-id="@Model.Id">Send to employee</button>
