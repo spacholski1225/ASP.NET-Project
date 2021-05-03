@@ -162,12 +162,13 @@ namespace RoboticsManagement.Controllers
             };
             try
             {
-                _context.EmployeeNotifications.Add(notifi);
+                // _context.EmployeeNotifications.Add(notifi);
                 _context.TaskForEmployee.Add(entity);
                 _context.SaveChanges();
             }
             catch (Exception e)
             {
+
                 _logger.LogError("Task is already in database", e);
             }
             return RedirectToAction("Success", "Success");
