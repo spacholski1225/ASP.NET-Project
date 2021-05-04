@@ -1,9 +1,26 @@
 ﻿@model IEnumerable<TaskViewModel>
-@{ 
+@{
     ViewData["Title"] = "Done Tasks";
 }
 
 @foreach (var task in Model)
 {
-    <h1>@task.Company</h1>
+<div class="row">
+    <div class="col">
+        <label asp-for="@task.TaskId"></label>
+        <input class="form-control" asp-for="@task.TaskId" readonly />
+        <span asp-validation-for="@task.TaskId" class="alert-danger"></span>
+    </div>
+    <div class="col">
+        <label asp-for="@task.Company"></label>
+        <input class="form-control" asp-for="@task.Company" readonly />
+        <span asp-validation-for="@task.Company" class="alert-danger"></span>
+    </div>
+    <div class="col">
+        <label asp-for="@task.CreatedDate"></label>
+        <input class="form-control" asp-for="@task.CreatedDate" readonly />
+        <span asp-validation-for="@task.CreatedDate" class="alert-danger"></span>
+    </div>
+</div>
+    <div style=" margin-top:10px;border: dashed 1px #787878"></div>
 }
