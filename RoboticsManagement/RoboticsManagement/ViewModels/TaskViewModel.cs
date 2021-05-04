@@ -24,5 +24,6 @@ namespace RoboticsManagement.ViewModels
         public int NIP { get; set; }
 
         public int Regon { get; set; }
+        public string AppUserId { get; set; }
     }
 }

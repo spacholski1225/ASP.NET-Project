@@ -5,22 +5,25 @@
 
 @foreach (var task in Model)
 {
-<div class="row">
-    <div class="col">
-        <label asp-for="@task.TaskId"></label>
-        <input class="form-control" asp-for="@task.TaskId" readonly />
-        <span asp-validation-for="@task.TaskId" class="alert-danger"></span>
-    </div>
-    <div class="col">
-        <label asp-for="@task.Company"></label>
-        <input class="form-control" asp-for="@task.Company" readonly />
-        <span asp-validation-for="@task.Company" class="alert-danger"></span>
-    </div>
-    <div class="col">
-        <label asp-for="@task.CreatedDate"></label>
-        <input class="form-control" asp-for="@task.CreatedDate" readonly />
-        <span asp-validation-for="@task.CreatedDate" class="alert-danger"></span>
-    </div>
-</div>
-    <div style=" margin-top:10px;border: dashed 1px #787878"></div>
+    <form asp-action="FinishedTasks" asp-controller="Task" method="post" class="row">
+        <div class="col">
+            <label asp-for="@task.TaskId"></label>
+            <input class="form-control" asp-for="@task.TaskId" readonly />
+            <span asp-validation-for="@task.TaskId" class="alert-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="@task.Company"></label>
+            <input class="form-control" asp-for="@task.Company" readonly />
+            <span asp-validation-for="@task.Company" class="alert-danger"></span>
+        </div>
+        <div class="col">
+            <label asp-for="@task.CreatedDate"></label>
+            <input class="form-control" asp-for="@task.CreatedDate" readonly />
+            <span asp-validation-for="@task.CreatedDate" class="alert-danger"></span>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary" asp-route-userId="@task.AppUserId">Choose @task.TaskId</button>
+        </div>
+    </form>
+    <div style="margin-top:10px;border: dashed 1px #787878"></div>
 }

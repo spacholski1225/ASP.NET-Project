@@ -26,7 +26,9 @@ namespace RoboticsManagement.Controllers
             _context = context;
             _userManager = userManager;
         }
-        public async Task<IActionResult> FinishedTasksAsync()
+
+        [HttpGet]
+        public async Task<IActionResult> FinishedTasks()
         {
             //todo add error handler
             var listToReturn = new List<TaskViewModel>();
@@ -54,11 +56,45 @@ namespace RoboticsManagement.Controllers
                     ERobotsCategory = complaintForm.ERobotsCategory,
                     NIP = user.NIP,
                     Regon = user.Regon,
-                    ZipCode = user.ZipCode
-
+                    ZipCode = user.ZipCode,
+                    TaskId = taskToGetUser.Id,
+                    AppUserId = user.Id
                 });
             }
             return View(listToReturn);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FinishedTasks(string userId)
+        {
+            var complaintForm = _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == userId);
+            var user = await _userManager.FindByIdAsync(userId);
+            var taskViewModel = new TaskViewModel
+            {
+                Description = complaintForm.Description,
+                CreatedDate = complaintForm.CreatedDate,
+                Adress = user.Adress,
+                City = user.City,
+                Company = user.CompanyName,
+                Country = user.Country,
+                ERobotsCategory = complaintForm.ERobotsCategory,
+                NIP = user.NIP,
+                Regon = user.Regon,
+                ZipCode = user.ZipCode,
+                AppUserId = user.Id
+            };
+            return RedirectToAction("ConcreteTask", "Task", taskViewModel);
+        }
+        [HttpGet]
+        public IActionResult ConcreteTask(TaskViewModel taskViewModel)
+        {
+            return View(taskViewModel);
+        }
+        [HttpPost]
+        public IActionResult ConcreteTask(TaskViewModel taskViewModel, bool isSure)
+        {
+            /*generate xml*/
+            return View(taskViewModel);
         }
 
     }
