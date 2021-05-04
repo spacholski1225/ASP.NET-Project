@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RoboticsManagement.Data;
 
 namespace RoboticsManagement.Migrations
 {
     [DbContext(typeof(MgmtDbContext))]
-    partial class MgmtDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210504132339_ChangedApplicationUserToAppUserId")]
+    partial class ChangedApplicationUserToAppUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -304,6 +306,9 @@ namespace RoboticsManagement.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
@@ -323,6 +328,8 @@ namespace RoboticsManagement.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("EmployeeTasks");
                 });
@@ -435,6 +442,13 @@ namespace RoboticsManagement.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("RoboticsManagement.Models.EmployeeTask", b =>
+                {
+                    b.HasOne("RoboticsManagement.Models.ApplicationUser", null)
+                        .WithMany("EmployeeTasks")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("RoboticsManagement.Models.TaskForEmployee", b =>
                 {
                     b.HasOne("RoboticsManagement.Models.ApplicationUser", "Employee")
@@ -456,6 +470,8 @@ namespace RoboticsManagement.Migrations
 
             modelBuilder.Entity("RoboticsManagement.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("EmployeeTasks");
+
                     b.Navigation("FormModels");
 
                     b.Navigation("TaskForEmployee");

@@ -16,5 +16,6 @@ namespace RoboticsManagement.Models
         public ERobotsCategory ERobotsCategory { get; set; }
         public ICollection<TaskForEmployee> TaskForEmployee{ get; set; }
         public bool isDone { get; set; }
+        public string AppUserId { get; set; }
     }
 }

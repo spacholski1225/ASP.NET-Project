@@ -87,7 +87,8 @@ namespace RoboticsManagement.Data
                     ERobotsCategory = summary.ERobotsCategory,
                     Country = summary.Country,
                     Description = summary.Description,
-                    isDone = false
+                    isDone = false,
+                    AppUserId = summary.Id
                 };
                 try
                 {

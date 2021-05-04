@@ -13,5 +13,6 @@ namespace RoboticsManagement.ViewModels
         public string Country { get; set; }
         public string Adress { get; set; }
         public bool IsOkay { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

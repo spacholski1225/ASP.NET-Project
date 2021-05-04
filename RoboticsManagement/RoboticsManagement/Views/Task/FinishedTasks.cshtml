@@ -1,0 +1,9 @@
+﻿@model IEnumerable<TaskViewModel>
+@{ 
+    ViewData["Title"] = "Done Tasks";
+}
+
+@foreach (var task in Model)
+{
+    <h1>@task.Company</h1>
+}

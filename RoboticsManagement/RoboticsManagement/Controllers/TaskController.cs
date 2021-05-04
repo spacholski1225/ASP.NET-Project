@@ -26,22 +26,39 @@ namespace RoboticsManagement.Controllers
             _context = context;
             _userManager = userManager;
         }
-        public async Task<IActionResult> FinishedTasks()
+        public async Task<IActionResult> FinishedTasksAsync()
         {
-            var listToReturn = new List<TaskViewModel>(); // lista z danymi Company
-            var tasks = new List<FormModel>(); //do zmiany <- tabela TaskForEmployee zwierajaca Id skonczonego zadania wraz z osoba ktora je zrobila
+            //todo add error handler
+            var listToReturn = new List<TaskViewModel>();
+            var tasks = new List<TaskForEmployee>(); 
+
             var doneTasks = _context.EmployeeTasks.Where(x => x.isDone == true).ToList();
             doneTasks.ForEach(t =>
             {
-             //dla kazdego taska szukamy EmployeeId w TaskForEmployee a nastepnie d zapisaujemy to  do listy tasks
+                tasks.Add(_context.TaskForEmployee.FirstOrDefault(x => x.TaskId == t.Id));
             });
-            tasks.ForEach(t =>
+
+            foreach (var task in tasks)
             {
-                //tutaj powinna znalezc sie tworzenie listy z danymi Company znaleznione poprzez wykonane zadanie z listy tasks
-                //trzeba zmienic strukture tabel tak aby EmployeeTasks zawieralo Id firmy ktora stworzyla to zadanie, albo zmiana jakos w logice bo teraz 
-                //wydaje mi sie ze nie da sie dostac do aktualnego Id w ApplicationUserId w tabeli complaintFormModels
-            });
-            return View();
+                var taskToGetUser = _context.EmployeeTasks.FirstOrDefault(x => x.Id == task.TaskId);
+                var complaintForm = _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == taskToGetUser.AppUserId);
+                var user = await _userManager.FindByIdAsync(taskToGetUser.AppUserId);
+                listToReturn.Add(new TaskViewModel
+                {
+                    Description = complaintForm.Description,
+                    CreatedDate = complaintForm.CreatedDate,
+                    Adress = user.Adress,
+                    City = user.City,
+                    Company = user.CompanyName,
+                    Country = user.Country,
+                    ERobotsCategory = complaintForm.ERobotsCategory,
+                    NIP = user.NIP,
+                    Regon = user.Regon,
+                    ZipCode = user.ZipCode
+
+                });
+            }
+            return View(listToReturn);
         }
 
     }
