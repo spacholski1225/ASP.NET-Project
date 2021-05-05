@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoboticsManagement.Data;
 using RoboticsManagement.Models;
-using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace RoboticsManagement.Controllers
 {
@@ -32,7 +33,7 @@ namespace RoboticsManagement.Controllers
         {
             //todo add error handler
             var listToReturn = new List<TaskViewModel>();
-            var tasks = new List<TaskForEmployee>(); 
+            var tasks = new List<TaskForEmployee>();
 
             var doneTasks = _context.EmployeeTasks.Where(x => x.isDone == true).ToList();
             doneTasks.ForEach(t =>
@@ -48,7 +49,7 @@ namespace RoboticsManagement.Controllers
                 listToReturn.Add(new TaskViewModel
                 {
                     Description = complaintForm.Description,
-                    CreatedDate = complaintForm.CreatedDate,
+                    CreatedDate = complaintForm.CreatedDate.ToString(),
                     Adress = user.Adress,
                     City = user.City,
                     Company = user.CompanyName,
@@ -67,12 +68,13 @@ namespace RoboticsManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> FinishedTasks(string userId)
         {
-            var complaintForm = _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == userId);
+            var complaintForm = _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == userId);// it can be deleted if in view
+                                                                                                                 // will be properties with hidden attribute
             var user = await _userManager.FindByIdAsync(userId);
             var taskViewModel = new TaskViewModel
             {
                 Description = complaintForm.Description,
-                CreatedDate = complaintForm.CreatedDate,
+                CreatedDate = complaintForm.CreatedDate.ToString(),
                 Adress = user.Adress,
                 City = user.City,
                 Company = user.CompanyName,
@@ -91,10 +93,25 @@ namespace RoboticsManagement.Controllers
             return View(taskViewModel);
         }
         [HttpPost]
-        public IActionResult ConcreteTask(TaskViewModel taskViewModel, bool isSure)
+        public ContentResult ConcreteTask(TaskViewModel taskViewModel, bool isSure)
         {
-            /*generate xml*/
-            return View(taskViewModel);
+            XmlSerializer serializer = new XmlSerializer(typeof(TaskViewModel));
+            var writer = new StringWriter();
+            serializer.Serialize(writer, taskViewModel);
+            var xmlString = writer.ToString();
+            try
+            {
+                _context.InvoiceData.Add(new InvoiceData { InvoiceXML = xmlString });
+                _context.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Cannot add invoice date to database!", ex);
+            }
+            return new ContentResult
+            {
+                Content = xmlString
+            };
         }
 
     }

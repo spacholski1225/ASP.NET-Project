@@ -12,7 +12,7 @@ namespace RoboticsManagement.ViewModels
         public string Company { get; set; }
         public string Description { get; set; }
         public ERobotsCategory ERobotsCategory { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public string CreatedDate { get; set; }
 
         public string ZipCode { get; set; }
 

@@ -19,7 +19,41 @@
         <input class="form-control" asp-for="NIP" readonly />
         <span asp-validation-for="NIP" class="alert-danger"></span>
     </div>
-    @*there will be more info*@
+    <div class="row">
+        <label asp-for="Regon"></label>
+        <input class="form-control" asp-for="Regon" readonly />
+        <span asp-validation-for="Regon" class="alert-danger"></span>
+    </div>
+    <div class="row">
+        <label asp-for="Country"></label>
+        <input class="form-control" asp-for="Country" readonly />
+        <span asp-validation-for="Country" class="alert-danger"></span>
+    </div>
+    <div class="row">
+        <label asp-for="City"></label>
+        <input class="form-control" asp-for="City" readonly />
+        <span asp-validation-for="City" class="alert-danger"></span>
+    </div>
+    <div class="row">
+        <label asp-for="Adress"></label>
+        <input class="form-control" asp-for="Adress" readonly />
+        <span asp-validation-for="Adress" class="alert-danger"></span>
+    </div>
+    <div class="row">
+        <label asp-for="ZipCode"></label>
+        <input class="form-control" asp-for="ZipCode" readonly />
+        <span asp-validation-for="ZipCode" class="alert-danger"></span>
+    </div>
+    <div class="row">
+        <label asp-for="Description"></label>
+        <input class="form-control" asp-for="Description" readonly />
+        <span asp-validation-for="Description" class="alert-danger"></span>
+    </div>
+    <div class="row">
+        <label asp-for="ERobotsCategory"></label>
+        <input class="form-control" asp-for="ERobotsCategory" readonly />
+        <span asp-validation-for="ERobotsCategory" class="alert-danger"></span>
+    </div>
     <button type="submit" asp-route-isSure=@true>Generate XML</button>@*change isSure parametr to checkbox or sth else*@
     <a asp-action="FinishedTasks" asp-controller="Task">Back</a>
 </form>
