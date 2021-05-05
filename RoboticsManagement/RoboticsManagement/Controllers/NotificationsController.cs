@@ -20,16 +20,20 @@ namespace RoboticsManagement.Controllers
             _userManager = userManager;
             _employeeNotificationsRepository = employeeNotificationsRepository;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string empName)
         {
-            return View();
+            var user = await _userManager.FindByNameAsync(empName);
+            var notis = _employeeNotificationsRepository.GetNotifications(user.Id);
+            return View(notis);
         }
         [HttpPost]
-        public JsonResult GetNotifications(string employeeId = "0506a940-07ea-4162-8e23-235f3f215225", bool isRead = false)
+        public JsonResult GetNotifications(string employeeId = "0506a940-07ea-4162-8e23-235f3f215225")
         {
             var notifications = new List<EmployeeNotifications>();
-            notifications =_employeeNotificationsRepository.GetNotifications(employeeId, isRead);
+            notifications =_employeeNotificationsRepository.GetNotifications(employeeId);
             return Json(notifications);
         }
+
+        
     }
 }

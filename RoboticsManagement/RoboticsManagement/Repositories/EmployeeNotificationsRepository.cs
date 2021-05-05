@@ -17,9 +17,9 @@ namespace RoboticsManagement.Repositories
             _context = context;
             _logger = logger;
         }
-        public List<EmployeeNotifications> GetNotifications(string toEmployeeId, bool isRead)
+        public List<EmployeeNotifications> GetNotifications(string toEmployeeId)
         {
-            return _context.EmployeeNotifications.Where(x => x.ToEmployeeId == toEmployeeId && x.IsRead == isRead).ToList();
+            return _context.EmployeeNotifications.Where(x => x.ToEmployeeId == toEmployeeId && x.IsRead == false).ToList();
         }
 
         public void ReadAllNotifications(string toEmployeeId)

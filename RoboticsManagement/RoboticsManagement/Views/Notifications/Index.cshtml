@@ -1,27 +1,16 @@
-﻿@model RoboticsManagement.Models.Notifications.EmployeeNotifications
+﻿@model IEnumerable<EmployeeNotifications>
 
 @{
     ViewData["Title"] = "Notifications";
 }
 <script scr="~/lib/jquery/dist/jquery.min.js"></script>
-<div class="container">
-    <div class="row">&nbsp;</div>
+@foreach (var noti in Model)
+{
     <div class="row">
-        <div class="col-6">
-            <input type="button" id="getNoti" value="Get notifications" />
-        </div>
+        <label asp-for="@noti.NotiHeader"> </label>
+        <input asp-for="@noti.NotiHeader" />
     </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <hr />
-    </div>
-</div>
-<div class="row">
-    <div class="col-6">
-        <ul id="notificationsList"></ul>
-    </div>
-</div>
+}
+
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/notification.js"></script>
-         
