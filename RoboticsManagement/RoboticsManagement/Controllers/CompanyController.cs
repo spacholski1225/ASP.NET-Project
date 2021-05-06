@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RoboticsManagement.Configuration;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
@@ -16,14 +17,17 @@ namespace RoboticsManagement.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<CompanyController> _logger;
         private readonly IFormRepository _formRepository;
+        private readonly AutoMapperConfig _mapper;
 
         public CompanyController(UserManager<ApplicationUser> userManager,
             ILogger<CompanyController> logger,
-            IFormRepository formRepository)
+            IFormRepository formRepository,
+            AutoMapperConfig mapper)
         {
             _userManager = userManager;
             _logger = logger;
             _formRepository = formRepository;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> CompanyInformation(string name)
@@ -31,18 +35,7 @@ namespace RoboticsManagement.Controllers
             var user = await _userManager.FindByNameAsync(name);
             if (user != null)
             {
-                var model = new CompanyInfoViewModel
-                {
-                    Email = user.Email,
-                    Country = user.Country,
-                    CompanyName = user.CompanyName,
-                    City = user.City,
-                    Adress = user.Adress,
-                    NIP = user.NIP.ToString(),
-                    Regon = user.Regon.ToString(),
-                    ZipCode = user.ZipCode,
-                    PhoneNumber = user.PhoneNumber
-                };
+                var model = _mapper.MapToCompanyInfoViewModel(user);
                 return View(model);
             }
             else
