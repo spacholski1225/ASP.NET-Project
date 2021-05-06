@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RoboticsManagement.Configuration;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
 using System;
@@ -17,16 +18,19 @@ namespace RoboticsManagement.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<AccountController> _logger;
+        private readonly AutoMapperConfig _mapper;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            AutoMapperConfig mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
+            _mapper = mapper;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -69,19 +73,7 @@ namespace RoboticsManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
-                {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    Country = model.Country,
-                    CompanyName = model.CompanyName,
-                    City = model.City,
-                    Adress = model.Adress,
-                    NIP = int.Parse(model.NIP),
-                    Regon = int.Parse(model.Regon),
-                    ZipCode = model.ZipCode,
-                    PhoneNumber = model.PhoneNumber,
-                };
+                var user = _mapper.MapCompanyRegistartionViewModelToApplicationUser(model);
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -119,19 +111,7 @@ namespace RoboticsManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
-                {
-                    UserName = model.UserName,
-                    Adress = model.Adress,
-                    Email = model.Email,
-                    Country = model.Country,
-                    City = model.City,
-                    ZipCode = model.ZipCode,
-                    PhoneNumber = model.PhoneNumber,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName
-
-                };
+                var user = _mapper.MapEmployeeRegistrationViewModelToApplicationUser(model);
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

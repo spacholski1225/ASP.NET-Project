@@ -35,7 +35,7 @@ namespace RoboticsManagement.Controllers
             var user = await _userManager.FindByNameAsync(name);
             if (user != null)
             {
-                var model = _mapper.MapToCompanyInfoViewModel(user);
+                var model = _mapper.MapApplicationUserToCompanyInfoViewModel(user);
                 return View(model);
             }
             else
@@ -52,7 +52,6 @@ namespace RoboticsManagement.Controllers
 
             var forms = await _formRepository.GetAllFormsByUser(name);
             var sentForms = new List<SentFormViewModel>();
-
             foreach (var form in forms)
             {
                 sentForms.Add(new SentFormViewModel
@@ -61,21 +60,13 @@ namespace RoboticsManagement.Controllers
                     CreatedDate = form.CreatedDate
                 });
             }
-            
-
            return View(sentForms);
         }
         [HttpGet]
         public IActionResult CurrentForm(int formId)
         {
             var form = _formRepository.GetFormById(formId);
-            var formModel = new SentFormViewModel
-            {
-                Description = form.Description,
-                CreatedDate = form.CreatedDate,
-                FormId = form.Id,
-                Robot = form.ERobotsCategory.ToString()
-            };
+            var formModel = _mapper.MapFormModelToSentFormViewModel(form);
             return View(formModel);
         }
 

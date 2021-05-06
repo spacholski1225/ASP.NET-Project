@@ -7,9 +7,9 @@ namespace RoboticsManagement.Models
     public class ApplicationUser : IdentityUser
     {
        
-        public int NIP { get; set; }
+        public string NIP { get; set; }
         
-        public int Regon { get; set; }
+        public string Regon { get; set; }
         
         public string CompanyName { get; set; }
        
