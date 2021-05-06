@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RoboticsManagement.Configuration;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.ViewModels;
@@ -16,14 +17,17 @@ namespace RoboticsManagement.Data
         private readonly MgmtDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<FormController> _logger;
+        private readonly AutoMapperConfig _mapper;
 
         public FormController(MgmtDbContext context,
             UserManager<ApplicationUser> userManager,
-            ILogger<FormController> logger)
+            ILogger<FormController> logger,
+            AutoMapperConfig mapper)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
+            _mapper = mapper;
         }
         [HttpGet]
         public IActionResult Form() => View();
@@ -36,17 +40,9 @@ namespace RoboticsManagement.Data
                 var user = await _userManager.FindByNameAsync(name);
                 if (user != null)
                 {
-                    var summary = new SummaryViewModel
-                    {
-                        Adress = user.Adress,
-                        City = user.City,
-                        Company = user.CompanyName,
-                        Country = user.Country,
-                        ZipCode = user.ZipCode,
-                        ERobotsCategory = model.ERobotsCategory,
-                        Description = model.Description,
-                        Id = user.Id
-                    };
+                    var summary = _mapper.MapApplicationUserToSummaryViewModel(user);
+                    summary.ERobotsCategory = model.ERobotsCategory;
+                    summary.Description = model.Description;
                     return RedirectToAction("Summary", "Form", summary);
                 }
                 else
@@ -67,29 +63,13 @@ namespace RoboticsManagement.Data
         {
             if (ModelState.IsValid && isOkay)
             {
-                var model = new FormModel
-                {
-                    Adress = summary.Adress,
-                    City = summary.City,
-                    Company = summary.Company,
-                    Country = summary.Country,
-                    ZipCode = summary.ZipCode,
-                    ERobotsCategory = summary.ERobotsCategory,
-                    Description = summary.Description,
-                    CreatedDate = DateTime.Now,
-                    ApplicationUser = await _userManager.FindByIdAsync(summary.Id)
-                };
-                var empTask = new EmployeeTask
-                {
-                    Adress = summary.Adress,
-                    City = summary.City,
-                    Company = summary.Company,
-                    ERobotsCategory = summary.ERobotsCategory,
-                    Country = summary.Country,
-                    Description = summary.Description,
-                    isDone = false,
-                    AppUserId = summary.Id
-                };
+                var model = _mapper.MapSummaryViewModelToFormModel(summary);
+                model.CreatedDate = DateTime.Now;
+                model.ApplicationUser = await _userManager.FindByIdAsync(summary.UserId);
+
+                var empTask = _mapper.MapSummaryViewModelToEmployeeTask(summary);
+                empTask.isDone = false;
+
                 try
                 {
                     _context.EmployeeTasks.Add(empTask);

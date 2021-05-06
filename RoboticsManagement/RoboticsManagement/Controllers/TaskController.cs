@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RoboticsManagement.Configuration;
 using RoboticsManagement.Data;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
@@ -20,12 +21,15 @@ namespace RoboticsManagement.Controllers
         private readonly ILogger<TaskController> _logger;
         private readonly MgmtDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly AutoMapperConfig _mapper;
 
-        public TaskController(ILogger<TaskController> logger, MgmtDbContext context, UserManager<ApplicationUser> userManager)
+        public TaskController(ILogger<TaskController> logger, MgmtDbContext context,
+            UserManager<ApplicationUser> userManager, AutoMapperConfig mapper)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -46,21 +50,15 @@ namespace RoboticsManagement.Controllers
                 var taskToGetUser = _context.EmployeeTasks.FirstOrDefault(x => x.Id == task.TaskId);
                 var complaintForm = _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == taskToGetUser.AppUserId);
                 var user = await _userManager.FindByIdAsync(taskToGetUser.AppUserId);
-                listToReturn.Add(new TaskViewModel
-                {
-                    Description = complaintForm.Description,
-                    CreatedDate = complaintForm.CreatedDate.ToString(),
-                    Adress = user.Adress,
-                    City = user.City,
-                    Company = user.CompanyName,
-                    Country = user.Country,
-                    ERobotsCategory = complaintForm.ERobotsCategory,
-                    NIP = user.NIP,
-                    Regon = user.Regon,
-                    ZipCode = user.ZipCode,
-                    TaskId = taskToGetUser.Id,
-                    AppUserId = user.Id
-                });
+
+                var mapTask = _mapper.MapApplicationUserToTaskViewModel(user);
+
+                mapTask.TaskId = taskToGetUser.Id;
+                mapTask.ERobotsCategory = complaintForm.ERobotsCategory;
+                mapTask.Description = complaintForm.Description;
+                mapTask.CreatedDate = complaintForm.CreatedDate.ToString();
+
+                listToReturn.Add(mapTask);
             }
             return View(listToReturn);
         }
@@ -104,7 +102,7 @@ namespace RoboticsManagement.Controllers
                 _context.InvoiceData.Add(new InvoiceData { InvoiceXML = xmlString });
                 _context.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError("Cannot add invoice date to database!", ex);
             }

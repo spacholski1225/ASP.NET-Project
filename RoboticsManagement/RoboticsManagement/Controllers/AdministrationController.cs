@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RoboticsManagement.Configuration;
 using RoboticsManagement.Data;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
@@ -23,18 +24,21 @@ namespace RoboticsManagement.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmployeeTaskRepository _employeeTaskRepository;
         private readonly ILogger<AdministrationController> _logger;
+        private readonly AutoMapperConfig _mapper;
 
         public AdministrationController(UserManager<ApplicationUser> userManager,
             MgmtDbContext context,
             RoleManager<IdentityRole> roleManager,
             IEmployeeTaskRepository employeeTaskRepository,
-            ILogger<AdministrationController> logger)
+            ILogger<AdministrationController> logger,
+            AutoMapperConfig mapper)
         {
             _userManager = userManager;
             _context = context;
             _roleManager = roleManager;
             _employeeTaskRepository = employeeTaskRepository;
             _logger = logger;
+            _mapper = mapper;
         }
         public async Task<IActionResult> AddAdmin()
         {
@@ -94,15 +98,12 @@ namespace RoboticsManagement.Controllers
             if (emp != null)
             {
                 var employees = new List<EmployeeTaskViewModel>();
+                
                 foreach (var employee in emp)
                 {
-                    employees.Add(new EmployeeTaskViewModel
-                    {
-                        EmployeeId = employee.Id,
-                        FirstName = employee.FirstName,
-                        LastName = employee.LastName,
-                        TaskId = newTask.TaskId
-                    });
+                    var mapEmp = _mapper.MapApplicationUserToEmployeeTaskViewModel(employee);
+                    mapEmp.TaskId = newTask.TaskId;
+                    employees.Add(mapEmp);
                 }
                 return View(employees);
             }
@@ -119,18 +120,12 @@ namespace RoboticsManagement.Controllers
             {
                 var employee = await _userManager.FindByIdAsync(employeeId);
                 var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId);
-                var model = new EmployeeTaskViewModel
-                {
-                    Description = task.Description,
-                    Adress = task.Adress,
-                    City = task.City,
-                    Company = task.Company,
-                    Country = task.Country,
-                    EmployeeId = employeeId,
-                    FirstName = employee.FirstName,
-                    LastName = employee.LastName,
-                    TaskId = taskId
-                };
+
+                var model = _mapper.MapEmployeeTaskToEmployeeTaskViewModel(task);
+                model.EmployeeId = employeeId;
+                model.FirstName = employee.FirstName;
+                model.LastName = employee.LastName;
+
                 return RedirectToAction("NewTask", model);
             }
             else

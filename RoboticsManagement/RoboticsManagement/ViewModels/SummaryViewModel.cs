@@ -4,7 +4,7 @@ namespace RoboticsManagement.ViewModels
 {
     public class SummaryViewModel
     {
-        public string Id { get; set; }
+        public string UserId { get; set; }
         public string Company { get; set; }
         public string Description { get; set; }
         public ERobotsCategory ERobotsCategory { get; set; }
