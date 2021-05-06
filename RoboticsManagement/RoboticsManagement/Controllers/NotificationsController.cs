@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
 {
+    [Authorize]
     public class NotificationsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
