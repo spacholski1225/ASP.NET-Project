@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace RoboticsManagement.Controllers
 {
-    [Authorize]
+    [Authorize] 
     public class HomeController : Controller
     {
         [HttpGet]
