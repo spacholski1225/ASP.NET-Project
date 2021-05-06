@@ -9,6 +9,11 @@
         "dist/browser/signalr.min.js",
         "dist/browser/signalr.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "twitter-bootstrap@4.6.0",
+      "destination": "wwwroot/twitter-bootstrap/"
     }
   ]
 }
