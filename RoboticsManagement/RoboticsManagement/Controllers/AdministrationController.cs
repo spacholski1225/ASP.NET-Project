@@ -40,35 +40,6 @@ namespace RoboticsManagement.Controllers
             _logger = logger;
             _mapper = mapper;
         }
-        public async Task<IActionResult> AddAdmin()
-        {
-
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = "admin"
-
-                };
-                var result = await _userManager.CreateAsync(user, "zaq1@WSX");
-                if (result.Succeeded)
-                {
-                    if (!_roleManager.Roles.Any(x => x.Name == "Admin"))
-                    {
-                        var role = new IdentityRole
-                        {
-                            Name = ERole.Admin.ToString()
-                        };
-                        await _roleManager.CreateAsync(role);
-                    }
-                    await _userManager.AddToRoleAsync(user, ERole.Admin.ToString());
-                    return RedirectToAction("Success", "Success");
-                }
-            }
-            return Ok();
-
-        }//to delete or modify
-
         [HttpGet]
         public IActionResult DisplayForm() => View(_employeeTaskRepository.SortAscById());
 

@@ -45,14 +45,6 @@ namespace RoboticsManagement.Controllers
                 return View("Error", "Error");
             }
         }
-        [HttpPost]
-        public JsonResult GetNotifications(string employeeId = "0506a940-07ea-4162-8e23-235f3f215225")
-        {
-            var notifications = new List<EmployeeNotifications>();
-            notifications = _notificationRepository.GetNotificationsForEmployee(employeeId);
-            return Json(notifications);
-        }
-
-
+       
     }
 }

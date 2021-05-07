@@ -5,13 +5,12 @@ using Microsoft.Extensions.Logging;
 using RoboticsManagement.Configuration;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -63,11 +62,9 @@ namespace RoboticsManagement.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult CompanyRegistration() => View();
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CompanyRegistration(CompanyRegistartionViewModel model)
         {
@@ -101,11 +98,9 @@ namespace RoboticsManagement.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult AddEmployee() => View();
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddEmployee(EmployeeRegistrationViewModel model)
         {
