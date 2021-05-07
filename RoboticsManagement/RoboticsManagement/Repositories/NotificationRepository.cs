@@ -7,22 +7,22 @@ using System.Linq;
 
 namespace RoboticsManagement.Repositories
 {
-    public class EmployeeNotificationsRepository : IEmployeeNotificationsRepository
+    public class NotificationRepository : INotificationRepository
     {
         private readonly MgmtDbContext _context;
-        private readonly ILogger<EmployeeNotificationsRepository> _logger;
+        private readonly ILogger<NotificationRepository> _logger;
 
-        public EmployeeNotificationsRepository(MgmtDbContext context, ILogger<EmployeeNotificationsRepository> logger)
+        public NotificationRepository(MgmtDbContext context, ILogger<NotificationRepository> logger)
         {
             _context = context;
             _logger = logger;
         }
-        public List<EmployeeNotifications> GetNotifications(string toEmployeeId)
+        public List<EmployeeNotifications> GetNotificationsForEmployee(string toEmployeeId)
         {
             return _context.EmployeeNotifications.Where(x => x.ToEmployeeId == toEmployeeId && x.IsRead == false).ToList();
         }
 
-        public void ReadAllNotifications(string toEmployeeId)
+        public void ReadAllEmployeeNotifications(string toEmployeeId)
         {
             var notis = _context.EmployeeNotifications.Where(x => x.ToEmployeeId == toEmployeeId && x.IsRead == false).ToList();
             notis.ForEach(n =>
@@ -33,7 +33,7 @@ namespace RoboticsManagement.Repositories
 
         }
 
-        public void SetNotificationAsRead(int NotiId)
+        public void SetNotificationForEmployeeAsRead(int NotiId)
         {
             var noti = _context.EmployeeNotifications.FirstOrDefault(x => x.NotiId == NotiId);
             if(noti.IsRead == false)

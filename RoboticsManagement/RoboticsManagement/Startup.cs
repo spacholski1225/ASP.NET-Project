@@ -46,7 +46,7 @@ namespace RoboticsManagement
             services.AddScoped<ITaskForEmployeeRepository, TaskForEmployeeRepository>();
             services.AddScoped<IEmployeeTaskRepository, EmployeeTaskRepository>();
             services.AddScoped<IFormRepository, FormRepository>();
-            services.AddScoped<IEmployeeNotificationsRepository, EmployeeNotificationsRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<AutoMapperConfig>();
 
             services.AddSignalR();

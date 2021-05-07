@@ -11,7 +11,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css?v=1.1.0" />
   
-    <link rel="stylesheet" href="~/css/site.css?v=4.4.3" />
+    <link rel="stylesheet" href="~/css/site.css?v=4.5.3" />
     <link href="~/icon/all.css" rel="stylesheet" />
 </head>
 <body>
@@ -38,7 +38,7 @@
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Notifications" asp-action="Index" asp-route-empName="@User.Identity.Name">Temporirily noti</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Notifications" asp-action="Index" asp-route-name="@User.Identity.Name">Temporirily noti</a>
                         </li>
                     </ul>
                     <div class="row">
@@ -50,6 +50,7 @@
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -67,7 +68,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/icon/all.js"></script>
-    
+
     <script src="~/js/popover.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

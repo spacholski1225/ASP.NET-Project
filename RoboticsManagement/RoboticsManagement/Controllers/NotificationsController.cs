@@ -15,24 +15,24 @@ namespace RoboticsManagement.Controllers
     public class NotificationsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmployeeNotificationsRepository _employeeNotificationsRepository;
+        private readonly INotificationRepository _notificationRepository;
 
-        public NotificationsController(UserManager<ApplicationUser> userManager,  IEmployeeNotificationsRepository employeeNotificationsRepository)
+        public NotificationsController(UserManager<ApplicationUser> userManager,  INotificationRepository notificationRepository)
         {
             _userManager = userManager;
-            _employeeNotificationsRepository = employeeNotificationsRepository;
+            _notificationRepository = notificationRepository;
         }
-        public async Task<IActionResult> Index(string empName)
+        public async Task<IActionResult> Index(string name)
         {
-            var user = await _userManager.FindByNameAsync(empName);
-            var notis = _employeeNotificationsRepository.GetNotifications(user.Id);
+            var user = await _userManager.FindByNameAsync(name);
+            var notis = _notificationRepository.GetNotificationsForEmployee(user.Id);
             return View(notis);
         }
         [HttpPost]
         public JsonResult GetNotifications(string employeeId = "0506a940-07ea-4162-8e23-235f3f215225")
         {
             var notifications = new List<EmployeeNotifications>();
-            notifications =_employeeNotificationsRepository.GetNotifications(employeeId);
+            notifications =_notificationRepository.GetNotificationsForEmployee(employeeId);
             return Json(notifications);
         }
 
