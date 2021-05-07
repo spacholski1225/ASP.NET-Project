@@ -32,7 +32,7 @@ namespace RoboticsManagement.Controllers
             }
             else if(await _userManager.IsInRoleAsync(user, "Admin"))
             {
-                var notis = _notificationRepository.GetNotificationsForAdmin(user.Id);
+                var notis = _notificationRepository.GetNotificationsForAdmin(ERole.Admin);
                 return View(notis);
             }
             else if (await _userManager.IsInRoleAsync(user, "Client"))

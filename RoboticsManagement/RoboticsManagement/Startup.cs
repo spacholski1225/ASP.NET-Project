@@ -7,10 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using RoboticsManagement.Configuration;
 using RoboticsManagement.Data;
-using RoboticsManagement.Hubs;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using RoboticsManagement.Repositories;
@@ -77,7 +75,6 @@ namespace RoboticsManagement
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Account}/{action=Login}/{id?}");
-                endpoints.MapHub<NotificationHub>("/notificationHub");
             });
         }
 
