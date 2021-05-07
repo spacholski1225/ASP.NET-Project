@@ -34,7 +34,7 @@ namespace RoboticsManagement.Controllers
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login() => View();
-
+        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

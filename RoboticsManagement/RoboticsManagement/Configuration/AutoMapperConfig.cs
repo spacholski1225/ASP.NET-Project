@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
+using RoboticsManagement.Models.Home;
 using RoboticsManagement.ViewModels;
 
 namespace RoboticsManagement.Configuration
@@ -25,8 +26,13 @@ namespace RoboticsManagement.Configuration
                cfg.CreateMap<SummaryViewModel, EmployeeTask>().ForMember(x => x.AppUserId, x => x.MapFrom(y => y.UserId));
                cfg.CreateMap<ApplicationUser, SummaryViewModel>().ForMember(x => x.Company, x => x.MapFrom(y => y.CompanyName))
                                                                  .ForMember(x => x.UserId, x => x.MapFrom(y => y.Id));
+               cfg.CreateMap<ContactViewModel, Contact>();
 
            }).CreateMapper();
+        }
+        public Contact MapContactViewModelToContact(ContactViewModel contactViewModel)
+        {
+            return _mapper.Map<Contact>(contactViewModel);
         }
         public SummaryViewModel MapApplicationUserToSummaryViewModel(ApplicationUser appUser)
         {

@@ -1,0 +1,31 @@
+﻿@model ContactViewModel
+
+@{
+    ViewData["Title"] = "Contact Form";
+}
+<form method="post">
+    <div asp-validation-summary="All" class="alert-danger"></div>
+    <div class="row">
+        <div>
+            <label asp-for="Topic" class="form-check-label">Topic</label>
+            <input asp-for="Topic" class="border-danger" />
+            <span asp-validation-for="Topic"></span>
+        </div>
+        <div>
+            <label asp-for="EContact" class="form-check-label">EContact</label>
+            <select asp-for="EContact" class="border-danger"></select>
+            <span asp-validation-for="EContact"></span>
+        </div>
+    </div>
+    <div class="row">
+        <label asp-for="Message">Message</label>
+        <textarea asp-for="Message"></textarea>
+        <span asp-validation-for="Message"></span>
+    </div>
+
+    <div class="rounded">
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Home">Back</a>
+        <button class="btn btn-primary" type="reset">Reset</button>
+        <button class="btn btn-primary" type="submit" asp-route-userName="@User.Identity.Name">Submit</button>
+    </div>
+</form>
