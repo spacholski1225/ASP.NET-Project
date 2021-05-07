@@ -25,6 +25,7 @@ namespace RoboticsManagement.Data
             modelBuilder.Entity<TaskForEmployee>().HasOne(x => x.Employee).WithMany(x => x.TaskForEmployee).HasForeignKey(x => x.EmployeeId);
 
             modelBuilder.Entity<ApplicationUser>().HasMany(f => f.FormModels).WithOne(a => a.ApplicationUser);
+            modelBuilder.Entity<EmployeeNotifications>().HasKey(x => x.NotiId);
         }
     }
 }

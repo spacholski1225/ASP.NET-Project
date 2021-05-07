@@ -125,6 +125,8 @@ namespace RoboticsManagement.Controllers
                 model.EmployeeId = employeeId;
                 model.FirstName = employee.FirstName;
                 model.LastName = employee.LastName;
+                model.TaskId = taskId;
+                model.ZipCode = employee.ZipCode;
 
                 return RedirectToAction("NewTask", model);
             }
@@ -156,13 +158,12 @@ namespace RoboticsManagement.Controllers
             };
             try
             {
-                // _context.EmployeeNotifications.Add(notifi);
+                _context.EmployeeNotifications.Add(notifi);
                 _context.TaskForEmployee.Add(entity);
                 _context.SaveChanges();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
                 _logger.LogError("Task is already in database", e.ToString());
             }
             return RedirectToAction("Success", "Success");
