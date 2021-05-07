@@ -16,6 +16,8 @@ namespace RoboticsManagement.Data
         public DbSet<EmployeeTask> EmployeeTasks { get; set; }
         public DbSet<TaskForEmployee> TaskForEmployee{ get; set; }
         public DbSet<EmployeeNotifications> EmployeeNotifications{ get; set; }
+        public DbSet<AdminNotifications> AdminNotifications{ get; set; }
+        public DbSet<ClientNotifications> ClientNotifications{ get; set; }
         public DbSet<InvoiceData> InvoiceData{ get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
