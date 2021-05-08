@@ -28,7 +28,7 @@ namespace RoboticsManagement.Controllers
         [Authorize]
         [HttpGet]
         [Route("~/Shared/Index.cshtml")]
-        public IActionResult Index() => View();
+        public IActionResult Index() => RedirectToAction("GetNotifications","Notifications");
 
         [HttpGet]
         public IActionResult Contact()

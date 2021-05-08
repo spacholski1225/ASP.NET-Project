@@ -69,7 +69,7 @@ namespace RoboticsManagement.Controllers
             var complaintForm = _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == userId);// it can be deleted if in view
                                                                                                                  // will be properties with hidden attribute
             var user = await _userManager.FindByIdAsync(userId);
-            var taskViewModel = new TaskViewModel
+            /*var taskViewModel = new TaskViewModel
             {
                 Description = complaintForm.Description,
                 CreatedDate = complaintForm.CreatedDate.ToString(),
@@ -82,7 +82,12 @@ namespace RoboticsManagement.Controllers
                 Regon = user.Regon,
                 ZipCode = user.ZipCode,
                 AppUserId = user.Id
-            };
+            };*/
+            var taskViewModel = _mapper.MapApplicationUserToTaskViewModel(user);
+            taskViewModel.ERobotsCategory = complaintForm.ERobotsCategory;
+            taskViewModel.Description = complaintForm.Description;
+            taskViewModel.CreatedDate = complaintForm.CreatedDate.ToString();
+
             return RedirectToAction("ConcreteTask", "Task", taskViewModel);
         }
         [HttpGet]

@@ -2,7 +2,9 @@
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.Models.Home;
+using RoboticsManagement.Models.Notifications;
 using RoboticsManagement.ViewModels;
+using RoboticsManagement.ViewModels.Notifications;
 
 namespace RoboticsManagement.Configuration
 {
@@ -27,8 +29,26 @@ namespace RoboticsManagement.Configuration
                cfg.CreateMap<ApplicationUser, SummaryViewModel>().ForMember(x => x.Company, x => x.MapFrom(y => y.CompanyName))
                                                                  .ForMember(x => x.UserId, x => x.MapFrom(y => y.Id));
                cfg.CreateMap<ContactViewModel, Contact>();
+               cfg.CreateMap<EmployeeNotifications, NotificationViewModel>().ForMember(x => x.Receiver, x => x.MapFrom(y => y.ToEmployeeId))
+                                                                         .ForMember(x => x.Sender, x => x.MapFrom(y => y.FromRole.ToString())); ;
+               cfg.CreateMap<AdminNotifications, NotificationViewModel>().ForMember(x => x.Receiver, x => x.MapFrom(y=> y.ToRole.ToString()))
+                                                                         .ForMember(x => x.Sender, x => x.MapFrom(y=> y.FromUserId));
+               cfg.CreateMap<ClientNotifications, NotificationViewModel>().ForMember(x=> x.Receiver, x=> x.MapFrom(y=> y.ToClientId))
+                                                                          .ForMember(x=> x.Sender, x=> x.MapFrom(y=> y.FromRole.ToString()));
 
            }).CreateMapper();
+        }
+        public NotificationViewModel MapEmployeeNotificationsToNotificationViewModel(EmployeeNotifications employeeNotifications)
+        {
+            return _mapper.Map<NotificationViewModel>(employeeNotifications);
+        }
+        public NotificationViewModel MapAdminNotificationsToNotificationViewModel(AdminNotifications adminNotifications)
+        {
+            return _mapper.Map<NotificationViewModel>(adminNotifications);
+        }
+        public NotificationViewModel MapClientNotificationsToNotificationViewModel(ClientNotifications clientNotifications)
+        {
+            return _mapper.Map<NotificationViewModel>(clientNotifications);
         }
         public Contact MapContactViewModelToContact(ContactViewModel contactViewModel)
         {
@@ -51,7 +71,6 @@ namespace RoboticsManagement.Configuration
             return _mapper.Map<EmployeeTaskViewModel>(empTask);
 
         }
-
         public EmployeeTaskViewModel MapApplicationUserToEmployeeTaskViewModel(ApplicationUser appUser)
         {
             return _mapper.Map<EmployeeTaskViewModel>(appUser);
