@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using RoboticsManagement.Data;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
+using RoboticsManagement.Models.Notifications;
 using RoboticsManagement.Repositories;
 using System;
 using System.Collections.Generic;
@@ -62,6 +63,17 @@ namespace RoboticsManagement.Controllers
             if (task != null)
             {
                 task.isDone = true;
+                var noti = new AdminNotifications
+                {
+                    CreatedDate = DateTime.Now,
+                    FromUserId = _context.TaskForEmployee.FirstOrDefault(x => x.TaskId == id).EmployeeId,
+                    IsRead = false,
+                    NotiBody = "Employee with id " + _context.TaskForEmployee.FirstOrDefault(x => x.TaskId == id).EmployeeId
+                    + "finished task with id " + id,
+                    NotiHeader = "Finished Task #" + id,
+                    ToRole = ERole.Admin
+                };
+                _context.AdminNotifications.Add(noti);
                 _context.SaveChanges();
             }
             else

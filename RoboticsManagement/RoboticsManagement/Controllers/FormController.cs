@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using RoboticsManagement.Configuration;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
+using RoboticsManagement.Models.Notifications;
 using RoboticsManagement.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -70,8 +71,28 @@ namespace RoboticsManagement.Data
                 var empTask = _mapper.MapSummaryViewModelToEmployeeTask(summary);
                 empTask.isDone = false;
 
+                var clientNoti = new ClientNotifications
+                {
+                    CreatedDate = DateTime.Now,
+                    FromRole = ERole.Admin,
+                    ToClientId = summary.UserId,
+                    IsRead =false,
+                    NotiBody = "Hello your form is sent.",
+                    NotiHeader = "Form confirmation"
+                };
+                var adminNoti = new AdminNotifications
+                {
+                    CreatedDate = DateTime.Now,
+                    FromUserId = summary.UserId,
+                    ToRole = ERole.Admin,
+                    IsRead = false,
+                    NotiBody = "Client with id " + summary.UserId + "sent form. ",
+                    NotiHeader = "New form from Client " + summary.Company
+                };
                 try
                 {
+                    _context.ClientNotifications.Add(clientNoti);
+                    _context.AdminNotifications.Add(adminNoti);
                     _context.EmployeeTasks.Add(empTask);
                     _context.complaintFormModels.Add(model);
                     _context.SaveChanges();

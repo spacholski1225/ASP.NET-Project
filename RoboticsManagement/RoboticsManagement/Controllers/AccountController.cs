@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoboticsManagement.Configuration;
+using RoboticsManagement.Data;
 using RoboticsManagement.Models;
+using RoboticsManagement.Models.Notifications;
 using RoboticsManagement.ViewModels;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,18 +21,21 @@ namespace RoboticsManagement.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger<AccountController> _logger;
         private readonly AutoMapperConfig _mapper;
+        private readonly MgmtDbContext _context;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             ILogger<AccountController> logger,
-            AutoMapperConfig mapper)
+            AutoMapperConfig mapper,
+            MgmtDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _logger = logger;
             _mapper = mapper;
+            _context = context;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -83,6 +89,25 @@ namespace RoboticsManagement.Controllers
                         await _roleManager.CreateAsync(role);
                     }
                     await _userManager.AddToRoleAsync(user, ERole.Client.ToString());
+
+                    var noti = new ClientNotifications
+                    {
+                        CreatedDate = DateTime.Now,
+                        ToClientId = user.Id,
+                        FromRole = ERole.Admin,
+                        IsRead = false,
+                        NotiBody = "Hello " + user.CompanyName + " in our system!",
+                        NotiHeader = "Welcome ;)"
+                    };
+                    try
+                    {
+                        _context.ClientNotifications.Add(noti);
+                        _context.SaveChanges();
+                    }
+                    catch(Exception ex)
+                    {
+                        _logger.LogError("Error within saveing notification after registration",ex);
+                    }
                     return RedirectToAction("Success", "Success");
                 }
                 else

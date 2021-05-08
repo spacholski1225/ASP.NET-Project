@@ -123,8 +123,9 @@ namespace RoboticsManagement.Controllers
                 FromRole = ERole.Admin,
                 IsRead = false,
                 CreatedDate = DateTime.Now,
-                NotiBody = "You have new task",
-                NotiHeader = "New task",
+                NotiBody = "Hi, you have new task to do! Here's problem description: " 
+                + _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId).Description,
+                NotiHeader = "New task from " + _context.EmployeeTasks.FirstOrDefault(x=> x.Id==taskId).Company,
                 ToEmployeeId = employeeId
             };
             try
