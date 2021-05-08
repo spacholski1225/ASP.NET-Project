@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="~/js/dropdown.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css?v=1.1.0" />
 
     <link rel="stylesheet" href="~/css/site.css?v=4.5.3" />
@@ -28,25 +29,32 @@
                         @if (signInManager.IsSignedIn(User))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                               <partial name="_DisplayUsersActions" /> 
                             </li>
                         }
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">
+                            <a class="dropbtn nav navbar-text" style="color: black" asp-area="" asp-controller="Home" asp-action="Contact">
                                 Contact
                             </a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Notifications" asp-action="Index" asp-route-name="@User.Identity.Name">Temporirily noti</a>
+                            <a class="dropbtn nav navbar-text" style="color: black" asp-area="" asp-controller="Notifications" asp-action="Index" asp-route-name="@User.Identity.Name">Temporirily noti</a>
                         </li>
                     </ul>
-                    <div class="row">
-                        <a href="#" title="notify" data-toggle="popover" data-trigger="focus" data-placement="bottom" data-content="">
-                            <i class="fa fa-bell" aria-hidden="true"></i>
-                        </a>
-                    </div>
+
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        <div class="row">
+                            <a class="dropbtn" style="font-size:18px" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <a class="dropbtn" style="font-size:18px"  asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                        </div>
+                    }
+
                 </div>
             </div>
         </nav>

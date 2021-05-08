@@ -1,46 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> signInManager
 @{
-    ViewData["Title"] = "Welcome";
-
-}
-
-@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-{
-<div class="grid-container">
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddEmployee">Add new Employee</a>
-    </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="DisplayForm">Temporily display forms</a>
-    </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyRegistration">Company Registration</a>
-    </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Task" asp-action="FinishedTasks">Done tasks</a>
-    </div>
-</div>
-}
-else if (signInManager.IsSignedIn(User) && User.IsInRole("Client"))
-{
-<div class="grid-container">
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Account Information</a>
-    </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint form</a>
-    </div>
-    <div class="grid-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="SentForms" asp-route-name="@User.Identity.Name">Sent Forms</a>
-    </div>
-</div>
-}
-else if (signInManager.IsSignedIn(User) && User.IsInRole("Employee"))
-{
-    <div class="grid-container">
-        <div class="grid-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="TasksForEmployee" asp-route-name="@User.Identity.Name">Tasks</a>
-        </div>
-    </div>
+    ViewData["Title"] = "Welcome" + User.Identity.Name;
 }

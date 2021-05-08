@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> signInManager
+
+@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+{
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropbtn">Tools</button>
+        <div id="dropdown" class="dropdown-content">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddEmployee">Add new Employee</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Administration" asp-action="DisplayForm">Temporily display forms</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="CompanyRegistration">Company Registration</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Task" asp-action="FinishedTasks">Done tasks</a>
+        </div>
+    </div>
+}
+else if (signInManager.IsSignedIn(User) && User.IsInRole("Client"))
+{
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropbtn">Management</button>
+        <div id="dropdown" class="dropdown-content">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="CompanyInformation" asp-route-name="@User.Identity.Name">Account Information</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Form" asp-action="Form">Complaint form</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Company" asp-action="SentForms" asp-route-name="@User.Identity.Name">Sent Forms</a>
+        </div>
+    </div>
+}
+else if (signInManager.IsSignedIn(User) && User.IsInRole("Employee"))
+{
+    <div class="dropdown">
+        <button onclick="dropDown()" class="dropbtn">Tools</button>
+        <div id="dropdown" class="dropdown-content">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Employee" asp-action="TasksForEmployee" asp-route-name="@User.Identity.Name">Tasks</a>
+        </div>
+    </div>
+}
+
