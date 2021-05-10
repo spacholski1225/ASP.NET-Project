@@ -109,5 +109,28 @@ namespace RoboticsManagement.Test.ControllerTests
             //Assert
              Assert.IsType<ViewResult>(result);
         }
+        [Fact]
+        public async Task Logout_ReturnsRedirectToAction_WhenUserIsSignIn()
+        {
+            //Arrange
+          
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+            var mockUserManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
+            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
+                                                                            userPrincipalFactory.Object, null, null, null, null);
+            var logger = new Mock<ILogger<AccountController>>();
+            var controller = new AccountController(mockUserManager, mockSignInManager.Object, null,
+                logger.Object, null, null);
+
+            //Act
+            var result = await controller.Logout();
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Login", redirectToAction.ActionName);
+            Assert.Equal("Account", redirectToAction.ControllerName);
+
+        }
     }
 }
