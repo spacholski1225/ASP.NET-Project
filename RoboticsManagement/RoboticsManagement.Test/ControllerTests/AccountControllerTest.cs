@@ -90,5 +90,24 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
+        [Fact]
+        public async Task Login_ReturnsAViewResult_ForInvalidModel()
+        {
+            //Arrange
+            var model = new LoginViewModel
+            {
+                UserName = "testId",
+                Password = "Passw0rd!",
+                RememberMe = false
+            };
+            var controller = new AccountController(null, null, null,
+                                                   null, null, null);
+            controller.ModelState.AddModelError("error", "some error");
+
+            //Act
+            var result = await controller.Login(model);
+            //Assert
+             Assert.IsType<ViewResult>(result);
+        }
     }
 }
