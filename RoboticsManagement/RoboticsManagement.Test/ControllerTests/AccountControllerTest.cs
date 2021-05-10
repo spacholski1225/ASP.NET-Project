@@ -132,5 +132,34 @@ namespace RoboticsManagement.Test.ControllerTests
             Assert.Equal("Account", redirectToAction.ControllerName);
 
         }
+        [Fact]
+        public async Task AddEmployee_ReturnsAViewResult_ForInvalidEmployeeRegistrationViewModel()
+        {
+            //Arrange
+            var model = new EmployeeRegistrationViewModel();
+
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+            var mockUserManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
+            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
+                                                                            userPrincipalFactory.Object, null, null, null, null);
+
+            var logger = new Mock<ILogger<AccountController>>();
+            var controller = new AccountController(mockUserManager, mockSignInManager.Object, null,
+                logger.Object, null, null);
+            controller.ModelState.AddModelError("eror", "some error");
+            //Act
+            var result = await controller.AddEmployee(model);
+            //Assert
+            Assert.IsType<ViewResult>(result);
+            logger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Warning),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString() == "While creating user occur invalid model"),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
     }
 }
