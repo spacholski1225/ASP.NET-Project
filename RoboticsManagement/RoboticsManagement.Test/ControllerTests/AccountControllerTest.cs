@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Moq;
-using RoboticsManagement.Configuration;
 using RoboticsManagement.Controllers;
-using RoboticsManagement.Data;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,12 +13,12 @@ namespace RoboticsManagement.Test.ControllerTests
     public class AccountControllerTest
     {
         [Fact]
-        public async void Login_ReturnsRedirectToAction_ForValidModel()
+        public async Task Login_ReturnsRedirectToAction_ForValidModel()
         {
             //Arrange
             var model = new LoginViewModel
             {
-                UserName = "test",
+                UserName = "testId",
                 Password = "Passw0rd!",
                 RememberMe = false
             };
@@ -32,29 +28,24 @@ namespace RoboticsManagement.Test.ControllerTests
             };
 
             var userStore = new Mock<IUserStore<ApplicationUser>>();
-            var passHasher = new Mock<IPasswordHasher<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(userStore.Object,null,passHasher.Object, null, null, null, null, null, null);
+            var mockUserManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
             var httpContextAccessor = new Mock<IHttpContextAccessor>();
             var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new SignInManager<ApplicationUser>(mockUserManager, httpContextAccessor.Object,userPrincipalFactory.Object,
-                                                                       null, null, null, null);
-            //var roleStore = new Mock<IRoleStore<IdentityRole>>();
-            //var roleValidator = new Mock<IEnumerable<IRoleValidator<IdentityRole>>>();
-            //var lookupNormalizer = new Mock<ILookupNormalizer>();
-            //var errorDescriber = new IdentityErrorDescriber();
-            //var logger = new Mock<ILogger<RoleManager<IdentityRole>>>();
-            //var mockRoleManager = new RoleManager<IdentityRole>(roleStore.Object, roleValidator.Object,
-            //    lookupNormalizer.Object, errorDescriber,logger.Object);
-            //var mockLogger = new Mock<ILogger<AccountController>>();
-            //var mockMapper = new AutoMapperConfig();
-            //var mockContext = new Mock<MgmtDbContext>();
-            await mockUserManager.CreateAsync(appUser, model.Password);
-            var controller = new AccountController(mockUserManager, mockSignInManager, null,
+            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
+                                                                            userPrincipalFactory.Object,null, null, null, null);
+            mockSignInManager.Setup(s => s.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false))
+                .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+
+            var controller = new AccountController(mockUserManager, mockSignInManager.Object, null,
                 null, null, null);
+
             //Act
-            var result = controller.Login(model);
+            var result = await controller.Login(model);
             //Assert
-            await Assert.IsType<Task<IActionResult>>(result);
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Index", redirectToActionResult.ActionName);
+            Assert.Equal("Home", redirectToActionResult.ControllerName);
+            
         }
     }
 }
