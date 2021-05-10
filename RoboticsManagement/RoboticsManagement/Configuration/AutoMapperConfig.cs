@@ -16,6 +16,7 @@ namespace RoboticsManagement.Configuration
             _mapper = new MapperConfiguration(cfg =>
            {
                cfg.CreateMap<ApplicationUser, CompanyInfoViewModel>().ReverseMap();
+               cfg.CreateMap<EmployeeRegistrationViewModel, ApplicationUser>().ReverseMap();
                cfg.CreateMap<FormModel, SentFormViewModel>().ForMember(x => x.Robot,
                    x => x.MapFrom(y => y.ERobotsCategory.ToString())).ForMember(x => x.FormId,
                    x => x.MapFrom(y => y.Id)).ReverseMap();

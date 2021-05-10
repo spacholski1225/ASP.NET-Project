@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using RoboticsManagement.Configuration;
 using RoboticsManagement.Controllers;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
@@ -107,13 +108,13 @@ namespace RoboticsManagement.Test.ControllerTests
             //Act
             var result = await controller.Login(model);
             //Assert
-             Assert.IsType<ViewResult>(result);
+            Assert.IsType<ViewResult>(result);
         }
         [Fact]
         public async Task Logout_ReturnsRedirectToAction_WhenUserIsSignIn()
         {
             //Arrange
-          
+
             var userStore = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
             var httpContextAccessor = new Mock<IHttpContextAccessor>();
@@ -133,7 +134,7 @@ namespace RoboticsManagement.Test.ControllerTests
 
         }
         [Fact]
-        public async Task AddEmployee_ReturnsAViewResult_ForInvalidEmployeeRegistrationViewModel()
+        public async Task AddEmployee_ReturnsAViewResult_ForInvalidModel()
         {
             //Arrange
             var model = new EmployeeRegistrationViewModel();
@@ -158,6 +159,50 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.Is<LogLevel>(l => l == LogLevel.Warning),
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString() == "While creating user occur invalid model"),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+        [Fact]
+        public async Task AddEmployee_ReturnsAViewResult_ForInvalidModelAndUnsuccessfulCreateMethod()
+        {
+            //Arrange
+            var model = new EmployeeRegistrationViewModel
+            {
+                UserName = "test",
+                Password = "Passw0rd!",
+                ConfirmPassword = "Passw0rd!",
+                Adress = "Adress",
+                City = "City",
+                Country = "Country",
+                ZipCode = "12345",
+                Email = "email@email.com",
+                FirstName = "FirstName",
+                LastName = "LastName"
+            };
+            var user = new ApplicationUser { UserName = model.UserName };
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object,null, null, null, null, null, null, null, null);
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
+            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
+                                                                            userPrincipalFactory.Object, null, null, null, null);
+            var mockMapper = new Mock<AutoMapperConfig>();
+
+            var logger = new Mock<ILogger<AccountController>>();
+            var controller = new AccountController(mockUserManager.Object, null, null,
+                logger.Object, mockMapper.Object, null);
+
+            mockUserManager.Setup(s => s.CreateAsync(user, model.Password)).ReturnsAsync(IdentityResult.Success);
+            //Act
+            var result = await controller.AddEmployee(model); //return ref null
+            //Assert
+            Assert.IsType<ViewResult>(result);
+            logger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Warning),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString() == "Can't create Employee user, something wrong with User Identity"),
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
