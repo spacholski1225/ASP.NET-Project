@@ -163,7 +163,7 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
         [Fact]
-        public async Task AddEmployee_ReturnsAViewResult_ForInvalidModelAndUnsuccessfulCreateMethod()
+        public async Task AddEmployee_ReturnsAViewResult_ForValidModelAndUnsuccessfulCreateMethod()
         {
             //Arrange
             var model = new EmployeeRegistrationViewModel
@@ -208,6 +208,48 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.Is<It.IsAnyType>((v, t) => v.ToString() == "Can't create Employee user, something wrong with User Identity"),
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+        [Fact]
+        public async Task AddEmployee_ReturnsRedirectToAction_ForValidModelAndSuccessfulCreateMethod()
+        {
+            //Arrange
+            var model = new EmployeeRegistrationViewModel
+            {
+                UserName = "test",
+                Password = "Passw0rd!",
+                ConfirmPassword = "Passw0rd!",
+                Adress = "Adress",
+                City = "City",
+                Country = "Country",
+                ZipCode = "12345",
+                Email = "email@email.com",
+                FirstName = "FirstName",
+                LastName = "LastName"
+            };
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
+            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
+                                                                            userPrincipalFactory.Object, null, null, null, null);
+            var mockMapper = new Mock<AutoMapperConfig>();
+            var mockIRoleStore = new Mock<IRoleStore<IdentityRole>>();
+            var mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockIRoleStore.Object, null, null, null, null);
+
+            var logger = new Mock<ILogger<AccountController>>();
+            var controller = new AccountController(mockUserManager.Object, null, mockRoleManager.Object,
+                logger.Object, mockMapper.Object, null);
+
+            mockUserManager.Setup(s => s.CreateAsync(It.IsAny<ApplicationUser>(), model.Password))
+                .ReturnsAsync(IdentityResult.Success);
+            //Act
+            var result = await controller.AddEmployee(model);
+            //Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Success", redirectToActionResult.ActionName);
+            Assert.Equal("Success", redirectToActionResult.ControllerName);
+
         }
     }
 }
