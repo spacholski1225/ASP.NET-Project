@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using RoboticsManagement.Configuration;
 using RoboticsManagement.Controllers;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
@@ -21,13 +22,15 @@ namespace RoboticsManagement.Test.ControllerTests
         private readonly AdministrationController _controller;
         private readonly Mock<IEmployeeTaskRepository> mockRepository;
         private readonly Mock<ILogger<AdministrationController>> mockLogger;
+        private readonly Mock<AutoMapperConfig> mockMapper;
         public AdministrationControllerTest()
         {
             var userStore = new Mock<IUserStore<ApplicationUser>>();
             mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
             mockRepository = new Mock<IEmployeeTaskRepository>();
             mockLogger = new Mock<ILogger<AdministrationController>>();
-            _controller = new AdministrationController(mockUserManager.Object, null, null, mockRepository.Object, mockLogger.Object, null);
+            mockMapper = new Mock<AutoMapperConfig>();
+            _controller = new AdministrationController(mockUserManager.Object, null, null, mockRepository.Object, mockLogger.Object, mockMapper.Object);
         }
         [Fact]
         public void DisplayForm_ResultRedirectToActionResult_ForExistRecord()
@@ -76,6 +79,43 @@ namespace RoboticsManagement.Test.ControllerTests
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("ConcreteForm", redirectToActionResult.ActionName);
             Assert.Equal("Administration", redirectToActionResult.ControllerName);
+        }
+        [Fact]
+        public async Task PickEmployee_ReturnViewResult_WhenUserIsInRole()
+        {
+            //Arrange
+            IList<ApplicationUser> returned = new List<ApplicationUser>
+            {
+                new ApplicationUser {Id = "testId"}
+            };
+            mockUserManager.Setup(s => s.GetUsersInRoleAsync(It.IsAny<string>())).ReturnsAsync(returned);
+            //Act
+            var result = await _controller.PickEmployee(new EmployeeTaskViewModel { TaskId = 1 });
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<List<EmployeeTaskViewModel>>(viewResult.ViewData.Model);
+
+        }
+        [Fact]
+        public async Task PickEmployee_ReturnViewResult_WhenUserIsNotInRole()
+        {
+            //Arrange
+            IList<ApplicationUser> returned = new List<ApplicationUser>
+            {
+                new ApplicationUser {Id = "testId"}
+            };
+            mockUserManager.Setup(s => s.GetUsersInRoleAsync(It.IsAny<string>())).ReturnsAsync(() => null);
+            //Act
+            var result = await _controller.PickEmployee(new EmployeeTaskViewModel { TaskId = 1 });
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Warning),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString() == "Can't find employees in Employee role, AdministrationController PickEmployee method"),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
     }
 }
