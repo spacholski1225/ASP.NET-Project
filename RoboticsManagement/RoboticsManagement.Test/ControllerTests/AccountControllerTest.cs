@@ -251,5 +251,50 @@ namespace RoboticsManagement.Test.ControllerTests
             Assert.Equal("Success", redirectToActionResult.ControllerName);
 
         }
+        [Fact]
+        public async Task CompanyRegistration_ReturnsAViewResult_ForInvalidModel()
+        {
+            //Arrange
+            var model = new CompanyRegistartionViewModel
+            {
+                Password = "Passw0rd!",
+                ConfirmPassword = "Passw0rd!",
+                Adress = "Adress",
+                City = "City",
+                Country = "Country",
+                ZipCode = "12345",
+                Email = "email@email.com",
+                CompanyName ="CompanyName",
+                NIP = "0000000000",
+                Regon = "000000000",
+            };
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
+            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
+                                                                            userPrincipalFactory.Object, null, null, null, null);
+            var mockMapper = new Mock<AutoMapperConfig>();
+            var mockIRoleStore = new Mock<IRoleStore<IdentityRole>>();
+            var mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockIRoleStore.Object, null, null, null, null);
+
+            var logger = new Mock<ILogger<AccountController>>();
+            var controller = new AccountController(mockUserManager.Object, null, mockRoleManager.Object,
+                logger.Object, mockMapper.Object, null);
+
+            controller.ModelState.AddModelError("error", "some error");
+            //Act
+            var result = await controller.CompanyRegistration(model);
+            //Assert
+            Assert.IsType<ViewResult>(result);
+            logger.Verify(
+               x => x.Log(
+                   It.Is<LogLevel>(l => l == LogLevel.Warning),
+                   It.IsAny<EventId>(),
+                   It.Is<It.IsAnyType>((v, t) => v.ToString() == "While creating user occur invalid model"),
+                   It.IsAny<Exception>(),
+                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
     }
 }
