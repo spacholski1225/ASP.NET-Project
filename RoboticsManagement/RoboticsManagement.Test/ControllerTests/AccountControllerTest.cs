@@ -296,5 +296,53 @@ namespace RoboticsManagement.Test.ControllerTests
                    It.IsAny<Exception>(),
                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
+        [Fact]
+        public async Task CompanyRegistration_ReturnsRedirectToAction_ForValidModelAndUnsuccessfulCreateAsync() 
+        {
+            //Arrange
+            var model = new CompanyRegistartionViewModel
+            {
+                Password = "Passw0rd!",
+                ConfirmPassword = "Passw0rd!",
+                Adress = "Adress",
+                City = "City",
+                Country = "Country",
+                ZipCode = "12345",
+                Email = "email@email.com",
+                CompanyName = "CompanyName",
+                NIP = "0000000000",
+                Regon = "000000000",
+            };
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+
+            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
+            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
+                                                                            userPrincipalFactory.Object, null, null, null, null);
+            var mockMapper = new Mock<AutoMapperConfig>();
+            var mockIRoleStore = new Mock<IRoleStore<IdentityRole>>();
+            var mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockIRoleStore.Object, null, null, null, null);
+
+            var logger = new Mock<ILogger<AccountController>>();
+            var controller = new AccountController(mockUserManager.Object, null, mockRoleManager.Object,
+                logger.Object, mockMapper.Object, null);
+
+            mockUserManager.Setup(s => s.CreateAsync(It.IsAny<ApplicationUser>(), model.Password))
+                .ReturnsAsync(IdentityResult.Failed());
+            //Act
+            var result = await controller.CompanyRegistration(model);
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectToAction.ActionName);
+            Assert.Equal("Error", redirectToAction.ControllerName);
+            logger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Warning),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString() == "Can't create Company user, something wrong with User Identity"),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
     }
 }
