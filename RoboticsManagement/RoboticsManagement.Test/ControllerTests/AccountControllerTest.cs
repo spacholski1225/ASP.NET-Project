@@ -179,7 +179,6 @@ namespace RoboticsManagement.Test.ControllerTests
                 FirstName = "FirstName",
                 LastName = "LastName"
             };
-            var user = new ApplicationUser { UserName = model.UserName };
             var userStore = new Mock<IUserStore<ApplicationUser>>();
 
             var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object,null, null, null, null, null, null, null, null);
@@ -193,11 +192,15 @@ namespace RoboticsManagement.Test.ControllerTests
             var controller = new AccountController(mockUserManager.Object, null, null,
                 logger.Object, mockMapper.Object, null);
 
-            mockUserManager.Setup(s => s.CreateAsync(user, model.Password)).ReturnsAsync(IdentityResult.Success);
+            mockUserManager.Setup(s => s.CreateAsync(It.IsAny<ApplicationUser>(),model.Password))
+                .ReturnsAsync(IdentityResult.Failed());
             //Act
-            var result = await controller.AddEmployee(model); //return ref null
+            var result = await controller.AddEmployee(model);
             //Assert
-            Assert.IsType<ViewResult>(result);
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var modelResult = Assert.IsType<EmployeeRegistrationViewModel>(viewResult.ViewData.Model);
+            Assert.Equal(model.UserName, modelResult.UserName);
+
             logger.Verify(
                 x => x.Log(
                     It.Is<LogLevel>(l => l == LogLevel.Warning),
