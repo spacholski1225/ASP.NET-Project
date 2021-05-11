@@ -57,7 +57,8 @@ namespace RoboticsManagement.Controllers
         public IActionResult ConcreteForm(int id)
         {
             var task = _employeeTaskRepository.GetTaskById(id);
-
+            if (task == null)
+                return RedirectToAction("ConcreteForm", "Administration");
             var newTask = new EmployeeTaskViewModel
             {
                 TaskId = task.Id

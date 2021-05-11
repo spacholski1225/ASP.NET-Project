@@ -5,6 +5,7 @@ using Moq;
 using RoboticsManagement.Controllers;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
+using RoboticsManagement.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +53,29 @@ namespace RoboticsManagement.Test.ControllerTests
             Assert.Equal("DisplayForm", redirectToActionResult.ActionName);
             Assert.Equal("Administration", redirectToActionResult.ControllerName);
         }
-
+        [Fact]
+        public void ConcreteForm_ReturnRedirectToActionResult_ForExistRecord()
+        {
+            //Arrange
+            mockRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(new EmployeeTask { Id = 2 });
+            //Act
+            var result = _controller.ConcreteForm(2);
+            //Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("PickEmployee", redirectToActionResult.ActionName);
+            Assert.NotNull(redirectToActionResult.RouteValues);
+        }
+        [Fact]
+        public void ConcreteForm_ReturnRedirectToActionResult_ForDoesNotExistRecord()
+        {
+            //Arrange
+            mockRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(() => null);
+            //Act
+            var result = _controller.ConcreteForm(2);
+            //Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("ConcreteForm", redirectToActionResult.ActionName);
+            Assert.Equal("Administration", redirectToActionResult.ControllerName);
+        }
     }
 }
