@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 using RoboticsManagement.Configuration;
 using RoboticsManagement.Controllers;
+using RoboticsManagement.Data;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
@@ -23,6 +25,7 @@ namespace RoboticsManagement.Test.ControllerTests
         private readonly Mock<IEmployeeTaskRepository> mockRepository;
         private readonly Mock<ILogger<AdministrationController>> mockLogger;
         private readonly Mock<AutoMapperConfig> mockMapper;
+        private readonly Mock<MgmtDbContext> mockContext;
         public AdministrationControllerTest()
         {
             var userStore = new Mock<IUserStore<ApplicationUser>>();
@@ -30,7 +33,9 @@ namespace RoboticsManagement.Test.ControllerTests
             mockRepository = new Mock<IEmployeeTaskRepository>();
             mockLogger = new Mock<ILogger<AdministrationController>>();
             mockMapper = new Mock<AutoMapperConfig>();
-            _controller = new AdministrationController(mockUserManager.Object, null, null, mockRepository.Object, mockLogger.Object, mockMapper.Object);
+            var mockdb = new Mock<DbContextOptions<MgmtDbContext>>();
+            mockContext = new Mock<MgmtDbContext>(mockdb.Object);
+            _controller = new AdministrationController(mockUserManager.Object, mockContext.Object, null, mockRepository.Object, mockLogger.Object, mockMapper.Object);
         }
         [Fact]
         public void DisplayForm_ResultRedirectToActionResult_ForExistRecord()
@@ -117,5 +122,24 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
+        [Fact]
+        public async Task PickEmployee_ReturnViewResult_WhenEmployeeIdOrTaskIdEqualNull()
+        {
+            //Arrange
+            string employeeId = null;
+            int taskId = 0;
+            //Act
+            var result = await _controller.PickEmployee(employeeId, taskId);
+            //Assert
+            Assert.IsType<ViewResult>(result);
+            mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Error),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString() == "While sending task to employee occurs error where employeeId or taskId null"),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+        
     }
 }
