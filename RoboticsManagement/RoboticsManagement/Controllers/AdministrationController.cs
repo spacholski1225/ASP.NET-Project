@@ -47,7 +47,9 @@ namespace RoboticsManagement.Controllers
         public IActionResult DisplayForm(int id)
         {
             var result = _employeeTaskRepository.GetTaskById(id);
-            return RedirectToAction("ConcreteForm", "Administration", result);
+            if (result != null)
+                return RedirectToAction("ConcreteForm", "Administration", result);
+            return RedirectToAction("DisplayForm", "Administration");
         }
         [HttpGet]
         public IActionResult ConcreteForm(EmployeeTask result) => View(result);
@@ -69,7 +71,7 @@ namespace RoboticsManagement.Controllers
             if (emp != null)
             {
                 var employees = new List<EmployeeTaskViewModel>();
-                
+
                 foreach (var employee in emp)
                 {
                     var mapEmp = _mapper.MapApplicationUserToEmployeeTaskViewModel(employee);
@@ -123,9 +125,9 @@ namespace RoboticsManagement.Controllers
                 FromRole = ERole.Admin,
                 IsRead = false,
                 CreatedDate = DateTime.Now,
-                NotiBody = "Hi, you have new task to do! Here's problem description: " 
+                NotiBody = "Hi, you have new task to do! Here's problem description: "
                 + _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId).Description,
-                NotiHeader = "New task from " + _context.EmployeeTasks.FirstOrDefault(x=> x.Id==taskId).Company,
+                NotiHeader = "New task from " + _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId).Company,
                 ToEmployeeId = employeeId
             };
             try
