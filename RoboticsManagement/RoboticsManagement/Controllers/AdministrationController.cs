@@ -125,31 +125,36 @@ namespace RoboticsManagement.Controllers
         [HttpPost]
         public IActionResult NewTask(string employeeId, int taskId) //add something like that user can't get into there without move across all controllers
         {
-            var entity = new TaskForEmployee
+            if (employeeId != null)
             {
-                EmployeeId = employeeId,
-                TaskId = taskId
-            };
-            var notifi = new EmployeeNotifications
-            {
-                FromRole = ERole.Admin,
-                IsRead = false,
-                CreatedDate = DateTime.Now,
-                NotiBody = "Hi, you have new task to do! Here's problem description: "
-                + _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId).Description,
-                NotiHeader = "New task from " + _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId).Company,
-                ToEmployeeId = employeeId
-            };
-            try
-            {
-                _notificationRepository.AddNotificationsForEmployee(notifi);
-                _taskForEmployeeRepository.AddNewTaskForEmployee(entity);
+                var entity = new TaskForEmployee
+                {
+                    EmployeeId = employeeId,
+                    TaskId = taskId
+                };
+                var notifi = new EmployeeNotifications
+                {
+                    FromRole = ERole.Admin,
+                    IsRead = false,
+                    CreatedDate = DateTime.Now,
+                    NotiBody = "Hi, you have new task to do! Here's problem description: "
+                    + _employeeTaskRepository.GetTaskById(taskId).Description,
+                    NotiHeader = "New task from " + _employeeTaskRepository.GetTaskById(taskId).Company,
+                    ToEmployeeId = employeeId
+                };
+                try
+                {
+                    _notificationRepository.AddNotificationsForEmployee(notifi);
+                    _taskForEmployeeRepository.AddNewTaskForEmployee(entity);
+                    return RedirectToAction("Success", "Success");
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("Task is already in database", e.ToString());
+                    return RedirectToAction("Error", "Error");
+                }
             }
-            catch (Exception e)
-            {
-                _logger.LogError("Task is already in database", e.ToString());
-            }
-            return RedirectToAction("Success", "Success");
+            return RedirectToAction("Error", "Error");
         }
     }
 }

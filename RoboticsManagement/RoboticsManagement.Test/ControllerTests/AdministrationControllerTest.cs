@@ -8,6 +8,7 @@ using RoboticsManagement.Controllers;
 using RoboticsManagement.Data;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
+using RoboticsManagement.Models.Notifications;
 using RoboticsManagement.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace RoboticsManagement.Test.ControllerTests
             mockNotificationRepository = new Mock<INotificationRepository>();
             mockTaskForEmployeeRepository = new Mock<ITaskForEmployeeRepository>();
             _controller = new AdministrationController(mockUserManager.Object, null, null,
-                mockRepository.Object, mockLogger.Object, mockMapper.Object,mockNotificationRepository.Object,
+                mockRepository.Object, mockLogger.Object, mockMapper.Object, mockNotificationRepository.Object,
                 mockTaskForEmployeeRepository.Object);
         }
         [Fact]
@@ -150,16 +151,16 @@ namespace RoboticsManagement.Test.ControllerTests
             //Arrange
             string employeeId = "test";
             int taskId = 1;
-            
+
             mockUserManager.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
             mockRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(new EmployeeTask { Id = taskId });
             //Act
-            var result = await _controller.PickEmployee(employeeId, taskId); 
+            var result = await _controller.PickEmployee(employeeId, taskId);
             //Assert
             var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("NewTask", redirectToAction.ActionName);
             Assert.NotNull(redirectToAction.RouteValues);
-            
+
         }
         [Fact]
         public async Task PickEmployee_ReturnViewResult_WhenEmployeeIdAndTaskIdIsNotNullAndEmployeeOrTaskDoesNotExist()
@@ -167,7 +168,7 @@ namespace RoboticsManagement.Test.ControllerTests
             //Arrange
             string employeeId = "test";
             int taskId = 1;
-            
+
             mockUserManager.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(() => null);
             mockRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(new EmployeeTask { Id = taskId });
 
@@ -183,6 +184,70 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
 
+        }
+        [Fact]
+        public void NewTask_ReturnRedirectToActionResult_ForEmployeeIdEqualNull()
+        {
+            //Arrange
+            string employeeId = null;
+            int taskId = 0;
+            //Act
+            var result = _controller.NewTask(employeeId, taskId);
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectToAction.ActionName);
+            Assert.Equal("Error", redirectToAction.ControllerName);
+        }
+        [Fact]
+        public void NewTask_ReturnRedirectToActionResult_WhenOccursError()
+        {
+            //Arrange
+            string employeeId = "test";
+            int taskId = 1;
+            mockRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(new EmployeeTask
+            {
+                Id = taskId,
+                Description = "test",
+                Company = "test"
+            });
+            mockNotificationRepository.Setup(s => s.AddNotificationsForEmployee(It.IsAny<EmployeeNotifications>()))
+                .Throws(new Exception());
+            //Act
+            var result = _controller.NewTask(employeeId, taskId);
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectToAction.ActionName);
+            Assert.Equal("Error", redirectToAction.ControllerName);
+            mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Error),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => true),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+        [Fact]
+        public void NewTask_ReturnRedirectToActionResult_WhenIsCorrectSave()
+        {
+            //Arrange
+            string employeeId = "test";
+            int taskId = 1;
+            mockRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(new EmployeeTask
+            {
+                Id = taskId,
+                Description = "test",
+                Company = "test"
+            });
+            mockNotificationRepository.Setup(s => s.AddNotificationsForEmployee(It.IsAny<EmployeeNotifications>()))
+                .Verifiable();
+            mockTaskForEmployeeRepository.Setup(s => s.AddNewTaskForEmployee(It.IsAny<TaskForEmployee>()))
+                .Verifiable();
+            //Act
+            var result = _controller.NewTask(employeeId, taskId);
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Success", redirectToAction.ActionName);
+            Assert.Equal("Success", redirectToAction.ControllerName);
         }
     }
 }
