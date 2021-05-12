@@ -51,6 +51,11 @@ namespace RoboticsManagement.Controllers
         {
 
             var forms = await _formRepository.GetAllFormsByUser(name);
+            if(forms == null)
+            {
+                _logger.LogError("Can not find any forms for user " + name);
+                return RedirectToAction("Error", "Error");
+            }
             var sentForms = new List<SentFormViewModel>();
             foreach (var form in forms)
             {
