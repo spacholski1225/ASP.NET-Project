@@ -42,7 +42,7 @@ namespace RoboticsManagement.Controllers
             if (task == null)
             {
                 _logger.LogWarning("Can't find task in EmployeeTask with id " + id);
-                return RedirectToAction("Error", "Error"); 
+                return RedirectToAction("Error", "Error");
             }
             return View(task);
         }
@@ -52,10 +52,13 @@ namespace RoboticsManagement.Controllers
             var employee = await _userManager.FindByNameAsync(name);
             if (employee != null)
             {
-                return View(_taskForEmployeeRepository.GetTasksForEmployee(employee.Id));
+                var tasks = _taskForEmployeeRepository.GetTasksForEmployee(employee.Id);
+                if (tasks == null)
+                    return View();
+                return View(tasks);
             }
             _logger.LogWarning("Employee named " + name + "doesn't exist");
-            return View(name); 
+            return View(name);
         }
         public IActionResult DoneTask(int id)
         {

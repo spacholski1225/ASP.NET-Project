@@ -69,5 +69,52 @@ namespace RoboticsManagement.Test.ControllerTests
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.IsType<EmployeeTask>(viewResult.ViewData.Model);
         }
+        [Fact]
+        public async Task TasksForEmployee_ReturnViewResult_ForNullEmployee()
+        {
+            //Arrange
+            string name = "testName";
+            mockUserManager.Setup(s => s.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(() => null);
+            //Act
+            var result = await _controller.TasksForEmployee(name);
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Equal(name, viewResult.ViewName);
+            mockLogger.Verify(
+               x => x.Log(
+                   It.Is<LogLevel>(l => l == LogLevel.Warning),
+                   It.IsAny<EventId>(),
+                   It.Is<It.IsAnyType>((v, t) => true),
+                   It.IsAny<Exception>(),
+                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+        [Fact]
+        public async Task TasksForEmployee_ReturnViewResult_ForNotNullEmployeeAndEmptyTasksList()
+        {
+            //Arrange
+            string name = "testName";
+            mockUserManager.Setup(s => s.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
+            mockTaskForEmployeeRepository.Setup(s => s.GetTasksForEmployee(It.IsAny<string>()))
+                .Returns(() => null);
+            //Act
+            var result = await _controller.TasksForEmployee(name);
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.Null(viewResult.ViewData.Model);
+        }
+        [Fact]
+        public async Task TasksForEmployee_ReturnViewResult_ForNotNullEmployeeAndTasksList()
+        {
+            //Arrange
+            string name = "testName";
+            mockUserManager.Setup(s => s.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
+            mockTaskForEmployeeRepository.Setup(s => s.GetTasksForEmployee(It.IsAny<string>()))
+                .Returns(new List<EmployeeTask>());
+            //Act
+            var result = await _controller.TasksForEmployee(name);
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<List<EmployeeTask>>(viewResult.ViewData.Model);
+        }
     }
 }
