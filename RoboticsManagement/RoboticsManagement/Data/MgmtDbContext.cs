@@ -6,7 +6,18 @@ using RoboticsManagement.Models.Notifications;
 
 namespace RoboticsManagement.Data
 {
-    public class MgmtDbContext : IdentityDbContext<ApplicationUser>
+    public interface IDbContext
+    {
+         DbSet<FormModel> complaintFormModels { get; set; }
+         DbSet<EmployeeTask> EmployeeTasks { get; set; }
+         DbSet<TaskForEmployee> TaskForEmployee { get; set; }
+         DbSet<EmployeeNotifications> EmployeeNotifications { get; set; }
+         DbSet<AdminNotifications> AdminNotifications { get; set; }
+         DbSet<ClientNotifications> ClientNotifications { get; set; }
+         DbSet<InvoiceData> InvoiceData { get; set; }
+        int SaveChanges();
+    }
+    public class MgmtDbContext : IdentityDbContext<ApplicationUser>, IDbContext
     {
         public MgmtDbContext(DbContextOptions<MgmtDbContext> options) : base(options)
         {

@@ -20,14 +20,14 @@ namespace RoboticsManagement.Controllers
     public class AdministrationController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly MgmtDbContext _context;
+        private readonly IDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmployeeTaskRepository _employeeTaskRepository;
         private readonly ILogger<AdministrationController> _logger;
         private readonly AutoMapperConfig _mapper;
 
         public AdministrationController(UserManager<ApplicationUser> userManager,
-            MgmtDbContext context,
+            IDbContext context,
             RoleManager<IdentityRole> roleManager,
             IEmployeeTaskRepository employeeTaskRepository,
             ILogger<AdministrationController> logger,
@@ -94,15 +94,18 @@ namespace RoboticsManagement.Controllers
             {
                 var employee = await _userManager.FindByIdAsync(employeeId);
                 var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId);
-
-                var model = _mapper.MapEmployeeTaskToEmployeeTaskViewModel(task);
-                model.EmployeeId = employeeId;
-                model.FirstName = employee.FirstName;
-                model.LastName = employee.LastName;
-                model.TaskId = taskId;
-                model.ZipCode = employee.ZipCode;
-
-                return RedirectToAction("NewTask", model);
+                if (task != null && employee != null)
+                {
+                    var model = _mapper.MapEmployeeTaskToEmployeeTaskViewModel(task);
+                    model.EmployeeId = employeeId;
+                    model.FirstName = employee.FirstName;
+                    model.LastName = employee.LastName;
+                    model.TaskId = taskId;
+                    model.ZipCode = employee.ZipCode;
+                    return RedirectToAction("NewTask", model);
+                }
+                _logger.LogError("Can not find task with id " + taskId + " or employee with id " + employeeId);
+                return View();
             }
             else
             {

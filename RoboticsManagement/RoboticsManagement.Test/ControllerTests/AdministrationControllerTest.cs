@@ -25,7 +25,7 @@ namespace RoboticsManagement.Test.ControllerTests
         private readonly Mock<IEmployeeTaskRepository> mockRepository;
         private readonly Mock<ILogger<AdministrationController>> mockLogger;
         private readonly Mock<AutoMapperConfig> mockMapper;
-        private readonly Mock<MgmtDbContext> mockContext;
+        private readonly Mock<IDbContext> mockContext;
         public AdministrationControllerTest()
         {
             var userStore = new Mock<IUserStore<ApplicationUser>>();
@@ -33,9 +33,19 @@ namespace RoboticsManagement.Test.ControllerTests
             mockRepository = new Mock<IEmployeeTaskRepository>();
             mockLogger = new Mock<ILogger<AdministrationController>>();
             mockMapper = new Mock<AutoMapperConfig>();
-            var mockdb = new Mock<DbContextOptions<MgmtDbContext>>();
-            mockContext = new Mock<MgmtDbContext>(mockdb.Object);
+
+            mockContext = new Mock<IDbContext>();
             _controller = new AdministrationController(mockUserManager.Object, mockContext.Object, null, mockRepository.Object, mockLogger.Object, mockMapper.Object);
+        }
+        private Mock<DbSet<T>> MockDbSet<T>(IEnumerable<T> list) where T : class, new()
+        {
+            IQueryable<T> queryableList = list.AsQueryable();
+            Mock<DbSet<T>> dbSetMock = new Mock<DbSet<T>>();
+            dbSetMock.As<IQueryable<T>>().Setup(x => x.Provider).Returns(queryableList.Provider);
+            dbSetMock.As<IQueryable<T>>().Setup(x => x.Expression).Returns(queryableList.Expression);
+            dbSetMock.As<IQueryable<T>>().Setup(x => x.ElementType).Returns(queryableList.ElementType);
+            dbSetMock.As<IQueryable<T>>().Setup(x => x.GetEnumerator()).Returns(() => queryableList.GetEnumerator());
+            return dbSetMock;
         }
         [Fact]
         public void DisplayForm_ResultRedirectToActionResult_ForExistRecord()
@@ -140,6 +150,46 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
-        
+        [Fact]
+        public async Task PickEmployee_ReturnViewResult_WhenEmployeeIdAndTaskIdIsNotNullAndEmployeeAndTaskExist()
+        {
+            //Arrange
+            string employeeId = "test";
+            int taskId = 1;
+            var empData = new List<EmployeeTask> { new EmployeeTask { Id = taskId } };
+            var emp = MockDbSet(empData);
+            mockUserManager.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
+            mockContext.Setup(s => s.EmployeeTasks).Returns(emp.Object);
+            //Act
+            var result = await _controller.PickEmployee(employeeId, taskId); 
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("NewTask", redirectToAction.ActionName);
+            Assert.NotNull(redirectToAction.RouteValues);
+            
+        }
+        [Fact]
+        public async Task PickEmployee_ReturnViewResult_WhenEmployeeIdAndTaskIdIsNotNullAndEmployeeOrTaskDoesNotExist()
+        {
+            //Arrange
+            string employeeId = "test";
+            int taskId = 1;
+            var empData = new List<EmployeeTask> { new EmployeeTask { Id = taskId } };
+            var emp = MockDbSet(empData);
+            mockUserManager.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(() => null);
+            mockContext.Setup(s => s.EmployeeTasks).Returns(emp.Object);
+            //Act
+            var result = await _controller.PickEmployee(employeeId, taskId);
+            //Assert
+            Assert.IsType<ViewResult>(result);
+            mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Error),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => v.ToString() == "Can not find task with id " + taskId + " or employee with id " + employeeId),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+
+        }
     }
 }
