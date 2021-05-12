@@ -38,7 +38,7 @@ namespace RoboticsManagement.Controllers
         [HttpGet]
         public IActionResult EmployeeTask(int id)
         {
-            var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == id);
+            var task = _employeeTaskRepository.GetTaskById(id);
             if (task == null)
             {
                 _logger.LogWarning("Can't find task in EmployeeTask with id " + id);
