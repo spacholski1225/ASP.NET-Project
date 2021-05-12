@@ -21,6 +21,11 @@ namespace RoboticsManagement.Repositories
             _context.SaveChanges();
         }
 
+        public TaskForEmployee GetTaskById(int id)
+        {
+            return _context.TaskForEmployee.FirstOrDefault(x => x.TaskId == id);
+        }
+
         public List<TaskForEmployee> GetTaskIdByEmployeeId(string employeeId) 
             => _context.TaskForEmployee.Where(x => x.EmployeeId == employeeId).ToList();
 

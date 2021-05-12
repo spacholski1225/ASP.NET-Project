@@ -22,18 +22,21 @@ namespace RoboticsManagement.Controllers
         private readonly ITaskForEmployeeRepository _taskForEmployeeRepository;
         private readonly IEmployeeTaskRepository _employeeTaskRepository;
         private readonly ILogger<EmployeeController> _logger;
+        private readonly INotificationRepository _notificationRepository;
 
         public EmployeeController(MgmtDbContext context,
             UserManager<ApplicationUser> userManager,
             ITaskForEmployeeRepository taskForEmployeeRepository,
             IEmployeeTaskRepository employeeTaskRepository,
-            ILogger<EmployeeController> logger)
+            ILogger<EmployeeController> logger,
+            INotificationRepository notificationRepository)
         {
             _context = context;
             _userManager = userManager;
             _taskForEmployeeRepository = taskForEmployeeRepository;
             _employeeTaskRepository = employeeTaskRepository;
             _logger = logger;
+            _notificationRepository = notificationRepository;
         }
         [HttpGet]
         public IActionResult EmployeeTask(int id)
@@ -69,15 +72,14 @@ namespace RoboticsManagement.Controllers
                 var noti = new AdminNotifications
                 {
                     CreatedDate = DateTime.Now,
-                    FromUserId = _context.TaskForEmployee.FirstOrDefault(x => x.TaskId == id).EmployeeId,
+                    FromUserId = _taskForEmployeeRepository.GetTaskById(id).EmployeeId,
                     IsRead = false,
-                    NotiBody = "Employee with id " + _context.TaskForEmployee.FirstOrDefault(x => x.TaskId == id).EmployeeId
+                    NotiBody = "Employee with id " + _taskForEmployeeRepository.GetTaskById(id).EmployeeId
                     + "finished task with id " + id,
                     NotiHeader = "Finished Task #" + id,
                     ToRole = ERole.Admin
                 };
-                _context.AdminNotifications.Add(noti);
-                _context.SaveChanges();
+                _notificationRepository.AddNotificationsForAdmin(noti);
             }
             else
             {

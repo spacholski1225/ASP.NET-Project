@@ -8,5 +8,6 @@ namespace RoboticsManagement.Interfaces.IRepository
         public List<TaskForEmployee> GetTaskIdByEmployeeId(string employeeId);
         public List<EmployeeTask> GetTasksForEmployee(string employeeId);
         public void AddNewTaskForEmployee(TaskForEmployee taskForEmployee);
+        public TaskForEmployee GetTaskById(int id);
     }
 }

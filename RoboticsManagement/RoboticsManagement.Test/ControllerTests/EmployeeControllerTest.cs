@@ -22,18 +22,20 @@ namespace RoboticsManagement.Test.ControllerTests
         private readonly Mock<ILogger<EmployeeController>> mockLogger;
         private readonly Mock<IEmployeeTaskRepository> mockEmployeeTaskRepository;
         private readonly Mock<ITaskForEmployeeRepository> mockTaskForEmployeeRepository;
+        private readonly Mock<INotificationRepository> mockNotificationRepository;
         public EmployeeControllerTest()
         {
             mockLogger = new Mock<ILogger<EmployeeController>>();
             mockTaskForEmployeeRepository = new Mock<ITaskForEmployeeRepository>();
             mockEmployeeTaskRepository = new Mock<IEmployeeTaskRepository>();
+            mockNotificationRepository = new Mock<INotificationRepository>();
 
             var mockIUserStore = new Mock<IUserStore<ApplicationUser>>();
             mockUserManager = new Mock<UserManager<ApplicationUser>>(mockIUserStore.Object,
                 null, null, null, null, null, null, null, null);
             _controller = new EmployeeController(null, mockUserManager.Object,
                 mockTaskForEmployeeRepository.Object, mockEmployeeTaskRepository.Object,
-                mockLogger.Object);
+                mockLogger.Object, mockNotificationRepository.Object);
         }
         [Fact]
         public void EmployeeTask_ReturnsRedirectToAction_ForTaskEqualNull()
@@ -115,6 +117,44 @@ namespace RoboticsManagement.Test.ControllerTests
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.IsType<List<EmployeeTask>>(viewResult.ViewData.Model);
+        }
+        [Fact]
+        public void DoneTask_ReturnRedirectToActionResult_ForTaskEqualNull()
+        {
+            //Arrange
+            int id = 1;
+            mockEmployeeTaskRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(() => null);
+            //Act
+            var result = _controller.DoneTask(id);
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Success", redirectToAction.ActionName);
+            Assert.Equal("Success", redirectToAction.ControllerName);
+            mockLogger.Verify(
+               x => x.Log(
+                   It.Is<LogLevel>(l => l == LogLevel.Warning),
+                   It.IsAny<EventId>(),
+                   It.Is<It.IsAnyType>((v, t) => true),
+                   It.IsAny<Exception>(),
+                   It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+        [Fact]
+        public void DoneTask_ReturnRedirectToActionResult_WhentaskIsNotNull()
+        {
+            //Arrange
+            int id = 1;
+            mockEmployeeTaskRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(new EmployeeTask
+            { isDone = false });
+            mockTaskForEmployeeRepository.Setup(s => s.GetTaskById(It.IsAny<int>())).Returns(new TaskForEmployee
+            {
+                EmployeeId = "testId"
+            });
+            //Act
+            var result = _controller.DoneTask(id);
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Success", redirectToAction.ActionName);
+            Assert.Equal("Success", redirectToAction.ControllerName);
         }
     }
 }
