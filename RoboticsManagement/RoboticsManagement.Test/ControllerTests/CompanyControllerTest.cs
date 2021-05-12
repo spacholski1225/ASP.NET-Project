@@ -101,5 +101,31 @@ namespace RoboticsManagement.Test.ControllerTests
             var resultView= Assert.IsType<ViewResult>(result);
             Assert.IsType<List<SentFormViewModel>>(resultView.ViewData.Model);
         }
+        [Fact]
+        public void CurrentForm_ReturnsRedirectToActionsResult_ForFormEqualNull()
+        {
+            //Arrange
+            int formId = 1;
+            mockFormRepository.Setup(s => s.GetFormById(It.IsAny<int>())).Returns(() => null);
+            //Act
+            var result =  _controller.CurrentForm(formId);
+            //Assert
+            var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Error", redirectToAction.ActionName);
+            Assert.Equal("Error", redirectToAction.ControllerName);
+        }
+        [Fact]
+        public void CurrentForm_ReturnsViewResult_ForFormNotNull()
+        {
+            //Arrange
+            int formId = 1;
+            mockFormRepository.Setup(s => s.GetFormById(It.IsAny<int>())).Returns(new FormModel());
+            //Act
+            var result = _controller.CurrentForm(formId);
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<SentFormViewModel>(viewResult.ViewData.Model);
+            
+        }
     }
 }

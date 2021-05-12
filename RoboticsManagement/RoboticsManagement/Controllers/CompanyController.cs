@@ -71,6 +71,10 @@ namespace RoboticsManagement.Controllers
         public IActionResult CurrentForm(int formId)
         {
             var form = _formRepository.GetFormById(formId);
+            if(form == null)
+            {
+                return RedirectToAction("Error", "Error");
+            }
             var formModel = _mapper.MapFormModelToSentFormViewModel(form);
             return View(formModel);
         }
