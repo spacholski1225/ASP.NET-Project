@@ -90,5 +90,23 @@ namespace RoboticsManagement.Repositories
             _logger.LogInformation("Notification with id " + NotiId + "is already read");
 
         }
+
+        public void AddNotificationsForEmployee(EmployeeNotifications notifi)
+        {
+            _context.EmployeeNotifications.Add(notifi);
+            _context.SaveChanges();
+        }
+
+        public void AddNotificationsForAdmin(AdminNotifications notifi)
+        {
+            _context.AdminNotifications.Add(notifi);
+            _context.SaveChanges();
+        }
+
+        public void AddNotificationsForClient(ClientNotifications notifi)
+        {
+            _context.ClientNotifications.Add(notifi);
+            _context.SaveChanges();
+        }
     }
 }

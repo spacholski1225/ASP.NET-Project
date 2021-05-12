@@ -20,18 +20,22 @@ namespace RoboticsManagement.Controllers
     public class AdministrationController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IDbContext _context;
+        private readonly MgmtDbContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmployeeTaskRepository _employeeTaskRepository;
         private readonly ILogger<AdministrationController> _logger;
         private readonly AutoMapperConfig _mapper;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly ITaskForEmployeeRepository _taskForEmployeeRepository;
 
         public AdministrationController(UserManager<ApplicationUser> userManager,
-            IDbContext context,
+            MgmtDbContext context,
             RoleManager<IdentityRole> roleManager,
             IEmployeeTaskRepository employeeTaskRepository,
             ILogger<AdministrationController> logger,
-            AutoMapperConfig mapper)
+            AutoMapperConfig mapper,
+            INotificationRepository notificationRepository,
+            ITaskForEmployeeRepository taskForEmployeeRepository)
         {
             _userManager = userManager;
             _context = context;
@@ -39,6 +43,8 @@ namespace RoboticsManagement.Controllers
             _employeeTaskRepository = employeeTaskRepository;
             _logger = logger;
             _mapper = mapper;
+            _notificationRepository = notificationRepository;
+            _taskForEmployeeRepository = taskForEmployeeRepository;
         }
         [HttpGet]
         public IActionResult DisplayForm() => View(_employeeTaskRepository.SortAscById());
@@ -93,7 +99,7 @@ namespace RoboticsManagement.Controllers
             if (employeeId != null && !taskId.Equals(null))
             {
                 var employee = await _userManager.FindByIdAsync(employeeId);
-                var task = _context.EmployeeTasks.FirstOrDefault(x => x.Id == taskId);
+                var task = _employeeTaskRepository.GetTaskById(taskId);
                 if (task != null && employee != null)
                 {
                     var model = _mapper.MapEmployeeTaskToEmployeeTaskViewModel(task);
@@ -136,9 +142,8 @@ namespace RoboticsManagement.Controllers
             };
             try
             {
-                _context.EmployeeNotifications.Add(notifi);
-                _context.TaskForEmployee.Add(entity);
-                _context.SaveChanges();
+                _notificationRepository.AddNotificationsForEmployee(notifi);
+                _taskForEmployeeRepository.AddNewTaskForEmployee(entity);
             }
             catch (Exception e)
             {
