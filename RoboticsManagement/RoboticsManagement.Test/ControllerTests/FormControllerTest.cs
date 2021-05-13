@@ -45,5 +45,24 @@ namespace RoboticsManagement.Test.ControllerTests
             var viewResult = Assert.IsType<ViewResult>(result);
             Assert.IsType<FormViewModel>(viewResult.ViewData.Model);
         }
+        [Fact]
+        public async Task Form_ReturnsViewResultAndLogWarning_ForUnKnownUser()
+        {
+            //Arrange
+            var model = new FormViewModel();
+            mockUserManager.Setup(s => s.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(() => null);
+            //Act
+            var result = await _controller.Form(model, "test");
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<FormViewModel>(viewResult.ViewData.Model);
+            mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Warning),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => true),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
     }
 }
