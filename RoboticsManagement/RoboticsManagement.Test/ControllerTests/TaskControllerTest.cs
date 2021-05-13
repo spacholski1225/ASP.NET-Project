@@ -91,5 +91,24 @@ namespace RoboticsManagement.Test.ControllerTests
             //Assert
             Assert.IsType<BadRequestResult>(result);
         }
+        [Fact]
+        public async Task FinishedTasksPOST_ReturnedRedirectToActionResult_ForUserIdNotNull()
+        {
+            //Arrange
+            string userId = "test";
+            _formRepository.Setup(s => s.GetFormByUserId(It.IsAny<string>())).Returns(new FormModel
+            {
+                ERobotsCategory = ERobotsCategory.Robot1,
+                Description = "test",
+                CreatedDate = DateTime.Now
+            });
+            mockUserManager.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
+            //Act
+            var result = await _controller.FinishedTasks(userId);
+            //Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("ConcreteTask", redirectToActionResult.ActionName);
+            Assert.Equal("Task", redirectToActionResult.ControllerName);
+        }
     }
 }
