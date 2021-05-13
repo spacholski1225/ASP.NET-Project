@@ -82,5 +82,24 @@ namespace RoboticsManagement.Test.ControllerTests
             Assert.Equal("Form", redirectToActionResult.ControllerName);
      
         }
+        [Fact]
+        public async Task Summary_ReturnViewResult_ForInValidModelOrIsnotOkay()
+        {
+            //Arrange
+            var model = new SummaryViewModel();
+            bool isOkay = false;
+            //Act
+            var result = await _controller.Summary(model, isOkay);
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<SummaryViewModel>(viewResult.ViewData.Model);
+            mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Warning),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => true),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
     }
 }
