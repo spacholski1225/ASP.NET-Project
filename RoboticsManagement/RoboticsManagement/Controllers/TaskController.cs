@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoboticsManagement.Configuration;
 using RoboticsManagement.Data;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
+using RoboticsManagement.Repositories;
 using RoboticsManagement.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -22,14 +24,22 @@ namespace RoboticsManagement.Controllers
         private readonly MgmtDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AutoMapperConfig _mapper;
+        private readonly IEmployeeTaskRepository _employeeTaskRepository;
+        private readonly IFormRepository _formRepository;
+        private readonly ITaskForEmployeeRepository _taskForEmployeeRepository;
+
 
         public TaskController(ILogger<TaskController> logger, MgmtDbContext context,
-            UserManager<ApplicationUser> userManager, AutoMapperConfig mapper)
+            UserManager<ApplicationUser> userManager, AutoMapperConfig mapper, IEmployeeTaskRepository employeeTaskRepository,
+            IFormRepository formRepository, ITaskForEmployeeRepository taskForEmployeeRepository)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
             _mapper = mapper;
+            _employeeTaskRepository = employeeTaskRepository;
+            _formRepository = formRepository;
+            _taskForEmployeeRepository = taskForEmployeeRepository;
         }
 
         [HttpGet]
@@ -39,16 +49,21 @@ namespace RoboticsManagement.Controllers
             var listToReturn = new List<TaskViewModel>();
             var tasks = new List<TaskForEmployee>();
 
-            var doneTasks = _context.EmployeeTasks.Where(x => x.isDone == true).ToList();
+            var doneTasks = _employeeTaskRepository.GetDoneTasks();
+            if(doneTasks == null)
+            {
+                return BadRequest();
+            }
             doneTasks.ForEach(t =>
             {
-                tasks.Add(_context.TaskForEmployee.FirstOrDefault(x => x.TaskId == t.Id));
+                tasks.Add(_taskForEmployeeRepository.GetTaskById(t.Id));
             });
 
             foreach (var task in tasks)
             {
-                var taskToGetUser = _context.EmployeeTasks.FirstOrDefault(x => x.Id == task.TaskId);
-                var complaintForm = _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == taskToGetUser.AppUserId);
+                var taskToGetUser = _employeeTaskRepository.GetTaskById(task.TaskId);
+                var complaintForm = _formRepository.GetFormByUserId(taskToGetUser.AppUserId);
+                
                 var user = await _userManager.FindByIdAsync(taskToGetUser.AppUserId);
 
                 var mapTask = _mapper.MapApplicationUserToTaskViewModel(user);
@@ -66,23 +81,10 @@ namespace RoboticsManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> FinishedTasks(string userId)
         {
-            var complaintForm = _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == userId);// it can be deleted if in view
-                                                                                                                 // will be properties with hidden attribute
+            var complaintForm = _context.complaintFormModels//
+                .FirstOrDefault(x => x.ApplicationUser.Id == userId);// it can be deleted if in view
+                                                                     // will be properties with hidden attribute
             var user = await _userManager.FindByIdAsync(userId);
-            /*var taskViewModel = new TaskViewModel
-            {
-                Description = complaintForm.Description,
-                CreatedDate = complaintForm.CreatedDate.ToString(),
-                Adress = user.Adress,
-                City = user.City,
-                Company = user.CompanyName,
-                Country = user.Country,
-                ERobotsCategory = complaintForm.ERobotsCategory,
-                NIP = user.NIP,
-                Regon = user.Regon,
-                ZipCode = user.ZipCode,
-                AppUserId = user.Id
-            };*/
             var taskViewModel = _mapper.MapApplicationUserToTaskViewModel(user);
             taskViewModel.ERobotsCategory = complaintForm.ERobotsCategory;
             taskViewModel.Description = complaintForm.Description;
@@ -115,7 +117,7 @@ namespace RoboticsManagement.Controllers
             {
                 Content = xmlString
             };
-        }
+        }//create unit test
 
     }
 }

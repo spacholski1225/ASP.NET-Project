@@ -73,5 +73,10 @@ namespace RoboticsManagement.Repositories
             _context.complaintFormModels.Add(model);
             _context.SaveChanges();
         }
+
+        public FormModel GetFormByUserId(string userId)
+        {
+            return _context.complaintFormModels.FirstOrDefault(x => x.ApplicationUser.Id == userId);
+        }
     }
 }

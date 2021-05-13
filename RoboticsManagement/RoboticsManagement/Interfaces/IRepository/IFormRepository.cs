@@ -13,6 +13,6 @@ namespace RoboticsManagement.Interfaces.IRepository
         public List<FormModel> SortAscById();
         public Task<List<FormModel>> GetAllFormsByUser(string name);
         public void AddTask(FormModel model);
-
+        public FormModel GetFormByUserId(string userId);
     }
 }
