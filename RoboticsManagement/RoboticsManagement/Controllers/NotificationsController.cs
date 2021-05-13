@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using RoboticsManagement.Configuration;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
-using RoboticsManagement.Models.Notifications;
 using RoboticsManagement.ViewModels.Notifications;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
@@ -28,11 +25,12 @@ namespace RoboticsManagement.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        [Route("/shared/index/{name?}")]
-        public async Task<JsonResult> GetNotifications(string name)//todo change something to display notifications after log in
+        public async Task<IActionResult> GetNotifications(string name)//todo change something to display notifications after log in
         {
-            if (name == null)
-                return Json("Error", "Error");
+            if (name == null)//after first login
+            {
+                return RedirectToAction("Success","Success");
+            }
 
             var user = await _userManager.FindByNameAsync(name);
             List<NotificationViewModel> returnedList = new List<NotificationViewModel>();
@@ -65,7 +63,7 @@ namespace RoboticsManagement.Controllers
             }
             else
             {
-                return Json("Error", "Error");
+                return RedirectToAction("Error", "Error");
             }
         }
        
