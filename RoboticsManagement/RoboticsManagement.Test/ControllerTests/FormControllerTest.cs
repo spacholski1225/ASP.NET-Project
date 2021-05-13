@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using RoboticsManagement.Configuration;
@@ -6,11 +7,13 @@ using RoboticsManagement.Controllers;
 using RoboticsManagement.Data;
 using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
+using RoboticsManagement.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace RoboticsManagement.Test.ControllerTests
 {
@@ -30,6 +33,17 @@ namespace RoboticsManagement.Test.ControllerTests
                 null, null, null, null, null, null, null, null);
             _controller = new FormController(null, mockUserManager.Object,
                 mockLogger.Object, mockMapper.Object);
+        }
+        [Fact]
+        public async Task Form_ReturnsViewResult_ForInvalidModelOrNameEqualNull()
+        {
+            //Arrange
+            var model = new FormViewModel();
+            //Act
+            var result = await _controller.Form(model,null);
+            //Assert
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsType<FormViewModel>(viewResult.ViewData.Model);
         }
     }
 }
