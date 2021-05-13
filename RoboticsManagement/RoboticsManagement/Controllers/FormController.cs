@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RoboticsManagement.Configuration;
+using RoboticsManagement.Interfaces.IRepository;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
 using RoboticsManagement.Models.Notifications;
@@ -19,16 +20,23 @@ namespace RoboticsManagement.Data
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<FormController> _logger;
         private readonly AutoMapperConfig _mapper;
+        private readonly INotificationRepository _notificationRepository;
+        private readonly IEmployeeTaskRepository _employeeTaskRepository;
+        private readonly IFormRepository _formRepository;
 
         public FormController(MgmtDbContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<FormController> logger,
-            AutoMapperConfig mapper)
+            AutoMapperConfig mapper, INotificationRepository notificationRepository,
+            IEmployeeTaskRepository employeeTaskRepository, IFormRepository formRepository)
         {
             _context = context;
             _userManager = userManager;
             _logger = logger;
             _mapper = mapper;
+            _notificationRepository = notificationRepository;
+            _employeeTaskRepository = employeeTaskRepository;
+            _formRepository = formRepository;
         }
         [HttpGet]
         public IActionResult Form() => View();
@@ -91,11 +99,11 @@ namespace RoboticsManagement.Data
                 };
                 try
                 {
-                    _context.ClientNotifications.Add(clientNoti);
-                    _context.AdminNotifications.Add(adminNoti);
-                    _context.EmployeeTasks.Add(empTask);
-                    _context.complaintFormModels.Add(model);
-                    _context.SaveChanges();
+
+                    _notificationRepository.AddNotificationsForClient(clientNoti);
+                    _notificationRepository.AddNotificationsForAdmin(adminNoti);
+                    _employeeTaskRepository.AddEmployeeTask(empTask);
+                    _formRepository.AddTask(model);
                 }
                 catch (Exception e)
                 {

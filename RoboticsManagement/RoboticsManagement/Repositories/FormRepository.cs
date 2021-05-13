@@ -17,6 +17,7 @@ namespace RoboticsManagement.Repositories
         private readonly ILogger<FormRepository> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
 
+
         public FormRepository(MgmtDbContext context,
             ILogger<FormRepository> logger,
             UserManager<ApplicationUser> userManager)
@@ -65,6 +66,12 @@ namespace RoboticsManagement.Repositories
         {
             var user = await _userManager.FindByNameAsync(name);
             return _context.complaintFormModels.Where(u => u.ApplicationUser.Id == user.Id).ToList();
+        }
+
+        public void AddTask(FormModel model)
+        {
+            _context.complaintFormModels.Add(model);
+            _context.SaveChanges();
         }
     }
 }

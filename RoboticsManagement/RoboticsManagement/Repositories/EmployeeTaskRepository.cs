@@ -28,5 +28,11 @@ namespace RoboticsManagement.Repositories
             var tasks =  _context.EmployeeTasks.Where(x=> x.Description !=null && x.City !=null && x.Country != null && x.Adress != null).OrderBy(x => x.Id).ToList();
             return tasks;
         }
+
+        public void AddEmployeeTask(EmployeeTask empTask)
+        {
+            _context.EmployeeTasks.Add(empTask);
+            _context.SaveChanges();
+        }
     }
 }
