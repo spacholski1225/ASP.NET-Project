@@ -135,6 +135,34 @@ namespace RoboticsManagement.Test.ControllerTests
             Assert.Equal("Success", redirectToActionResult.ControllerName);
 
         }
+        [Fact]
+        public async Task Summary_RedirectToActionResult_WhenOccurException()
+        {
+            //Arrange
+            var model = new SummaryViewModel
+            {
+                UserId = "test",
+                Company = "test"
+            };
+            bool isOkay = true;
+            mockUserManager.Setup(s => s.FindByIdAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
+            _notificationRepository.Setup(s => s.AddNotificationsForClient(It.IsAny<ClientNotifications>()))
+                .Throws(new Exception());
+            //Act
+            var result = await _controller.Summary(model, isOkay);
+            //Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Success", redirectToActionResult.ActionName);
+            Assert.Equal("Success", redirectToActionResult.ControllerName);
+            mockLogger.Verify(
+                x => x.Log(
+                    It.Is<LogLevel>(l => l == LogLevel.Error),
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) => true),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+
+        }
 
     }
 }
