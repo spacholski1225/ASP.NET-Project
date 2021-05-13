@@ -25,6 +25,7 @@ namespace RoboticsManagement.Test.ControllerTests
         private readonly Mock<IEmployeeTaskRepository> _employeeTaskRepository;
         private readonly Mock<IFormRepository> _formRepository;
         private readonly Mock<ITaskForEmployeeRepository> _taskForEmployeeRepository;
+        private readonly Mock<IInvoiceRepository> _invoiceRepository;
 
         public TaskControllerTest()
         {
@@ -36,10 +37,11 @@ namespace RoboticsManagement.Test.ControllerTests
             _notificationRepository = new Mock<INotificationRepository>();
             _employeeTaskRepository = new Mock<IEmployeeTaskRepository>();
             _formRepository = new Mock<IFormRepository>();
+            _invoiceRepository = new Mock<IInvoiceRepository>();
             _taskForEmployeeRepository = new Mock<ITaskForEmployeeRepository>();
             _controller = new TaskController(mockLogger.Object, null, mockUserManager.Object,
                 mockMapper.Object, _employeeTaskRepository.Object, _formRepository.Object,
-                _taskForEmployeeRepository.Object);
+                _taskForEmployeeRepository.Object, _invoiceRepository.Object);
         }
         [Fact]
         public async Task FinishedTask_ReturnBadRequest_IfListOfTaskIsEmpty()
@@ -109,6 +111,28 @@ namespace RoboticsManagement.Test.ControllerTests
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("ConcreteTask", redirectToActionResult.ActionName);
             Assert.Equal("Task", redirectToActionResult.ControllerName);
+        }
+        [Fact]
+        public void ConcreteTask_ReturnesContentResult_WhenOccursError()
+        {
+            //Arrange
+            var taskViewModel = new TaskViewModel();
+            _invoiceRepository.Setup(s => s.AddInvoice(It.IsAny<InvoiceData>())).Throws(new Exception());
+            //Act
+            var result = _controller.ConcreteTask(taskViewModel, true);
+            //Assert
+            Assert.IsType<ContentResult>(result);
+        }
+        [Fact]
+        public void ConcreteTask_ReturnsContentResult_CorrectSaveIntoDatabase()
+        {
+            //Arrange
+            var taskViewModel = new TaskViewModel();
+            _invoiceRepository.Setup(s => s.AddInvoice(It.IsAny<InvoiceData>())).Verifiable();
+            //Act
+            var result = _controller.ConcreteTask(taskViewModel, true);
+            //Assert
+            Assert.IsType<ContentResult>(result);
         }
     }
 }

@@ -27,11 +27,12 @@ namespace RoboticsManagement.Controllers
         private readonly IEmployeeTaskRepository _employeeTaskRepository;
         private readonly IFormRepository _formRepository;
         private readonly ITaskForEmployeeRepository _taskForEmployeeRepository;
-
+        private readonly IInvoiceRepository _invoiceRepository;
 
         public TaskController(ILogger<TaskController> logger, MgmtDbContext context,
             UserManager<ApplicationUser> userManager, AutoMapperConfig mapper, IEmployeeTaskRepository employeeTaskRepository,
-            IFormRepository formRepository, ITaskForEmployeeRepository taskForEmployeeRepository)
+            IFormRepository formRepository, ITaskForEmployeeRepository taskForEmployeeRepository,
+            IInvoiceRepository invoiceRepository)
         {
             _logger = logger;
             _context = context;
@@ -40,6 +41,7 @@ namespace RoboticsManagement.Controllers
             _employeeTaskRepository = employeeTaskRepository;
             _formRepository = formRepository;
             _taskForEmployeeRepository = taskForEmployeeRepository;
+            _invoiceRepository = invoiceRepository;
         }
 
         [HttpGet]
@@ -109,8 +111,7 @@ namespace RoboticsManagement.Controllers
             var xmlString = writer.ToString();
             try
             {
-                _context.InvoiceData.Add(new InvoiceData { InvoiceXML = xmlString });
-                _context.SaveChanges();
+                _invoiceRepository.AddInvoice(new InvoiceData { InvoiceXML = xmlString });
             }
             catch (Exception ex)
             {
@@ -120,7 +121,7 @@ namespace RoboticsManagement.Controllers
             {
                 Content = xmlString
             };
-        }//create unit test
+        }
 
     }
 }
