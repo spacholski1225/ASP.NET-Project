@@ -41,7 +41,7 @@ namespace RoboticsManagement.Controllers
                 {
                     returnedList.Add(_mapper.MapEmployeeNotificationsToNotificationViewModel(n));
                 });
-                return Json(returnedList);
+                return View("Notifications", returnedList);
             }
             else if(await _userManager.IsInRoleAsync(user, "Admin"))
             {
@@ -50,7 +50,7 @@ namespace RoboticsManagement.Controllers
                 {
                     returnedList.Add(_mapper.MapAdminNotificationsToNotificationViewModel(n));
                 });
-                return Json(returnedList);
+                return View("Notifications", returnedList);
             }
             else if (await _userManager.IsInRoleAsync(user, "Client"))
             {
@@ -59,7 +59,7 @@ namespace RoboticsManagement.Controllers
                 {
                     returnedList.Add(_mapper.MapClientNotificationsToNotificationViewModel(n));
                 });
-                return Json(returnedList);
+                return View("Notifications", returnedList);
             }
             else
             {

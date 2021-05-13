@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EmployeeNotifications>
+﻿@model IEnumerable<NotificationViewModel>
 
 @{
     ViewData["Title"] = "Notifications";
@@ -10,6 +10,10 @@
         <label asp-for="@noti.NotiHeader"> </label>
         <input asp-for="@noti.NotiHeader" />
     </div>
+}
+@if (Model.Count() == 0)
+{
+    <h3>Sorry you did not have any notifications</h3>
 }
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
