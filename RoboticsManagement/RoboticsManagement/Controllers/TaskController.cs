@@ -50,7 +50,7 @@ namespace RoboticsManagement.Controllers
             var tasks = new List<TaskForEmployee>();
 
             var doneTasks = _employeeTaskRepository.GetDoneTasks();
-            if(doneTasks == null)
+            if (doneTasks == null)
             {
                 return BadRequest();
             }
@@ -63,7 +63,7 @@ namespace RoboticsManagement.Controllers
             {
                 var taskToGetUser = _employeeTaskRepository.GetTaskById(task.TaskId);
                 var complaintForm = _formRepository.GetFormByUserId(taskToGetUser.AppUserId);
-                
+
                 var user = await _userManager.FindByIdAsync(taskToGetUser.AppUserId);
 
                 var mapTask = _mapper.MapApplicationUserToTaskViewModel(user);
@@ -81,16 +81,19 @@ namespace RoboticsManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> FinishedTasks(string userId)
         {
-            var complaintForm = _context.complaintFormModels//
-                .FirstOrDefault(x => x.ApplicationUser.Id == userId);// it can be deleted if in view
-                                                                     // will be properties with hidden attribute
-            var user = await _userManager.FindByIdAsync(userId);
-            var taskViewModel = _mapper.MapApplicationUserToTaskViewModel(user);
-            taskViewModel.ERobotsCategory = complaintForm.ERobotsCategory;
-            taskViewModel.Description = complaintForm.Description;
-            taskViewModel.CreatedDate = complaintForm.CreatedDate.ToString();
+            if (userId != null)
+            {
+                var complaintForm = _formRepository.GetFormByUserId(userId);
 
-            return RedirectToAction("ConcreteTask", "Task", taskViewModel);
+                var user = await _userManager.FindByIdAsync(userId);
+                var taskViewModel = _mapper.MapApplicationUserToTaskViewModel(user);
+                taskViewModel.ERobotsCategory = complaintForm.ERobotsCategory;
+                taskViewModel.Description = complaintForm.Description;
+                taskViewModel.CreatedDate = complaintForm.CreatedDate.ToString();
+
+                return RedirectToAction("ConcreteTask", "Task", taskViewModel);
+            }
+            return BadRequest();
         }
         [HttpGet]
         public IActionResult ConcreteTask(TaskViewModel taskViewModel)

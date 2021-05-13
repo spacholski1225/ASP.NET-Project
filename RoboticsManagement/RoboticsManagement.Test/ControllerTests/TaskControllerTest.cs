@@ -81,5 +81,15 @@ namespace RoboticsManagement.Test.ControllerTests
             Assert.NotNull(viewResult.ViewData.Model);
             Assert.IsType<List<TaskViewModel>>(viewResult.ViewData.Model);
         }
+        [Fact]
+        public async Task FinishedTasksPOST_ReturnedBadRequest_ForUserIdEqualNull()
+        {
+            //Arrange
+            string userId = null;
+            //Act
+            var result = await _controller.FinishedTasks(userId);
+            //Assert
+            Assert.IsType<BadRequestResult>(result);
+        }
     }
 }
