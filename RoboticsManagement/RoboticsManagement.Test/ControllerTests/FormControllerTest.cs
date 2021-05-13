@@ -64,5 +64,23 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
+        [Fact]
+        public async Task Form_ReturnsRedirectToAction_ForUser()
+        {
+            //Arrange
+            var model = new FormViewModel
+            {
+                ERobotsCategory = ERobotsCategory.Robot1,
+                Description = "test"
+            };
+            mockUserManager.Setup(s => s.FindByNameAsync(It.IsAny<string>())).ReturnsAsync(new ApplicationUser());
+            //Act
+            var result = await _controller.Form(model, "test");
+            //Assert
+            var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Summary", redirectToActionResult.ActionName);
+            Assert.Equal("Form", redirectToActionResult.ControllerName);
+     
+        }
     }
 }
