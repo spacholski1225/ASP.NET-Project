@@ -5,7 +5,7 @@
 <form method="post" style="width:100%">
     <div class="row">
         <div class="col-4" style="width:100%">
-            <div class="hidden">
+            <div hidden>
                 <input class="hidden"asp-for="UserId" />
                 <input class="hidden"asp-for="ApplicationUser.Id" />
             </div>
@@ -49,7 +49,7 @@
         </div>
     </div>
     <div style="margin:10px 0 0 50%">
-        <button class="btn btn-success" type="submit" asp-route-isOkay="@true">Submit</button> @*there will be something like "everything is okay?"*@
+        <button class="btn btn-success" type="submit" asp-route-isOkay="@true">Submit</button> 
         <button class="btn btn-success" asp-action="Form" asp-controller="Form">Back</button>
     </div>
 </form>

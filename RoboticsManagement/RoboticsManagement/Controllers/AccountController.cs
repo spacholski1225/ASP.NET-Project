@@ -39,7 +39,15 @@ namespace RoboticsManagement.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login() => View();
+        public IActionResult Login()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("GetNotifications", "Notifications");
+            }
+            return View();
+        }
+
         [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
@@ -104,9 +112,9 @@ namespace RoboticsManagement.Controllers
                         _context.ClientNotifications.Add(noti);
                         _context.SaveChanges();
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        _logger.LogError("Error within saveing notification after registration",ex);
+                        _logger.LogError("Error within saveing notification after registration", ex);
                     }
                     return RedirectToAction("Success", "Success");
                 }

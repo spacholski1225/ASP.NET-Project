@@ -1,8 +1,9 @@
 ﻿@model LoginViewModel
+@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> signInManager
+
 @{
     ViewData["Title"] = "Index";
 }
-
 
 <form method="post">
     <div asp-validation-summary="All"></div>
