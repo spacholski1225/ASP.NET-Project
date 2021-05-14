@@ -4,6 +4,7 @@ namespace RoboticsManagement.ViewModels.Notifications
 {
     public class NotificationViewModel
     {
+        public int NotiId { get; set; }
         public string Receiver { get; set; }
         public string Sender { get; set; }
         public string NotiHeader { get; set; }

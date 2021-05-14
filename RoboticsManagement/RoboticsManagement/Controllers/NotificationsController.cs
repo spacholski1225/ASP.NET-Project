@@ -34,6 +34,8 @@ namespace RoboticsManagement.Controllers
 
             var user = await _userManager.FindByNameAsync(name);
             List<NotificationViewModel> returnedList = new List<NotificationViewModel>();
+            var notiList = new NotificationListViewModel();
+            
             if (await _userManager.IsInRoleAsync(user, "Employee"))
             {
                 var notis = _notificationRepository.GetNotificationsForEmployee(user.Id);
@@ -41,7 +43,8 @@ namespace RoboticsManagement.Controllers
                 {
                     returnedList.Add(_mapper.MapEmployeeNotificationsToNotificationViewModel(n));
                 });
-                return View("Notifications", returnedList);
+                notiList.NotificationList = returnedList;
+                return View("Notifications", notiList);
             }
             else if(await _userManager.IsInRoleAsync(user, "Admin"))
             {
@@ -67,5 +70,10 @@ namespace RoboticsManagement.Controllers
             }
         }
        
+        [HttpPost]
+        public IActionResult GetNotifications(NotificationListViewModel model)
+        {
+             return View();
+        }
     }
 }
