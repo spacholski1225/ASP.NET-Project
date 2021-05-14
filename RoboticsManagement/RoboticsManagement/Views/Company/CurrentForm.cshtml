@@ -17,5 +17,5 @@
     <textarea rows="10" class="form-control" asp-for="Description" readonly></textarea>
 </div>
 <div class="col-4">
-    <button class="btn btn-primary" asp-action="SentForms" asp-controller="Company">Back</button>
+    <a class="btn btn-primary" asp-action="SentForms" asp-controller="Company" asp-route-name="@User.Identity.Name">Back</a>
 </div>
