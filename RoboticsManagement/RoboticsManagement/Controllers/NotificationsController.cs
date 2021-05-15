@@ -25,11 +25,11 @@ namespace RoboticsManagement.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<IActionResult> GetNotifications(string name)//todo change something to display notifications after log in
+        public async Task<IActionResult> GetNotifications(string name)
         {
-            if (name == null)//after first login
+            if (name == null)
             {
-                return RedirectToAction("Success","Success");
+                return RedirectToAction("Welcome","Success");
             }
 
             var user = await _userManager.FindByNameAsync(name);
@@ -53,7 +53,8 @@ namespace RoboticsManagement.Controllers
                 {
                     returnedList.Add(_mapper.MapAdminNotificationsToNotificationViewModel(n));
                 });
-                return View("Notifications", returnedList);
+                notiList.NotificationList = returnedList;
+                return View("Notifications", notiList);
             }
             else if (await _userManager.IsInRoleAsync(user, "Client"))
             {
@@ -62,7 +63,8 @@ namespace RoboticsManagement.Controllers
                 {
                     returnedList.Add(_mapper.MapClientNotificationsToNotificationViewModel(n));
                 });
-                return View("Notifications", returnedList);
+                notiList.NotificationList = returnedList;
+                return View("Notifications", notiList);
             }
             else
             {

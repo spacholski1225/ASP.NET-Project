@@ -8,6 +8,8 @@ using RoboticsManagement.Controllers;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
 using System;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -90,6 +92,27 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.Is<It.IsAnyType>((v, t) => v.ToString() == "Unauthenticated user"),
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
+        }
+        [Fact]
+        public void Login_ReturnsARedirectToActionResult_ForAuthorizedUser()
+        {
+            //Arrange
+            
+            var controller = new AccountController(null, null, null,
+                                                   null, null, null);
+            //https://stackoverflow.com/questions/24337497/unit-test-method-that-uses-identity-in-regular-mvc-controller-not-web-api-contr
+            var controllerContext = new Mock<ControllerContext>();
+            //var principal = new Mock<IPrincipal>();
+            //principal.Setup(s => s.Identity.IsAuthenticated).Returns(true);
+            var claims = new Mock<ClaimsPrincipal>();
+            claims.Setup(s => s.Identity.IsAuthenticated).Returns(true);
+
+            controllerContext.SetupGet( s=> s.HttpContext.User).Returns(claims.Object);
+            controller.ControllerContext = controllerContext.Object;
+            //Act
+            var result =  controller.Login();
+            //Assert
+            Assert.IsType<RedirectToActionResult>(result);
         }
         [Fact]
         public async Task Login_ReturnsAViewResult_ForInvalidModel()

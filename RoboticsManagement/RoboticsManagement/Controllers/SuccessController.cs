@@ -7,5 +7,6 @@ namespace RoboticsManagement.Controllers
     {
         [Authorize]
         public IActionResult Success() => View();
+        public IActionResult Welcome() => View();
     }
 }
