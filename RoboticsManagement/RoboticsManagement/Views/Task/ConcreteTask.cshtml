@@ -1,6 +1,6 @@
 ﻿@model TaskViewModel
 @{
-    ViewData["Title"] = "Task " + Model.TaskId;
+    ViewData["Title"] = "Concrete task ";
 }
 
 <form method="post">
@@ -54,6 +54,6 @@
         <input class="form-control" asp-for="ERobotsCategory" readonly />
         <span asp-validation-for="ERobotsCategory" class="alert-danger"></span>
     </div>
-    <button type="submit" asp-route-isSure=@true>Generate XML</button>@*change isSure parametr to checkbox or sth else*@
-    <a asp-action="FinishedTasks" asp-controller="Task">Back</a>
+    <button class="btn btn-primary" style="margin-top:10px" type="submit" asp-route-isSure=@true>Generate XML</button>@*change isSure parametr to checkbox or sth else*@
+    <a class="btn btn-primary" style="margin-top:10px"  asp-action="FinishedTasks" asp-controller="Task">Back</a>
 </form>
