@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RoboticsManagement.Models;
 using RoboticsManagement.Models.ComplaintForm;
+using RoboticsManagement.Models.Home;
 using RoboticsManagement.Models.Notifications;
 
 namespace RoboticsManagement.Data
@@ -19,6 +20,7 @@ namespace RoboticsManagement.Data
         public DbSet<AdminNotifications> AdminNotifications{ get; set; }
         public DbSet<ClientNotifications> ClientNotifications{ get; set; }
         public DbSet<InvoiceData> InvoiceData{ get; set; }
+        public DbSet<Contact> ContactMessages{ get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

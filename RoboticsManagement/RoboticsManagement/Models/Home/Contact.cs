@@ -8,6 +8,8 @@ namespace RoboticsManagement.Models.Home
         public string UserName { get; set; }
         public string Message { get; set; }
         public string Topic { get; set; }
+        public string Sender { get; set; }
+        public string Receiver { get; set; }
         public EContact EContact { get; set; }
     }
 }
