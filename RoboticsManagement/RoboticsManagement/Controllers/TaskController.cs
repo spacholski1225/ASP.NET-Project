@@ -74,6 +74,7 @@ namespace RoboticsManagement.Controllers
                 mapTask.ERobotsCategory = complaintForm.ERobotsCategory;
                 mapTask.Description = complaintForm.Description;
                 mapTask.CreatedDate = complaintForm.CreatedDate.ToString();
+                mapTask.Company = complaintForm.Company;
 
                 listToReturn.Add(mapTask);
             }
@@ -92,6 +93,7 @@ namespace RoboticsManagement.Controllers
                 taskViewModel.ERobotsCategory = complaintForm.ERobotsCategory;
                 taskViewModel.Description = complaintForm.Description;
                 taskViewModel.CreatedDate = complaintForm.CreatedDate.ToString();
+                taskViewModel.Company = complaintForm.Company;
 
                 return RedirectToAction("ConcreteTask", "Task", taskViewModel);
             }
