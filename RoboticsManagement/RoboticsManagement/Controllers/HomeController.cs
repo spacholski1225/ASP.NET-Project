@@ -76,7 +76,7 @@ namespace RoboticsManagement.Controllers
                 return RedirectToAction("Success", "Success");
 
             }
-            return RedirectToAction("Error", "Error");
+            return View(model);
         }
     }
 }

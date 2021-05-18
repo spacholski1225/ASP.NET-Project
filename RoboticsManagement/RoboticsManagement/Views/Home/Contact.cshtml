@@ -9,14 +9,14 @@
         <div class="form-group col-6">
             <label asp-for="Topic" class="form-check-label" style="width:100%">Topic</label>
             <input asp-for="Topic" class="form-control" style="width:100%" />
-            <span asp-validation-for="Topic" class="border-danger"></span>
+            <span asp-validation-for="Topic" class="text-danger"></span>
         </div>
     </div>
     <div class="row">
         <div class="form-group col-12">
             <label asp-for="Message" style="width:100%">Message</label>
             <textarea row="10" asp-for="Message" style="width:100%" class="form-control" placeholder="Please contact with us."></textarea>
-            <span asp-validation-for="Message"></span>
+            <span asp-validation-for="Message" class="text-danger"></span>
         </div>
     </div>
 
