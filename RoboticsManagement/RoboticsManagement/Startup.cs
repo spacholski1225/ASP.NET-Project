@@ -46,6 +46,7 @@ namespace RoboticsManagement
             services.AddScoped<IFormRepository, FormRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IConctactRepository, ContactRepository>();
             services.AddScoped<AutoMapperConfig>();
 
             services.AddSignalR();

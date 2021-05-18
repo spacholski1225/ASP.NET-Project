@@ -19,13 +19,15 @@ namespace RoboticsManagement.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly INotificationRepository _notificationRepository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConctactRepository _contactRepository;
         public HomeController(ILogger<HomeController> logger, INotificationRepository notificationRepository,
-            AutoMapperConfig mapper, UserManager<ApplicationUser> userManager)
+            AutoMapperConfig mapper, UserManager<ApplicationUser> userManager, IConctactRepository contactRepository)
         {
             _mapper = mapper;
             _logger = logger;
             _notificationRepository = notificationRepository;
             _userManager = userManager;
+            _contactRepository = contactRepository;
         }
         [Authorize]
         [HttpGet]
@@ -70,8 +72,7 @@ namespace RoboticsManagement.Controllers
                         NotiHeader = "New message from " + mapModel.UserName,
                         ToRole = ERole.Admin
                     });
-                    //stworzyc contactrepository
-                    //z zapisem message do bazy danych
+                    _contactRepository.SaveToDatabase(mapModel);
                     return RedirectToAction("Success", "Success");
                     //dodac podsumowanie jaka wiadomosc zostala wyslana i jesli uzytkownik ma konto
                     //to niech dostanie powiadomienie z podsumowaniem wiadomosci

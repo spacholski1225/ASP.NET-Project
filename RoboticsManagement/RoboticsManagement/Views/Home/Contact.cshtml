@@ -11,11 +11,22 @@
             <input asp-for="Topic" class="form-control" />
             <span asp-validation-for="Topic" class="border-danger"></span>
         </div>
-        <div class="form-group col-6">
-            <label asp-for="EContact" class="form-check-label">EContact</label>
-            <select asp-for="EContact" asp-items="@Html.GetEnumSelectList<EContact>()" class="form-control"></select>
-            <span asp-validation-for="EContact" class="border-danger"></span>
-        </div>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="form-group col-6">
+                <label asp-for="EContact" class="form-check-label">EContact</label>
+                <select asp-for="EContact" asp-items="@Html.GetEnumSelectList<EContact>()" class="form-control" disabled></select>
+                <span asp-validation-for="EContact" class="border-danger"></span>
+            </div>
+        }
+        else
+        {
+            <div class="form-group col-6">
+                <label asp-for="EContact" class="form-check-label">EContact</label>
+                <select asp-for="EContact" asp-items="@Html.GetEnumSelectList<EContact>()" class="form-control"></select>
+                <span asp-validation-for="EContact" class="border-danger"></span>
+            </div>
+        }
     </div>
     <div class="row">
         <div class="form-group col-12">
@@ -26,7 +37,7 @@
     </div>
 
     <div class="row col-12">
-        <a class="btn btn-primary" asp-action="Index" asp-controller="Home" style=" margin-right: 2.5px" >Back</a>
+        <a class="btn btn-primary" asp-action="Index" asp-controller="Home" style=" margin-right: 2.5px">Back</a>
         <button class="btn btn-primary" type="reset" style="margin-right: 2.5px; margin-left:2.5px">Reset</button>
         <button class="btn btn-primary" type="submit" asp-route-userName="@User.Identity.Name" style="margin-left: 2.5px">Submit</button>
     </div>
