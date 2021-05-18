@@ -56,30 +56,25 @@ namespace RoboticsManagement.Controllers
                 }
                 catch (Exception e)
                 {
+                    user.Id = "Unknown";
                     _logger.LogInformation("Cannot find user");
                 }
-                if (mapModel.EContact.ToString().Equals("SendToAdmins"))
+
+                mapModel.Sender = mapModel.UserName;
+                mapModel.Receiver = ERole.Admin.ToString();
+
+                _notificationRepository.AddNotificationsForAdmin(new AdminNotifications
                 {
-                    mapModel.Sender = mapModel.UserName;
-                    mapModel.Receiver = ERole.Admin.ToString();
+                    CreatedDate = DateTime.Now,
+                    FromUserId = user.Id,
+                    IsRead = false,
+                    NotiBody = mapModel.Message,
+                    NotiHeader = "New message from " + mapModel.UserName,
+                    ToRole = ERole.Admin
+                });
+                _contactRepository.SaveToDatabase(mapModel);
+                return RedirectToAction("Success", "Success");
 
-                    _notificationRepository.AddNotificationsForAdmin(new AdminNotifications
-                    {
-                        CreatedDate = DateTime.Now,
-                        FromUserId = user.Id,
-                        IsRead = false,
-                        NotiBody = mapModel.Message,
-                        NotiHeader = "New message from " + mapModel.UserName,
-                        ToRole = ERole.Admin
-                    });
-                    _contactRepository.SaveToDatabase(mapModel);
-                    return RedirectToAction("Success", "Success");
-                    //dodac podsumowanie jaka wiadomosc zostala wyslana i jesli uzytkownik ma konto
-                    //to niech dostanie powiadomienie z podsumowaniem wiadomosci
-
-                    //dodac if Send To Concrete Employee przekierowanie na AllEmployees.cshtml
-                    //tak samo z Client
-                }
             }
             return RedirectToAction("Error", "Error");
         }
