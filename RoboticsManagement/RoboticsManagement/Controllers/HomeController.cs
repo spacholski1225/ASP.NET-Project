@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RoboticsManagement.Controllers
 {
-
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly AutoMapperConfig _mapper;

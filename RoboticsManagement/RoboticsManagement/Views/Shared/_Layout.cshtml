@@ -32,14 +32,7 @@
                                <partial name="_DisplayUsersActions" /> 
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="dropbtn nav navbar-text" style="color: black" asp-area="" asp-controller="Home" asp-action="Contact">
-                                Contact
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="dropbtn nav navbar-text" style="color: black" asp-area="" asp-controller="Notifications" asp-action="GetNotifications" asp-route-name="@User.Identity.Name">Temporirily noti</a>
-                        </li>
+                        
                     </ul>
 
                     @if (signInManager.IsSignedIn(User))
