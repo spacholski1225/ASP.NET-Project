@@ -11,34 +11,45 @@
             <input asp-for="@noti.NotiId" />
             <span asp-validation-for="@noti.NotiId" class="alert-danger"></span>
         </div>
-        <div class="">
-            <label asp-for="@noti.Sender">From:</label>
-            <input class="" asp-for="@noti.Sender" readonly />
-            <span asp-validation-for="@noti.Sender" class="alert-danger"></span>
-        </div>
-        <div class="">
-            <label>Title:</label>
-            <input class="" asp-for="@noti.NotiHeader" readonly />
-            <span asp-validation-for="@noti.NotiHeader" class="alert-danger"></span>
-        </div>
-        <div class="">
-            <label>Message</label>
-            <input class="" asp-for="@noti.NotiBody" readonly />
-            <span asp-validation-for="@noti.NotiBody" class="alert-danger"></span>
-        </div>
-        <div class="">
-            <label>Date:</label>
-            <input class="" asp-for="@noti.CreatedDate" readonly />
-            <span asp-validation-for="@noti.CreatedDate" class="alert-danger"></span>
-        </div>
-        @*<div class="custom-checkbox">
-            <label asp-for="@noti.IsRead">Mark as read:</label>
-            <input asp-for="@noti.IsRead" /> @Html.CheckBoxFor(m)
-        </div>*@
+        <table style="width:100%">
+            <tr>
+                <th>Title</th>
+                <th>Message</th>
+                <th>From</th>
+                <th>Date</th>
+            </tr>
+            <tr>
+                <th>
+                    <div class="">
+                        <input class="" asp-for="@noti.Sender" readonly />
+                        <span asp-validation-for="@noti.Sender" class="alert-danger"></span>
+                    </div>
+                </th>
+                <th>
+                    <div class="">
+                        <input class="" asp-for="@noti.NotiHeader" readonly />
+                        <span asp-validation-for="@noti.NotiHeader" class="alert-danger"></span>
+                    </div>
+                </th>
+                <th>
+                    <div class="">
+                        <input class="" asp-for="@noti.NotiBody" readonly />
+                        <span asp-validation-for="@noti.NotiBody" class="alert-danger"></span>
+                    </div>
+                </th>
+                <th>
+                    <div class="">
+                        <input class="" asp-for="@noti.CreatedDate" readonly />
+                        <span asp-validation-for="@noti.CreatedDate" class="alert-danger"></span>
+                    </div>
+                </th>
+            </tr>
+        </table>
+
         <div class="custom-checkbox">
             <label asp-for="@noti.IsRead">
                 <input asp-for="@noti.IsRead" />
-                @Html.DisplayNameFor(m => m.NotificationList)
+                Clear notification
             </label>
         </div>
     }

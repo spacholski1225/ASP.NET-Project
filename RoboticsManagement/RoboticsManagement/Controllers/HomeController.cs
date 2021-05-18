@@ -75,6 +75,9 @@ namespace RoboticsManagement.Controllers
                     return RedirectToAction("Success", "Success");
                     //dodac podsumowanie jaka wiadomosc zostala wyslana i jesli uzytkownik ma konto
                     //to niech dostanie powiadomienie z podsumowaniem wiadomosci
+
+                    //dodac if Send To Concrete Employee przekierowanie na AllEmployees.cshtml
+                    //tak samo z Client
                 }
             }
             return RedirectToAction("Error", "Error");

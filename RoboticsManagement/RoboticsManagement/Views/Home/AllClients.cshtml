@@ -1,0 +1,12 @@
+﻿@model IEnumerable<CompanyInfoViewModel>
+
+@foreach (var client in Model)
+{
+    <form method="post" class="form-check">
+        <button type="submit" class="btn btn-outline-dark"
+                asp-route-clientId="@client.Id">@client.CompanyName</button>
+    </form>
+}
+<div class="col-12">
+    <a class="btn btn-danger" asp-controller="Home" asp-action="Index">Cancel</a> 
+</div>
