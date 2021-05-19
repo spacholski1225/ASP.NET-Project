@@ -17,6 +17,29 @@ namespace RoboticsManagement.Test.ControllerTests
 {
     public class AccountControllerTest
     {
+        private readonly Mock<UserManager<ApplicationUser>> mockUserManager;
+        private readonly AccountController _controller;
+        private readonly Mock<ILogger<AccountController>> mockLogger;
+        private readonly Mock<AutoMapperConfig> mockMapper;
+        private readonly Mock<SignInManager<ApplicationUser>> mockSignInManager;
+        private readonly Mock<RoleManager<IdentityRole>> mockRoleManager;
+        public AccountControllerTest()
+        {
+            var userStore = new Mock<IUserStore<ApplicationUser>>();
+            mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+            mockLogger = new Mock<ILogger<AccountController>>();
+            mockMapper = new Mock<AutoMapperConfig>();
+
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
+            mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager.Object, httpContextAccessor.Object,
+                                                                            userPrincipalFactory.Object, null, null, null, null);
+            var mockIRoleStore = new Mock<IRoleStore<IdentityRole>>();
+             mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockIRoleStore.Object, null, null, null, null);
+
+            _controller = new AccountController(mockUserManager.Object, mockSignInManager.Object, mockRoleManager.Object,
+                mockLogger.Object, mockMapper.Object, null);
+        }
         [Fact]
         public async Task Login_ReturnsRedirectToAction_ForValidModel()
         {
@@ -32,20 +55,11 @@ namespace RoboticsManagement.Test.ControllerTests
                 UserName = model.UserName,
             };
 
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
             mockSignInManager.Setup(s => s.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false))
                 .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
 
-            var controller = new AccountController(mockUserManager, mockSignInManager.Object, null,
-                null, null, null);
-
             //Act
-            var result = await controller.Login(model);
+            var result = await _controller.Login(model);
             //Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectToActionResult.ActionName);
@@ -66,26 +80,15 @@ namespace RoboticsManagement.Test.ControllerTests
             {
                 UserName = model.UserName,
             };
-
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
+            
             mockSignInManager.Setup(s => s.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false))
                 .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed);
 
-            var logger = new Mock<ILogger<AccountController>>();
-
-            var controller = new AccountController(mockUserManager, mockSignInManager.Object, null,
-                logger.Object, null, null);
-
             //Act
-            var result = await controller.Login(model);
+            var result = await _controller.Login(model);
             //Assert
             Assert.IsType<ViewResult>(result);
-            logger.Verify(
+            mockLogger.Verify(
                 x => x.Log(
                     It.Is<LogLevel>(l => l == LogLevel.Information),
                     It.IsAny<EventId>(),
@@ -118,12 +121,9 @@ namespace RoboticsManagement.Test.ControllerTests
                 Password = "Passw0rd!",
                 RememberMe = false
             };
-            var controller = new AccountController(null, null, null,
-                                                   null, null, null);
-            controller.ModelState.AddModelError("error", "some error");
-
+            _controller.ModelState.AddModelError("error", "some error");
             //Act
-            var result = await controller.Login(model);
+            var result = await _controller.Login(model);
             //Assert
             Assert.IsType<ViewResult>(result);
         }
@@ -131,19 +131,8 @@ namespace RoboticsManagement.Test.ControllerTests
         public async Task Logout_ReturnsRedirectToAction_WhenUserIsSignIn()
         {
             //Arrange
-
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
-            var logger = new Mock<ILogger<AccountController>>();
-            var controller = new AccountController(mockUserManager, mockSignInManager.Object, null,
-                logger.Object, null, null);
-
             //Act
-            var result = await controller.Logout();
+            var result = await _controller.Logout();
             //Assert
             var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Login", redirectToAction.ActionName);
@@ -155,23 +144,12 @@ namespace RoboticsManagement.Test.ControllerTests
         {
             //Arrange
             var model = new EmployeeRegistrationViewModel();
-
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-            var mockUserManager = new UserManager<ApplicationUser>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
-
-            var logger = new Mock<ILogger<AccountController>>();
-            var controller = new AccountController(mockUserManager, mockSignInManager.Object, null,
-                logger.Object, null, null);
-            controller.ModelState.AddModelError("eror", "some error");
+            _controller.ModelState.AddModelError("eror", "some error");
             //Act
-            var result = await controller.AddEmployee(model);
+            var result = await _controller.AddEmployee(model);
             //Assert
             Assert.IsType<ViewResult>(result);
-            logger.Verify(
+            mockLogger.Verify(
                 x => x.Log(
                     It.Is<LogLevel>(l => l == LogLevel.Warning),
                     It.IsAny<EventId>(),
@@ -196,29 +174,17 @@ namespace RoboticsManagement.Test.ControllerTests
                 FirstName = "FirstName",
                 LastName = "LastName"
             };
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-
-            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
-            var mockMapper = new Mock<AutoMapperConfig>();
-
-            var logger = new Mock<ILogger<AccountController>>();
-            var controller = new AccountController(mockUserManager.Object, null, null,
-                logger.Object, mockMapper.Object, null);
 
             mockUserManager.Setup(s => s.CreateAsync(It.IsAny<ApplicationUser>(), model.Password))
                 .ReturnsAsync(IdentityResult.Failed());
             //Act
-            var result = await controller.AddEmployee(model);
+            var result = await _controller.AddEmployee(model);
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var modelResult = Assert.IsType<EmployeeRegistrationViewModel>(viewResult.ViewData.Model);
             Assert.Equal(model.UserName, modelResult.UserName);
 
-            logger.Verify(
+            mockLogger.Verify(
                 x => x.Log(
                     It.Is<LogLevel>(l => l == LogLevel.Warning),
                     It.IsAny<EventId>(),
@@ -243,25 +209,11 @@ namespace RoboticsManagement.Test.ControllerTests
                 FirstName = "FirstName",
                 LastName = "LastName"
             };
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-
-            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
-            var mockMapper = new Mock<AutoMapperConfig>();
-            var mockIRoleStore = new Mock<IRoleStore<IdentityRole>>();
-            var mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockIRoleStore.Object, null, null, null, null);
-
-            var logger = new Mock<ILogger<AccountController>>();
-            var controller = new AccountController(mockUserManager.Object, null, mockRoleManager.Object,
-                logger.Object, mockMapper.Object, null);
-
+            //Arrange
             mockUserManager.Setup(s => s.CreateAsync(It.IsAny<ApplicationUser>(), model.Password))
                 .ReturnsAsync(IdentityResult.Success);
             //Act
-            var result = await controller.AddEmployee(model);
+            var result = await _controller.AddEmployee(model);
             //Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Success", redirectToActionResult.ActionName);
@@ -285,27 +237,13 @@ namespace RoboticsManagement.Test.ControllerTests
                 NIP = "0000000000",
                 Regon = "000000000",
             };
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-
-            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
-            var mockMapper = new Mock<AutoMapperConfig>();
-            var mockIRoleStore = new Mock<IRoleStore<IdentityRole>>();
-            var mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockIRoleStore.Object, null, null, null, null);
-
-            var logger = new Mock<ILogger<AccountController>>();
-            var controller = new AccountController(mockUserManager.Object, null, mockRoleManager.Object,
-                logger.Object, mockMapper.Object, null);
-
-            controller.ModelState.AddModelError("error", "some error");
+            
+            _controller.ModelState.AddModelError("error", "some error");
             //Act
-            var result = await controller.CompanyRegistration(model);
+            var result = await _controller.CompanyRegistration(model);
             //Assert
             Assert.IsType<ViewResult>(result);
-            logger.Verify(
+            mockLogger.Verify(
                x => x.Log(
                    It.Is<LogLevel>(l => l == LogLevel.Warning),
                    It.IsAny<EventId>(),
@@ -330,30 +268,16 @@ namespace RoboticsManagement.Test.ControllerTests
                 NIP = "0000000000",
                 Regon = "000000000",
             };
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-
-            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
-            var mockMapper = new Mock<AutoMapperConfig>();
-            var mockIRoleStore = new Mock<IRoleStore<IdentityRole>>();
-            var mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockIRoleStore.Object, null, null, null, null);
-
-            var logger = new Mock<ILogger<AccountController>>();
-            var controller = new AccountController(mockUserManager.Object, null, mockRoleManager.Object,
-                logger.Object, mockMapper.Object, null);
-
+            
             mockUserManager.Setup(s => s.CreateAsync(It.IsAny<ApplicationUser>(), model.Password))
                 .ReturnsAsync(IdentityResult.Failed());
             //Act
-            var result = await controller.CompanyRegistration(model);
+            var result = await _controller.CompanyRegistration(model);
             //Assert
             var redirectToAction = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Error", redirectToAction.ActionName);
             Assert.Equal("Error", redirectToAction.ControllerName);
-            logger.Verify(
+            mockLogger.Verify(
                 x => x.Log(
                     It.Is<LogLevel>(l => l == LogLevel.Warning),
                     It.IsAny<EventId>(),
@@ -378,25 +302,11 @@ namespace RoboticsManagement.Test.ControllerTests
                 NIP = "0000000000",
                 Regon = "000000000",
             };
-            var userStore = new Mock<IUserStore<ApplicationUser>>();
-
-            var mockUserManager = new Mock<UserManager<ApplicationUser>>(userStore.Object, null, null, null, null, null, null, null, null);
-            var httpContextAccessor = new Mock<IHttpContextAccessor>();
-            var userPrincipalFactory = new Mock<IUserClaimsPrincipalFactory<ApplicationUser>>();
-            var mockSignInManager = new Mock<SignInManager<ApplicationUser>>(mockUserManager, httpContextAccessor.Object,
-                                                                            userPrincipalFactory.Object, null, null, null, null);
-            var mockMapper = new Mock<AutoMapperConfig>();
-            var mockIRoleStore = new Mock<IRoleStore<IdentityRole>>();
-            var mockRoleManager = new Mock<RoleManager<IdentityRole>>(mockIRoleStore.Object, null, null, null, null);
-
-            var logger = new Mock<ILogger<AccountController>>();
-            var controller = new AccountController(mockUserManager.Object, null, mockRoleManager.Object,
-                logger.Object, mockMapper.Object, null);
-
+            
             mockUserManager.Setup(s => s.CreateAsync(It.IsAny<ApplicationUser>(), model.Password))
                 .ReturnsAsync(IdentityResult.Success);
             //Act
-            var result = await controller.CompanyRegistration(model);
+            var result = await _controller.CompanyRegistration(model);
             //Assert
             var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Success", redirectToActionResult.ActionName);
