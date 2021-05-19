@@ -4,18 +4,22 @@
 }
 <div class="row">
     <div class="col-6">
-        <label class="form-label col-4" asp-for="CreatedDate"></label>
+        <label class="form-label col-4 font-weight-bolder" asp-for="CreatedDate"></label>
         <input class="form-control" asp-for="CreatedDate" readonly />
     </div>
     <div class="col-6">
-        <label class="form-label col-4" asp-for="Robot"></label>
+        <label class="form-label col-4 font-weight-bolder"  asp-for="Robot"></label>
         <input class="form-control" asp-for="Robot" readonly />
     </div>
 </div>
-<div class="col-12">
-    <label class="form-label col-4" asp-for="Description"></label>
-    <textarea rows="10" class="form-control" asp-for="Description" readonly></textarea>
+<div class="row">
+    <div class="col-12">
+        <label class="form-label col-4 font-weight-bolder" asp-for="Description"></label>
+        <textarea rows="10" class="form-control" asp-for="Description" readonly></textarea>
+    </div>
 </div>
-<div class="col-4">
-    <a class="btn btn-primary" asp-action="SentForms" asp-controller="Company" asp-route-name="@User.Identity.Name">Back</a>
+<div class="row">
+    <div class="col-12">
+        <a style="margin-top:10px; width:100%" class="btn btn-primary" asp-action="SentForms" asp-controller="Company" asp-route-name="@User.Identity.Name">Back</a>
+    </div>
 </div>
