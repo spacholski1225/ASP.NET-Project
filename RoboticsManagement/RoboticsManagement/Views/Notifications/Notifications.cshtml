@@ -4,12 +4,12 @@
     ViewData["Title"] = "Notifications";
 }
 <form method="post">
-    @foreach (var noti in Model.NotificationList)
+    @for(int i =0; i < Model.NotificationList.Count; i++)
     {
         <div hidden>
-            <label asp-for="@noti.NotiId"></label>
-            <input asp-for="@noti.NotiId" />
-            <span asp-validation-for="@noti.NotiId" class="alert-danger"></span>
+            <label asp-for="@Model.NotificationList[i].NotiId"></label>
+            <input asp-for="@Model.NotificationList[i].NotiId" />
+            <span asp-validation-for="@Model.NotificationList[i].NotiId" class="alert-danger"></span>
         </div>
         <table style="width:100%">
             <tr>
@@ -20,41 +20,41 @@
             </tr>
             <tr>
                 <th>
-                    <div class="">
-                        <input class="" asp-for="@noti.Sender" readonly />
-                        <span asp-validation-for="@noti.Sender" class="alert-danger"></span>
+                    <div>
+                        <input asp-for="@Model.NotificationList[i].Sender" readonly />
+                        <span asp-validation-for="@Model.NotificationList[i].Sender" class="alert-danger"></span>
                     </div>
                 </th>
                 <th>
-                    <div class="">
-                        <input class="" asp-for="@noti.NotiHeader" readonly />
-                        <span asp-validation-for="@noti.NotiHeader" class="alert-danger"></span>
+                    <div>
+                        <input asp-for="@Model.NotificationList[i].NotiHeader" readonly />
+                        <span asp-validation-for="@Model.NotificationList[i].NotiHeader" class="alert-danger"></span>
                     </div>
                 </th>
                 <th>
-                    <div class="">
-                        <input class="" asp-for="@noti.NotiBody" readonly />
-                        <span asp-validation-for="@noti.NotiBody" class="alert-danger"></span>
+                    <div>
+                        <input asp-for="@Model.NotificationList[i].NotiBody" readonly />
+                        <span asp-validation-for="@Model.NotificationList[i].NotiBody" class="alert-danger"></span>
                     </div>
                 </th>
                 <th>
-                    <div class="">
-                        <input class="" asp-for="@noti.CreatedDate" readonly />
-                        <span asp-validation-for="@noti.CreatedDate" class="alert-danger"></span>
+                    <div>
+                        <input asp-for="@Model.NotificationList[i].CreatedDate" readonly />
+                        <span asp-validation-for="@Model.NotificationList[i].CreatedDate" class="alert-danger"></span>
                     </div>
                 </th>
             </tr>
         </table>
 
         <div class="custom-checkbox">
-            <label asp-for="@noti.IsRead">
-                <input asp-for="@noti.IsRead" />
+            <label asp-for="@Model.NotificationList[i].IsRead">
+                <input asp-for="@Model.NotificationList[i].IsRead" />
                 Clear notification
             </label>
         </div>
     }
     <div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" asp-route-userName="@User.Identity.Name">Save</button>
     </div>
 </form>
 @if (Model.NotificationList.Count() == 0)

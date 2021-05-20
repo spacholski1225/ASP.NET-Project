@@ -73,9 +73,10 @@ namespace RoboticsManagement.Controllers
         }
        
         [HttpPost]
-        public IActionResult GetNotifications(NotificationListViewModel model)
+        public IActionResult GetNotifications(NotificationListViewModel noti, string userName)
         {
-             return View();
+            
+              return RedirectToAction("GetNotifications", "Notifications");
         }
     }
 }
