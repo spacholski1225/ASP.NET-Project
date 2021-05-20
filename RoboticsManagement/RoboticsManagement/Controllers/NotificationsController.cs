@@ -7,6 +7,7 @@ using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels.Notifications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace RoboticsManagement.Controllers
 {
@@ -29,13 +30,13 @@ namespace RoboticsManagement.Controllers
         {
             if (name == null)
             {
-                return RedirectToAction("Welcome","Success");
+                return RedirectToAction("Welcome", "Success");
             }
 
             var user = await _userManager.FindByNameAsync(name);
             List<NotificationViewModel> returnedList = new List<NotificationViewModel>();
             var notiList = new NotificationListViewModel();
-            
+
             if (await _userManager.IsInRoleAsync(user, "Employee"))
             {
                 var notis = _notificationRepository.GetNotificationsForEmployee(user.Id);
@@ -46,7 +47,7 @@ namespace RoboticsManagement.Controllers
                 notiList.NotificationList = returnedList;
                 return View("Notifications", notiList);
             }
-            else if(await _userManager.IsInRoleAsync(user, "Admin"))
+            else if (await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 var notis = _notificationRepository.GetNotificationsForAdmin(ERole.Admin);
                 notis.ForEach(n =>
@@ -71,12 +72,43 @@ namespace RoboticsManagement.Controllers
                 return RedirectToAction("Error", "Error");
             }
         }
-       
+
         [HttpPost]
-        public IActionResult GetNotifications(NotificationListViewModel noti, string userName)
+        public async Task<IActionResult> GetNotifications(NotificationListViewModel noti, string userName)
         {
-            
-              return RedirectToAction("GetNotifications", "Notifications");
+            if (ModelState.IsValid && userName != null)
+            {
+                var readedNotifications = noti.NotificationList.Where(s => s.IsRead == true).ToList();
+
+                var user = await _userManager.FindByNameAsync(userName);
+                if (user != null)
+                {
+                    if (await _userManager.IsInRoleAsync(user, "Employee"))
+                    {
+                        readedNotifications.ForEach(f =>
+                        {
+                            _notificationRepository.SetNotificationForEmployeeAsRead(f.NotiId);
+                        });
+                    }
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        readedNotifications.ForEach(f =>
+                        {
+                            _notificationRepository.SetNotificationForAdminAsRead(f.NotiId);
+                        });
+                    }
+                    if (await _userManager.IsInRoleAsync(user, "Client"))
+                    {
+                        readedNotifications.ForEach(f =>
+                        {
+                            _notificationRepository.SetNotificationForClientAsRead(f.NotiId);
+                        });
+                    }
+                    return Redirect("GetNotifications?name=" + userName);
+                }
+                return RedirectToAction("Error", "Error");
+            }
+            return RedirectToAction("Error", "Error");
         }
     }
 }
