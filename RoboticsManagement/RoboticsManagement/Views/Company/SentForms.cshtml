@@ -4,10 +4,11 @@
 }
 @foreach (var form in Model)
 {
-    <div class="row">
-        <div class="col-6">
-            <label>@form.CreatedDate</label>
-            <a class="btn btn-outline-info" asp-controller="Company" asp-action="CurrentForm" asp-route-formId="@form.FormId">Check me!</a>
+    <div class="row" style="border: solid 1px; margin-top:5px">
+        <div class="col-12" style="width:100%">
+            <label class="font-weight-bold">Date: </label>
+            <label >@form.CreatedDate</label>
+            <a class="btn btn-sm align-content-center" style="color: #2a84f3" asp-controller="Company" asp-action="CurrentForm" asp-route-formId="@form.FormId">More info...</a>
         </div>
     </div>
 }
