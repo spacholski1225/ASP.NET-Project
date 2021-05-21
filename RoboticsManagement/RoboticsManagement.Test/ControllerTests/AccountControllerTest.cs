@@ -8,6 +8,7 @@ using RoboticsManagement.Controllers;
 using RoboticsManagement.Models;
 using RoboticsManagement.ViewModels;
 using System;
+using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
@@ -96,18 +97,14 @@ namespace RoboticsManagement.Test.ControllerTests
                     It.IsAny<Exception>(),
                     It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)));
         }
-        [Fact(Skip = "Does not working")]
+        [Fact(Skip ="Null exception")]
         public void Login_ReturnsARedirectToActionResult_ForAuthorizedUser()
         {
             //Arrange
-            var identity = new GenericIdentity("test");
-            Thread.CurrentPrincipal = new GenericPrincipal(identity, null);
-
-            ///to do https://stackoverflow.com/questions/12780185/writing-unit-test-for-methods-that-use-user-identity-name-in-asp-net-web-api
-            var controller = new AccountController(null, null, null,
-                                                   null, null, null);
+            var claim = new Mock<ClaimsPrincipal>();
+            claim.Setup(s => s.Identity.IsAuthenticated).Returns(() => true);            
             //Act
-            var result = controller.Login();
+            var result = _controller.Login();
             //Assert
             Assert.IsType<RedirectToActionResult>(result);
         }
