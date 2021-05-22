@@ -1,7 +1,7 @@
 # Project management 
 
 ## General info
-I want to create a business application that manages product maintenance. User (company) after login can fill a form then administration gets information from a form. After that administration department gets information and they can assign tasks to employees.
+I created a business application that manages product maintenance. User (company) after login can fill a form then administration gets information from a form. After that administration department gets information and they can assign tasks to employees. The whole application is covered by unit tests in xUnit.
 
 ## Technologies
 * .NET 5.0
