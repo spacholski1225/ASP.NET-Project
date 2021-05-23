@@ -1,7 +1,7 @@
 # Project management 
 
 ## General info
-I created a business application that manages product maintenance. User (company) after login can fill a form then administration gets information from a form. After that administration department gets information and they can assign tasks to employees. The whole application is covered by unit tests in xUnit.
+I created a business application that manages product maintenance. User (company) after login can fill a form then administration gets information from a form. After that administration department gets information and they can assign tasks to employees. The whole application is covered by unit tests in xUnit. I focused primarily on business logic, although I also took care of the visual layer.
 
 ## Technologies
 * .NET 5.0
